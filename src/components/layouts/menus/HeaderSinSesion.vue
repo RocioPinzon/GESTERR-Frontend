@@ -1,6 +1,5 @@
 <template>
-
-    <v-app-bar color="green1">
+    <v-app-bar color="green">
 
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
@@ -14,7 +13,7 @@
               </nav>-->
               <v-btn variant="text"><router-link to="/">Inicio</router-link> </v-btn>
               <v-btn variant="text"><router-link to="/signin">Entrar</router-link></v-btn>
-              <v-btn variant="text">Regístrate</v-btn>
+              <v-btn variant="text"><router-link to="/signup">Regístrate</router-link></v-btn>
 
             </template>
           </v-menu>
