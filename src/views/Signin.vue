@@ -21,7 +21,7 @@
                   </v-img>
               </div>
               <v-card-title>
-                <p class="text-center py-10 text-h2">Iniciar sesión</p>
+                <p class="text-center py-10 text-h2">Iniciar sesión  </p>
               </v-card-title>
               
               <v-text-field
@@ -67,7 +67,7 @@
                 size="large"
                 type="submit"
                 clearable
-                variant="elevated">Entrar
+                variant="elevated">  HolaaEntrar
               </v-btn>
             </v-form>
           </v-card>
