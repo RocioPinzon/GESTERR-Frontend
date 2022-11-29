@@ -25,22 +25,7 @@
                   </v-card>
                 </v-sheet>
               </v-col>
-              <v-col
-                cols="4">
-                <v-sheet class="pa-2 ma-2">
-                  <v-card
-                    class="mx-auto"
-                    width="400"
-                    prepend-icon="mdi-home">
-                      
-                    <v-card-text>
-                      {{ datosUser.name }}
-                      {{ datosUser.email }}
-
-                    </v-card-text>
-                  </v-card>
-                </v-sheet>
-              </v-col>
+              
             </v-row>
         </v-sheet>
         <v-sheet class="ma-2 pa-2">

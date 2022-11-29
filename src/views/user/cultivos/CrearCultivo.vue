@@ -5,7 +5,7 @@
                 <v-col
                     cols="6"
                     sm="12">
-                    <h2 class="text-center">CREAR DATOS DEL CAMPO {{ }}</h2>
+                    <h2 class="text-center">CREAR CULTIVO DEL CAMPO {{ }}</h2>
                 </v-col>
                 <v-col
                     cols="6"
@@ -17,36 +17,27 @@
                         lazy-validation>
 
                         <v-text-field
-                            v-model="datosNuevoCampo.name"
+                            v-model="datosNuevoCultivo.nombre"
                             :counter="10"
                             :rules="nameRules"
-                            label="Nombre campo"
-                            clearable
+                            label="Nombre cultivo"
                             variant="outlined"
                             required>
                         </v-text-field>
 
                         <v-text-field
-                            v-model="datosNuevoCampo.direccion"
-                            :counter="30"
-                            :rules="nameRules"
-                            label="Dirección"
-                            required>
-                        </v-text-field>
-
-                        <v-text-field
-                            v-model="datosNuevoCampo.hectareas"
+                            v-model="datosNuevoCultivo.cantidad"
                             :counter="2"
                             type="number"
                             :rules="nameRules"
-                            label="Hectáreas"
+                            label="Cantidad"
                             required>
                         </v-text-field>
 
                         <v-btn
                             color="success"
                             class="mr-4"
-                            @click="crearCampo()"
+                            @click="crearCultivo()"
                             >Guardar
                         </v-btn>
 
@@ -67,39 +58,40 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
     export default {
     components: { Navigation },
-        name: 'CrearCampo',
+        name: 'CrearCultivo',
         data: () => ({
           userId: null,
-          datosNuevoCampo:{
-                name:"",
-                direccion:"",
-                hectareas:""
+          datosNuevoCultivo:{
+                nombre:"",
+                cantidad:""                
             }
         }),
         mounted(){
 
           this.userId=localStorage.getItem('userId');  
+          this.campoId = this.$route.params.campoId;
+
             // FIN MOUNTED
         },
  
 
         methods: {
             volverDashboard(){
-                this.$router.push(`/user/dashboard`);
+                this.$router.push(`/user/${this.campoId}/cultivos`);
             },
 
-            crearCampo(){
-                let datos = this.datosNuevoCampo;
+            crearCultivo(){
+                let datos = this.datosNuevoCultivo;
                 console.log(datos);
                 
-                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`,datos) //Actualizar Campo
+                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`,datos) //Actualizar Cultivo
                 .then((response) =>{
 
                     if(response.statusText=="OK"){
                         console.log("Exito actualizar datos campo ");
-                        this.datosNuevoCampo= response.data;
+                        this.datosNuevoCultivo= response.data;
                         this.volverDashboard();
-                        console.log(response.data);
+                        
                     }else{
                         console.log("Error creando campo");
                     }

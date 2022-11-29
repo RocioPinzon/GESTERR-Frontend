@@ -8,6 +8,10 @@ import DashboardAdmin from '../views/admin/DashboardAdmin.vue'
 import VerCultivos from '../views/user/cultivos/VerCultivos.vue'
 import EditarCampo from '../views/user/campos/EditarCampo.vue'
 import CrearCampo from '../views/user/campos/CrearCampo.vue'
+import CrearCultivo from '../views/user/cultivos/CrearCultivo.vue'
+import EditarCultivo from '../views/user/cultivos/EditarCultivo.vue'
+import VerProductos from '../views/user/productos/VerProductos.vue'
+
 
 const routes = [
   {
@@ -46,14 +50,30 @@ const routes = [
     component: DashboardAdmin
   },
   {
+    path: '/user/crearCampo',
+    name: 'CrearCampo',
+    component: CrearCampo
+  },
+  {
     path: '/user/:campoId/editarCampo',
     name: 'EditarCampo',
     component: EditarCampo
   },
+  
   {
-    path: '/user/crearCampo',
-    name: 'CrearCampo',
-    component: CrearCampo
+    path: '/user/:campoId/cultivos/crearCultivo',
+    name: 'CrearCultivo',
+    component: CrearCultivo
+  },
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/editarCultivo',
+    name: 'EditarCultivo',
+    component: EditarCultivo
+  },
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos',
+    name: 'VerProductos',
+    component: VerProductos
   }
 ]
 

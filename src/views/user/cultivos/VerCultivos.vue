@@ -5,10 +5,16 @@
 
 
         <v-sheet class="ma-2 pa-2">
-            <button @click="volverDashboard()">VOLVER</button>       
+          <v-btn @click="volverDashboard()">VOLVER</v-btn>   
         </v-sheet>
         <v-sheet class="ma-2 pa-2">
           DATOS
+        </v-sheet>
+        <v-sheet class="ma-2 pa-2">
+
+        <div class="d-flex justify-space-between">
+          <v-btn @click="agregarCultivo()">Añadir Cultivo</v-btn>
+        </div>
         </v-sheet>
       </div>
     </div>
@@ -16,7 +22,7 @@
             <thead>
               <tr>
                 <th class="text-left">
-                  Nombre
+                  Nombre cultivo
                 </th>
                 <th class="text-left">
                   Cantidad
@@ -30,6 +36,21 @@
                 :key="item._id" >
                 <td>{{ item.nombre }}</td>
                 <td>{{ item.cantidad }}</td>
+                <td>
+                  <button @click="verProductos(item._id)">
+                    <v-icon>mdi-eye</v-icon>
+                  </button>
+                </td>
+                <td>
+                  <button @click="editarCultivo(item._id)">
+                    <v-icon class="red">mdi-pencil</v-icon>
+                  </button>
+                </td>
+                <td>
+                  <button @click="eliminarCultivo(item._id)">
+                    <v-icon class="red">mdi-trash-can</v-icon>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </v-table>
@@ -49,46 +70,118 @@ const Swal = require('sweetalert2');
         data: () => ({
           userId: null,
           campoId: null,
-          datosCampos:{},
+          datosCultivo:{},
           cultivos: []
         }),
         mounted(){
 
           this.userId=localStorage.getItem('userId');  
           this.campoId = this.$route.params.campoId;
+          this.cargarCultivos(); 
 
-          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) //await antes
+          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) //await antes
             .then((response) =>{
 
               if(response.statusText=="OK"){
-                console.log("Exito consultar campos ");
-                this.datosCampos = response.data;
+                
+                console.log("Exito consultar datos usuario ");
+                
+                this.datosUser = response.data;
+                
+                console.log("response: ");
+                console.log(response);
+                  
+                
               }else{
+                
                 console.log("Error haciendo login ");
               }
 
-            }); 
-            
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) //await antes
-            .then((response) =>{
-
-              if(response.statusText=="OK"){
-                console.log("Exito consultar cultivos ");
-                this.cultivos = response.data;
-                console.log(response.data);
-              }else{
-                console.log("Error haciendo login ");
-              }
-
-            }); 
+            });             
             // FIN MOUNTED
         },
  
 
         methods: {
+          cargarCultivos(){
+              //CONSULTAR CAMPOS USER
+              
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) //await antes
+                .then((response) =>{
+
+                  if(response.statusText=="OK"){
+                    console.log("Exito consultar cultivos ");
+                    this.cultivos = response.data;
+                    console.log(response.data);
+                  }else{
+                    console.log("Error get cultivos  ");
+                  }
+
+                }); 
+            },
             volverDashboard(){
-                this.$router.push(`/user/dashboard`);
+              this.$router.push(`/user/dashboard`);
+            },
+            agregarCultivo(){
+              this.$router.push(`/user/${this.campoId}/cultivos/crearCultivo`);
+            },
+            verProductos(cultivoId){
+              this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
+            },
+            async eliminarCultivo(cultivoId){
+              const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: '#4CB944',
+                  cancelButton: '#F72C25'
+                },
+                buttonsStyling: false
+              });
+              const result = await swalWithBootstrapButtons.fire({
+                title: 'Estás seguro?',
+                text: "Si elimina, No podrá recuperar el archivo.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '¡Si, eliminar!',
+                cancelButtonText: 'No, cancelar.',
+                reverseButtons: true
+              });
+              
+              // Stop if user did not confirm
+               if (!result.value) {
+                  return;
+               }
+
+                  // DELETE           
+                  axios.delete(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${cultivoId}`) 
+                    .then(async(responseDelete) =>{
+
+                      if(responseDelete.statusText=="OK"){
+                        swalWithBootstrapButtons.fire(
+                          'Eliminado!',
+                          'Tu campo ha sido eliminado.',
+                          'success'
+                        )
+                        console.log("Exito borrar campos");  
+                        this.cargarCultivos();
+                        
+                      }else if(result.dismiss === Swal.DismissReason.cancel){
+                        swalWithBootstrapButtons.fire(
+                              'Cancelled',
+                              'Your imaginary file is safe :)',
+                              'error')
+                      }else{
+                        
+                        console.log("Error borrando campo ");
+                      }
+
+                    });
+                
+            },
+            editarCultivo(){
+              this.$router.push(`/user/${this.campoId}/cultivos/${this.cultivoId}/editarCultivo`);
+
             }
+
         }
  
     }
