@@ -54,7 +54,7 @@
                                 clearable
                                 required>
                             </v-text-field>
-                                
+                               
                             <v-text-field
                                 v-model="email"
                                 :rules="emailRules"
@@ -106,8 +106,16 @@
                                 counter
                                 clearable
                                 required>
-                            </v-text-field>
-
+                            </v-text-field> 
+                   
+                            <div id="mensajeError">
+                                    
+                            </div>
+                                
+                            <div id="mensajeSuccess">
+                            
+                            </div> 
+                           
                             <v-checkbox
                                 v-model="checkbox"
                                 :readonly="loading"
@@ -136,30 +144,36 @@
     </v-row>
 </template>
 
-
 <script>
-  export default {
-    data: () => ({
-        nombre: "",
-        apellidos: "",
-        email: "",
-        username:"",
-        password: "",
-        passwordConfirm:"",
-        valid: true,
-        errorMessages: '',
-        checkbox:false,
-        form: false,
-        loading: false,
-        show1: false,
-        show2: true,
-        
+    import axios from 'axios';
+
+    //const SERVER_URL = "https://gesterr-back.herokuapp.com/user/signup";
+    //const SERVER_URL = "https://gesterr-back.herokuapp.com/users/signup";
+    const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signup";
+    export default {
+        data: () => ({
+           
+            nombre: "",
+            apellidos: "",
+            email: "",
+            username:"",
+            password: "",
+            passwordConfirm:"",
+            valid: true,
+            errorMessages: '',
+            checkbox:false,
+            form: false,
+            loading: false,
+            show1: false,
+            show2: true,
+            
         nameRules:[
             v => !!v || 'Nombre requerido',
-            v => (v && v.length <= 10) || 'El nombre debe tener al menos 10 caracteres'
+            v => (v && v.length <= 10) || 'El nombre debe tener como máximo 10 caracteres'
         ],
         apeRules:[
-            v => !!v || 'Apellido requerido'
+            v => !!v || 'Apellido requerido',
+            v => (v && v.length <= 15) || 'El apellido debe tener como máximo 15 caracteres'
         ],
         userNameRules:[
             v => !!v || 'Username requerido'
@@ -167,13 +181,14 @@
         emailRules: [
             v => !!v || 'E-mail requerido',
             v => /.+@.+/.test(v) || 'E-mail tiene que ser válido',
+            v => (v && v.length <= 20) || 'El email debe tener como máximo 20 caracteres'
         ],
         passwordRules:[
-            v => (v && v.length <= 8) || 'La contraseña debe tener al menos 8 caracteres'
+            v => (v && v.length <= 5) || 'La contraseña debe tener al menos 8 caracteres'
 
         ],
         passwordConfirmRules:[
-            v => (v && v.length <= 8) || 'La contraseña debe tener al menos 8 caracteres'
+            v => (v && v.length <= 5) || 'La contraseña debe tener al menos 8 caracteres'
         ]
     }),
 
@@ -190,7 +205,73 @@
             this.loading = true
 
             setTimeout(() => (this.loading = false), 2000)
-        }
+
+            console.log("Formulario enviado");
+            this.created();
+            //SERVER_URL_COMPROBADA
+/*
+            fetch(SERVER_URL)
+                .then(response => response.json())
+                .then(data=>{
+                    //this.name = data;
+                    console.log(data);
+                    console.log("-------------------");
+                    console.log(data[0]);
+                    console.log("-------------------");
+                    console.log(data[0].name);
+
+                    //console.log(this.name);
+
+                    for (const element of data) {
+
+                        console.log("-------------------");
+                        console.log(element);
+                        console.log("-------------------");
+                        console.log(element.name);
+                        let contador  = 1;
+                        this.items.push({title:element.name, value:contador});
+                        contador++;
+                        
+                    }
+                });*/       
+        },
+        created() {           
+                // ERROR CORS. NECESITO USAR FETCH
+                    // POST request using fetch()
+                    fetch(SERVER_URL_COMPROBADA, {
+                        
+                        // Adding method type
+                        method: "POST",
+                        
+                        // Adding body or contents to send
+                        body: JSON.stringify({
+                            "name": this.nombre,
+                            "apellidos":this.apellidos,
+                            "email": this.email,
+                            "username":this.username,
+                            "password": this.password,
+                            "confirmPassword": this.passwordConfirm,
+                            }),
+                        
+                        // Añadiendo headers al request
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8",
+                            "cache-control":"no-cache"
+                        }
+                    })
+                    
+                    // Convertimos a JSON
+                    .then(response => response.json())
+                    
+                    // Displaying results to console
+                    //.then(json => console.log(json));
+                    .then(json => {
+                        document.getElementById("mensajeError").mensajeError= json.error;
+                        document.getElementById("mensajeSuccess").mensajeSuccess= json.msg;
+                        //this.$router.push('/signin')
+                        console.log(json);
+                    })                 
+                }
     },
 }
   

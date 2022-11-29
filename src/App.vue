@@ -1,6 +1,8 @@
 <template>
   <v-app>
-    <HeaderSinSesion/>
+    <HeaderSinSesion v-if="!logueado"/>
+    <Header v-if="logueado"/>
+
     <v-main class="">
       <router-view/>
     </v-main>
@@ -9,7 +11,7 @@
 </template>
 
 <script>
-
+import Header from './components/layouts/menus/Header.vue'
 import HeaderSinSesion from './components/layouts/menus/HeaderSinSesion.vue'
 import Footer from './components/layouts/footers/Footer.vue'
 
@@ -18,10 +20,17 @@ export default {
 
   components:{
     Footer,
-    HeaderSinSesion
+    HeaderSinSesion,
+    Header
   },
   data: () => ({
-    //
-  })
+    logueado:false
+  }),
+  mounted(){
+    this.logueado=localStorage.getItem('userId')!=undefined;
+    
+  }
+
+
 }
 </script>

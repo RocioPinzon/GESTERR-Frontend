@@ -10,6 +10,7 @@
           <v-card class="mx-auto px-sm-1 px-6 py-8 w-100 elevation-7">
             <v-form
               v-model="form"
+              class="px-6"
               @submit.prevent="onSubmit">
               <div class="ma-4">
                 <v-img
@@ -25,13 +26,12 @@
               </v-card-title>
               
               <v-text-field
-                  id="name" 
-                  name="name"
-                  v-model="user.name"
-                  :counter="10"
-                  :rules="nameRules"
+                  id="email" 
+                  name="email"
+                  v-model="user.email"
+                  :rules="emailRules"
                   :readonly="loading"
-                  label="Usuario"
+                  label="Email"
                   variant="outlined"
                   clearable
                   type="text">
@@ -53,12 +53,14 @@
                   required>
               </v-text-field>
               <br>
-              <v-checkbox
+              <!--<v-checkbox
                 v-model="checkbox"
                 label="Guardar contraseña"
                 required>
-              </v-checkbox>
-              
+              </v-checkbox>-->
+              <div id="mensajeError"></div>
+                                      
+              <div id="mensajeSuccess"></div> 
               <v-btn
                 :disabled="!form"
                 :loading="loading"
@@ -67,7 +69,8 @@
                 size="large"
                 type="submit"
                 clearable
-                variant="elevated">  HolaaEntrar
+                variant="elevated"
+                @click="inicioSesion"> Entrar
               </v-btn>
             </v-form>
           </v-card>
@@ -78,23 +81,24 @@
 
 <script>
 
-const SERVER_URL = "https://localhost:3000";
+import axios from 'axios';
+const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signin";
 
 export default {
   name: 'Signin',
   data: () => ({
     user: {
-            name: "",
+            email: "",
             password: ""
     },
     valid: true,
-    nameRules: [
-      v => !!v || 'Usuario requerido',
-      v => (v && v.length <= 10) || 'EL usuario debe tener al menos 5 caracteres'  
+    emailRules: [
+      v => !!v || 'Email requerido',
+      v => (v && v.length <= 20) || 'EL email debe tener al menos 20 caracteres'  
     ],
 
     passwordRules:[
-            v => (v && v.length <= 8) || 'La contraseña debe tener al menos 8 caracteres'
+            v => (v && v.length <= 9) || 'La contraseña debe tener al menos 7 caracteres'
 
     ],
     show1: false,
@@ -103,43 +107,47 @@ export default {
   }),
 
   methods: {
-    async validate () {
+    onSubmit () { //async antes
+      if (!this.form) return
 
-      if(!this.user.name){
-        return this.show("Escriba su nombre", {
-                    position: "top-left",
-                    duration: 1000,
-        });
+            this.loading = true
+
+            //setTimeout(() => (this.loading = false), 2000)
+
+            console.log("Formulario enviado");
+            //this.created();
+            console.log("this: ");
+            console.log(this);
+     var paylod = {
+        email: this.user.email,
+        //email: "imper@imper.es",
+        password: this.user.password
+     };
+     
+     axios.post(SERVER_URL_COMPROBADA,paylod) //await antes
+     .then((response) =>{
+
+      if(response.statusText=="OK"){
+        console.log("Exito haciendo login ");
+
+        localStorage.setItem('userId',response.data.userId);
+        
+        console.log("response: ");
+        console.log(response);
+          
+        if(response.data.admin){
+          this.$router.push('/admin/dashboardAdmin');
+        }else{
+          this.$router.push('/user/dashboard');
+        }
+        
+      }else{
+
+        console.log("Error haciendo login ");
       }
-      const payload = JSON.stringify(this.user);
-      const url = SERVER_URL + "/user/signin";
-      const r = await fetch(url, {
-          method: "POST",
-          body: payload,
-          headers: {
-            "Content-type": "application/json",
-          }
-      });
 
-      const response = await r.json();
-            if (response) {
-                this.show("Saved", {
-                    position: "top-left",
-                    duration: 1000,
-                });
-                this.user = {
-                    name: "",
-                    password: null
-                };
-            } else {
-                this.show("Something went wrong. Try again", {
-                    position: "top-left",
-                    duration: 1000,
-                });
-            }
-      
+     });
     }
-  },
-  
+  }
 }
 </script>

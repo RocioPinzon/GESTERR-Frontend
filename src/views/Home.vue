@@ -4,20 +4,20 @@
 
         <v-container class="text-center" width="800px">
             <h2>Servicios</h2>
-            <Servicios/>
+            <Cards/>
         </v-container>
     </v-content>
 </template>
 <script>
 
-import Servicios from '../components/layouts/Servicios.vue'
+import Cards from '../components/layouts/Cards.vue'
 import Slider from '../components/layouts/Slider.vue'
 
 export default {
 
   name: 'Home',
   components: {
-    Servicios,
+    Cards,
     Slider
   },
   data: () => ({
