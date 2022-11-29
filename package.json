@@ -1,6 +1,6 @@
 {
   "name": "gesterr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "node": "18.x",
     "npm": "8.x"
