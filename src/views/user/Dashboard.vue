@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <v-layout>
     <v-main>
       <v-container class="">
@@ -44,6 +45,8 @@
 </template>
 
 <script>
+
+import Header from '@/components/layouts/menus/user/Header.vue';
 import CardUser from '@/components/layouts/CardUser.vue'
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import CardDashboard from '@/components/layouts/CardDashboard.vue'
@@ -57,7 +60,8 @@ const Swal = require('sweetalert2');
       Navigation,
       CardDashboard,
       CardUser,
-      AlertDashboard
+      AlertDashboard,
+      Header
       },
         name: 'Dashboard',
         data: () => ({
@@ -71,15 +75,14 @@ const Swal = require('sweetalert2');
         ],
         }),
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
+          this.comprobarUsuario();  
           this.campoId = this.$route.params.campoId;
           
           this.cargarCampos();  
           
           //CONSULTAR CAMPOS USER
           
-          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) //await antes
+          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) 
             .then((response) =>{
 
               if(response.statusText=="OK"){
@@ -89,9 +92,7 @@ const Swal = require('sweetalert2');
                 this.datosUser = response.data;
                 
                 console.log("response: ");
-                console.log(response);
-                  
-                
+                console.log(response);     
               }else{
                 
                 console.log("Error haciendo login ");
@@ -181,6 +182,12 @@ const Swal = require('sweetalert2');
 
                     });
                 
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
         }
  

@@ -1,14 +1,7 @@
 <template>
 
     <v-app-bar color="green">
-        <template v-slot:image>
-          <v-img></v-img>
-        </template>
-
-        <template v-slot:prepend>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
-        </template>
-
+       
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
         <v-spacer></v-spacer>
@@ -19,7 +12,10 @@
 
             <v-list>
               <v-list-item>
-                <v-list-item-title><router-link to="/user/dashboard">Dashboard</router-link></v-list-item-title>
+                <v-list-item-title><router-link :to= urlDashboard()>Dashboard</router-link></v-list-item-title>
+                <v-list-item-title><router-link :to= urlCampos()>Campos</router-link></v-list-item-title>
+                <v-list-item-title><router-link :to= urlProductos()>Productos</router-link></v-list-item-title>
+
               </v-list-item>
             </v-list>
           </v-menu>
@@ -53,6 +49,16 @@ export default {
   methods:{
     logout(){
       localStorage.removeItem=('userId');
+      this.$router.push(`/`);
+    },
+    urlDashboard(){
+      return "/user/dashboard";
+    },
+    urlCampos(){
+      return `/user/campos`;
+    },
+    urlProductos(){
+      return `/user/productos`;
     }
   }
 }

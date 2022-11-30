@@ -1,4 +1,5 @@
 <template>
+  <Header/>
     <v-container class="bg-surface-variant">
       <v-row no-gutters>
         <v-col
@@ -46,13 +47,14 @@
   </template>  
 <script>
 
+import Header from '@/components/layouts/menus/user/Header.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation },
+    components: { Navigation,Header },
         name: 'Dashboard',
         data: () => ({
           userId: null,
@@ -60,8 +62,7 @@ const Swal = require('sweetalert2');
           campos: []
         }),
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
+          this.comprobarUsuario();  
           this.campoId = this.$route.params.campoId;
                   
           //CONSULTAR CAMPOS USER
@@ -94,6 +95,12 @@ const Swal = require('sweetalert2');
             editarPerfil(campoId){
               this.$router.push(`/user/${campoId}/editarCampo`);
             },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
+            }
         }
  
     }

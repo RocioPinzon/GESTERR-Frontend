@@ -1,4 +1,5 @@
 <template>
+    <Header/>
     <v-main>
         <v-container class="d-flex flex-column">
             <v-row class="justify-center">
@@ -29,16 +30,16 @@
                         <v-text-field
                             v-model="datosCampos.direccion"
                             :counter="30"
-                            :rules="nameRules"
+                            :rules="direccionRules"
                             label="Dirección"
                             required>
                         </v-text-field>
 
                         <v-text-field
                             v-model="datosCampos.hectareas"
-                            :counter="2"
-                            :rules="nameRules"
+                            :counter="3"
                             label="Hectáreas"
+                            type="number"
                             required>
                         </v-text-field>
 
@@ -64,13 +65,18 @@
 </template>
 
 <script>
-      
+
+import Header from '@/components/layouts/menus/user/Header.vue';
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //const Swal = require('sweetalert2');
 
     export default {
+        components:{
+            Header
+        },
         name: 'VerCultivos',
+        
         data: () => ({
             valid:true,
             nombreCampo:'',
@@ -90,9 +96,9 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
         mounted(){
 
-          this.userId=localStorage.getItem('userId');  
-          this.campoId = this.$route.params.campoId;
-            console.log();
+            this.comprobarUsuario();
+            this.campoId = this.$route.params.campoId;
+                console.log();
 
             axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) // Consultar datos Campos
                 .then((response) =>{
@@ -110,8 +116,8 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
  
 
         methods: {
-            volverDashboard(){
-                this.$router.push(`/user/dashboard`);
+            volverCampos(){
+                this.$router.push(`/user/campos`);
             },
 
             reset(){
@@ -128,12 +134,18 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                 if(response.statusText=="OK"){
                     console.log("Exito actualizar datos campo ");
                     this.datosCampos= response.data;
-                    this.$router.push(`/user/dashboard`);
+                    this.volverCampos();
                     console.log(response.data);
                 }else{
                     console.log("Error actualizando datos campo");
                 }
             });
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
         }
  

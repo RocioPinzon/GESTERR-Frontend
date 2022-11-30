@@ -16,7 +16,6 @@
       </v-app-bar>
 
   </template>
-
 <script>
 
 export default {
@@ -24,20 +23,11 @@ export default {
   name: 'HeaderAdmin',
 
   data: () => ({
-    items: [
-      { title: 'Campos' },
-      { title: 'Cultivos' },
-      { title: 'Productos' }
-    ]
+    
   }),
-  mounted(){
-
-    this.userId=localStorage.getItem('userId'); 
-
-  },
   methods:{
     logout(){
-      localStorage.removeItem=('userId');
+      localStorage.removeItem=('adminId');
       this.$router.push(`/`);
     }
   }

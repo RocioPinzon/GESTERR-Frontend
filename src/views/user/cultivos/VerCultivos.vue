@@ -1,4 +1,5 @@
 <template>
+  <Header/>
     <div>
       <div
         class="d-flex justify-space-between mb-6 bg-surface-variant">
@@ -58,14 +59,15 @@
   
 
 <script>
-      
+
+import Header from '@/components/layouts/menus/user/Header.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation },
+    components: { Navigation,Header },
         name: 'VerCultivos',
         data: () => ({
           userId: null,
@@ -74,8 +76,7 @@ const Swal = require('sweetalert2');
           cultivos: []
         }),
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
+          this.comprobarUsuario();   
           this.campoId = this.$route.params.campoId;
           this.cargarCultivos(); 
 
@@ -180,6 +181,12 @@ const Swal = require('sweetalert2');
             editarCultivo(){
               this.$router.push(`/user/${this.campoId}/cultivos/${this.cultivoId}/editarCultivo`);
 
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
 
         }

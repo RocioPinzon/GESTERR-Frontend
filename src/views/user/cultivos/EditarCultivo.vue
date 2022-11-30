@@ -1,4 +1,5 @@
 <template>
+    <Header/>
     <v-main>
         <v-container class="d-flex flex-column">
             <v-row class="justify-center">
@@ -64,14 +65,15 @@
 </template>
 
 <script>
-      
+
+import Header from '@/components/layouts/menus/user/Header.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation },
+    components: { Navigation, Header },
         name: 'VerCultivos',
         data: () => ({
             valid:true,
@@ -91,10 +93,10 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
         }),
 
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
-          this.campoId = this.$route.params.campoId;
-            console.log();
+        
+            this.comprobarUsuario();   
+            this.campoId = this.$route.params.campoId;
+                console.log();
 
             axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) // Consultar datos Campos
                 .then((response) =>{
@@ -138,6 +140,12 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                     console.log("Error actualizando datos campo");
                 }
             });
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
         }
  

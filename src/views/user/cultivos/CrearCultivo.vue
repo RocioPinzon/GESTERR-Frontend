@@ -1,4 +1,5 @@
 <template>
+    <Header/>
     <v-main>
         <v-container class="d-flex flex-column">
             <v-row class="justify-center">
@@ -51,25 +52,24 @@
 
 <script>
 
-     
+import Header from '@/components/layouts/menus/user/Header.vue';  
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
     export default {
-    components: { Navigation },
+    components: { Navigation, Header},
         name: 'CrearCultivo',
         data: () => ({
-          userId: null,
-          datosNuevoCultivo:{
+            userId: null,
+            datosNuevoCultivo:{
                 nombre:"",
                 cantidad:""                
             }
         }),
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
-          this.campoId = this.$route.params.campoId;
+            this.comprobarUsuario(); 
+            this.campoId = this.$route.params.campoId;
 
             // FIN MOUNTED
         },
@@ -96,6 +96,12 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                         console.log("Error creando campo");
                     }
                 })
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
         }
  

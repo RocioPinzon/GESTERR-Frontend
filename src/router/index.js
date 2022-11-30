@@ -4,7 +4,6 @@ import Home from '../views/Home.vue'
 import Signin from '../views/Signin.vue'
 import Signup from '../views/Signup.vue'
 
-import Users from '../views/Users.vue'
 import Perfil from '../views/user/Perfil.vue'
 
 import Dashboard from '../views/user/Dashboard.vue'
@@ -39,12 +38,6 @@ const routes = [
     path: '/signup',
     name: 'signup',
     component: Signup
-  },
-    //  USUARIOS PARA ADMIN  //
-  {
-    path: '/users',
-    name: 'users',
-    component: Users
   },
     //  DASHBOARD  //
   {
@@ -97,17 +90,17 @@ const routes = [
   },
     //  PRODUCTOS  //
   {
-    path: '/user/:campoId/cultivos/:cultivoId/productos',
+    path: '/user/productos',
     name: 'VerProductos',
     component: VerProductos
   },
   {
-    path: '/user/:campoId/cultivos/:cultivoId/productos/crearProducto',
+    path: '/user/productos/crearProducto',
     name: 'CrearProducto',
     component: CrearProducto
   },
   {
-    path: '/user/:campoId/cultivos/:cultivoId/productos/editarProducto',
+    path: '/user/productos/:productoId/editarProducto',
     name: 'EditarProducto',
     component: EditarProducto
   }

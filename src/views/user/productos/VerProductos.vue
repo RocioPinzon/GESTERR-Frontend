@@ -1,4 +1,5 @@
 <template>
+  <Header/>
     <div>
       <div
         class="d-flex justify-space-between mb-6 bg-surface-variant">
@@ -24,18 +25,15 @@
                 <th class="text-left">
                   Nombre producto
                 </th>
-                <th class="text-left">
-                  Cantidad
-                </th>
+               
                 
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="item in cultivos"
+                v-for="item in productos"
                 :key="item._id" >
-                <td>{{ item.nombre }}</td>
-                <td>{{ item.cantidad }}</td>
+                <td>{{ item.name }}</td>
                 <td>
                   <button @click="verProductos(item._id)">
                     <v-icon>mdi-eye</v-icon>
@@ -58,49 +56,32 @@
   
 
 <script>
-      
+
+import Header from '@/components/layouts/menus/user/Header.vue';  
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation },
+    components: { Navigation, Header },
         name: 'VerCultivos',
         data: () => ({
           userId: null,
-          campoId: null,
-          cultivoId:null,
-          datosCampos:{},
-          cultivos: []
+          productos: []
         }),
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
-          this.campoId = this.$route.params.campoId;
-          this.cultivoId = this.$route.params.cultivoId;
-
-          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) //await antes
+          this.comprobarUsuario();  
+ 
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/productos`) 
             .then((response) =>{
 
               if(response.statusText=="OK"){
-                console.log("Exito consultar campos ");
-                this.datosCampos = response.data;
+                console.log("Exito consultar productos ");
+                this.productos = response.data;
+              
               }else{
-                console.log("Error haciendo login ");
-              }
-
-            }); 
-            
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) //await antes
-            .then((response) =>{
-
-              if(response.statusText=="OK"){
-                console.log("Exito consultar cultivos ");
-                this.cultivos = response.data;
-                console.log(response.data);
-              }else{
-                console.log("Error haciendo login ");
+                console.log("Error ");
               }
 
             }); 
@@ -113,7 +94,13 @@ const Swal = require('sweetalert2');
               this.$router.push(`/user/dashboard`);
             },
             agregarProducto(){
-              this.$router.push(`/user/${this.campoId}/cultivos`);
+              //this.$router.push(`/user/${this.campoId}/cultivos`);
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
 
         }

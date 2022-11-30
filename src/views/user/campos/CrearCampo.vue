@@ -1,4 +1,5 @@
 <template>
+    <Header/>
     <v-main>
         <v-container class="d-flex flex-column">
             <v-row class="justify-center">
@@ -62,13 +63,13 @@
 
 <script>
 
-     
+import Header from '@/components/layouts/menus/user/Header.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
     export default {
-    components: { Navigation },
+    components: { Navigation, Header },
         name: 'CrearCampo',
         data: () => ({
           userId: null,
@@ -79,15 +80,14 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             }
         }),
         mounted(){
-
-          this.userId=localStorage.getItem('userId');  
+            this.comprobarUsuario(); 
             // FIN MOUNTED
         },
  
 
         methods: {
-            volverDashboard(){
-                this.$router.push(`/user/dashboard`);
+            volverCampos(){
+                this.$router.push(`/user/campos`);
             },
 
             crearCampo(){
@@ -100,12 +100,18 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                     if(response.statusText=="OK"){
                         console.log("Exito actualizar datos campo ");
                         this.datosNuevoCampo= response.data;
-                        this.$router.push(`/user/dashboard`);
+                        this.volverCampos();
                         console.log(response.data);
                     }else{
                         console.log("Error creando campo");
                     }
                 })
+            },
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
             }
         }
  
