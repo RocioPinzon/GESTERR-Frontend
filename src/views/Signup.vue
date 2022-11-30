@@ -1,4 +1,5 @@
 <template>
+    <HeaderSinSesion/>
     <v-row justify="center">      
         <v-col
             cols="11"
@@ -98,13 +99,15 @@
                                 id="passwordConfirm" 
                                 name="passwordConfirm"
                                 v-model="passwordConfirm"
+                                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                 :rules="passwordConfirmRules"
                                 :readonly="loading"
-                                :type="password"
+                                :type="show1 ? 'text' : 'password'"
                                 label="Confirmar contraseña"
                                 variant="outlined"
                                 counter
                                 clearable
+                                @click:append="show1 = !show1"
                                 required>
                             </v-text-field> 
                    
@@ -115,14 +118,6 @@
                             <div id="mensajeSuccess">
                             
                             </div> 
-                           
-                            <v-checkbox
-                                v-model="checkbox"
-                                :readonly="loading"
-                                type="submit"
-                                label="¿Recordar contraseña?"
-                                required>
-                            </v-checkbox>
                         </v-card-text>
 
                         <v-card-actions>
@@ -147,10 +142,12 @@
 <script>
     import axios from 'axios';
 
-    //const SERVER_URL = "https://gesterr-back.herokuapp.com/user/signup";
-    //const SERVER_URL = "https://gesterr-back.herokuapp.com/users/signup";
     const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signup";
+    import HeaderSinSesion from '../components/layouts/menus/HeaderSinSesion.vue';
+
     export default {
+    components:{HeaderSinSesion},
+
         data: () => ({
            
             nombre: "",
@@ -184,11 +181,13 @@
             v => (v && v.length <= 20) || 'El email debe tener como máximo 20 caracteres'
         ],
         passwordRules:[
-            v => (v && v.length <= 5) || 'La contraseña debe tener al menos 8 caracteres'
+            v => !!v || 'Contraseña requerida',
+            v => (v && v.length >= 8 ||  v.length >= 15) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
 
         ],
         passwordConfirmRules:[
-            v => (v && v.length <= 5) || 'La contraseña debe tener al menos 8 caracteres'
+            v => !!v || 'Confirmacion de contraseña requerida',
+            v => (v && v.length <= 8 ||  v.length >= 15 ) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
         ]
     }),
 
@@ -208,70 +207,39 @@
 
             console.log("Formulario enviado");
             this.created();
-            //SERVER_URL_COMPROBADA
-/*
-            fetch(SERVER_URL)
-                .then(response => response.json())
-                .then(data=>{
-                    //this.name = data;
-                    console.log(data);
-                    console.log("-------------------");
-                    console.log(data[0]);
-                    console.log("-------------------");
-                    console.log(data[0].name);
-
-                    //console.log(this.name);
-
-                    for (const element of data) {
-
-                        console.log("-------------------");
-                        console.log(element);
-                        console.log("-------------------");
-                        console.log(element.name);
-                        let contador  = 1;
-                        this.items.push({title:element.name, value:contador});
-                        contador++;
-                        
-                    }
-                });*/       
         },
-        created() {           
-                // ERROR CORS. NECESITO USAR FETCH
-                    // POST request using fetch()
-                    fetch(SERVER_URL_COMPROBADA, {
-                        
-                        // Adding method type
-                        method: "POST",
-                        
-                        // Adding body or contents to send
-                        body: JSON.stringify({
-                            "name": this.nombre,
-                            "apellidos":this.apellidos,
-                            "email": this.email,
-                            "username":this.username,
-                            "password": this.password,
-                            "confirmPassword": this.passwordConfirm,
-                            }),
-                        
-                        // Añadiendo headers al request
-                        headers: {
-                            "Content-type": "application/json; charset=UTF-8",
-                            "cache-control":"no-cache"
-                        }
-                    })
+
+        created() {   
+                fetch(SERVER_URL_COMPROBADA, {
                     
-                    // Convertimos a JSON
-                    .then(response => response.json())
+                    // Adding method type
+                    method: "POST",
                     
-                    // Displaying results to console
-                    //.then(json => console.log(json));
-                    .then(json => {
-                        document.getElementById("mensajeError").mensajeError= json.error;
-                        document.getElementById("mensajeSuccess").mensajeSuccess= json.msg;
-                        //this.$router.push('/signin')
-                        console.log(json);
-                    })                 
-                }
+                    // Adding body or contents to send
+                    body: JSON.stringify({
+                        "name": this.nombre,
+                        "apellidos":this.apellidos,
+                        "email": this.email,
+                        "username":this.username,
+                        "password": this.password,
+                        "confirmPassword": this.passwordConfirm,
+                        }),
+                    
+                    // Añadiendo headers al request
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "cache-control":"no-cache"
+                    }
+                })
+                
+                // Convertimos a JSON
+                .then(response => response.json())
+                .then(json => {
+                    document.getElementById("mensajeError").mensajeError= json.error; //Repasar mensajes error
+                    document.getElementById("mensajeSuccess").mensajeSuccess= json.msg;//Repasar mensajes succes
+                    console.log(json);
+                });              
+            }
     },
 }
   

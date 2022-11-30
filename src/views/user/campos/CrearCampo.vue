@@ -31,6 +31,7 @@
                             :counter="30"
                             :rules="nameRules"
                             label="Dirección"
+                            variant="outlined"
                             required>
                         </v-text-field>
 
@@ -40,6 +41,7 @@
                             type="number"
                             :rules="nameRules"
                             label="Hectáreas"
+                            variant="outlined"
                             required>
                         </v-text-field>
 
@@ -61,7 +63,7 @@
 <script>
 
      
-import Navigation from '@/components/layouts/menus/Navigation.vue'
+import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
@@ -98,7 +100,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                     if(response.statusText=="OK"){
                         console.log("Exito actualizar datos campo ");
                         this.datosNuevoCampo= response.data;
-                        this.volverDashboard();
+                        this.$router.push(`/user/dashboard`);
                         console.log(response.data);
                     }else{
                         console.log("Error creando campo");

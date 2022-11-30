@@ -1,74 +1,114 @@
 <template>
   <v-layout>
-    <v-main>
-      <v-container class="">
-        <v-row class="pa-4" no-gutters>
-          <AlertDashboard/>
-
-        </v-row>
-        <v-row no-gutters>
-          <CardUser/>
-          
-          <v-col>
-            <v-sheet class="pa-2 ma-2">
-              <v-card
-                  class="mx-auto"
-                  max-width="300">
-                  <v-list density="compact">
-                    <v-list-subheader>ACCIONES</v-list-subheader>
-
-                    <v-list-item
-                      v-for="(item, i) in items"
-                      :key="i"
-                      :value="item"
-                      active-color="primary">
-                      <template v-slot:prepend>
-                        <v-icon :icon="item.icon"></v-icon>
-                      </template>
-
-                      <v-list-item-title v-text="item.text"></v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-card>
+      <v-main>
+        <v-container class="">
+          <v-row justify="center">
+            <v-col
+              cols="4">
+              <h2 class="text-center py-10">CAMPOS</h2>
+            </v-col>
+          </v-row>
+         
+          <v-row justify="space-between">
+            <v-sheet class="ma-2 pa-2">
+              <div class="my-3 d-flex justify-space-between">
+                <v-btn 
+                  color="success" 
+                  elevation="6"
+                  @click="agregarCampo()">Añadir campo</v-btn>
+              </div>
+              <div class="d-flex justify-space-between">
+                <v-btn 
+                  color="primary" 
+                  elevation="6"
+                  @click="volverDashboard()">Volver dashboard</v-btn>
+              </div>
+              
             </v-sheet>
-          </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col
+              cols="6">
 
-          <v-responsive width="100%"></v-responsive>
-
-          <CardDashboard/>
-        </v-row>
-      </v-container>
-  </v-main>
-
-</v-layout>
+              <v-sheet class="ma-2 pa-2">
+                <v-table class="elevation-2">
+                  <thead>
+                    <tr class="bg-green">
+                      <th class="text-left">
+                        Nombre
+                      </th>
+                      <th class="text-left">
+                        Direccion
+                      </th>
+                      <th class="text-left">
+                        Hectareas
+                      </th>
+                      <th class="text-left">
+                        Ver cultivos de campo
+                      </th>
+                      <th class="text-left">
+                        Modificar
+                      </th>
+                      <th class="text-left">
+                        Eliminar
+                      </th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in campos"
+                      :key="item._id" >
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.direccion }}</td>
+                      <td>{{ item.hectareas }}</td>
+                      <td>
+                        <button @click="verCultivos(item._id)">
+                          <v-icon
+                            color="primary">
+                            mdi-eye</v-icon>
+                        </button>
+                      </td>
+                      <td>
+                        <button @click="editarCampo(item._id)">
+                          <v-icon
+                            color="success">
+                            mdi-pencil</v-icon>
+                        </button>
+                      </td>
+                      <td>
+                        <button @click="eliminarCampo(item._id)">
+                          <v-icon 
+                            color="error">
+                            mdi-trash-can</v-icon>
+                        </button>
+                      </td>
+                    </tr>
+                    
+                    </tbody>
+                  </v-table>
+                </v-sheet>
+              </v-col>
+            </v-row>         
+        </v-container>
+      </v-main>
+    </v-layout>
 </template>
 
 <script>
-import CardUser from '@/components/layouts/CardUser.vue'
+
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
-import CardDashboard from '@/components/layouts/CardDashboard.vue'
-import AlertDashboard from '@/components/layouts/AlertDashboard.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components:   {
-      Navigation,
-      CardDashboard,
-      CardUser,
-      AlertDashboard
-      },
+    components: { Navigation },
         name: 'Dashboard',
         data: () => ({
           userId: null,
           datosUser:{},
-          campos: [],
-          items: [
-          { text: 'Real-Time', icon: 'mdi-clock' },
-          { text: 'Audience', icon: 'mdi-account' },
-          { text: 'Conversions', icon: 'mdi-flag' },
-        ],
+          campos: []
         }),
         mounted(){
 
@@ -119,6 +159,9 @@ const Swal = require('sweetalert2');
                               }
 
                           });
+            },
+            volverDashboard(){
+              this.$router.push(`/user/dashboard`);
             },
             verCultivos(campoId){
               this.$router.push(`/user/${campoId}/cultivos`);

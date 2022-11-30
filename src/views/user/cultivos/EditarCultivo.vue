@@ -27,7 +27,7 @@
                         </v-text-field>
 
                         <v-text-field
-                            v-model="datosCampos.direccion"
+                            v-model="datosCam.direccion"
                             :counter="30"
                             :rules="nameRules"
                             label="Dirección"
@@ -65,7 +65,7 @@
 
 <script>
       
-import Navigation from '@/components/layouts/menus/Navigation.vue'
+import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //const Swal = require('sweetalert2');

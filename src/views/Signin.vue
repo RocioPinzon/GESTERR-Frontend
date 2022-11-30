@@ -1,4 +1,5 @@
 <template>
+  <HeaderSinSesion/>
   <v-row justify="center">      
     <v-col
       cols="11"
@@ -53,11 +54,7 @@
                   required>
               </v-text-field>
               <br>
-              <!--<v-checkbox
-                v-model="checkbox"
-                label="Guardar contraseña"
-                required>
-              </v-checkbox>-->
+             
               <div id="mensajeError"></div>
                                       
               <div id="mensajeSuccess"></div> 
@@ -69,8 +66,7 @@
                 size="large"
                 type="submit"
                 clearable
-                variant="elevated"
-                @click="inicioSesion"> Entrar
+                variant="elevated"> Entrar
               </v-btn>
             </v-form>
           </v-card>
@@ -83,8 +79,10 @@
 
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signin";
+import HeaderSinSesion from '../components/layouts/menus/HeaderSinSesion.vue';
 
 export default {
+  components:{HeaderSinSesion},
   name: 'Signin',
   data: () => ({
     user: {
@@ -120,24 +118,20 @@ export default {
             console.log(this);
      var paylod = {
         email: this.user.email,
-        //email: "imper@imper.es",
         password: this.user.password
      };
      
-     axios.post(SERVER_URL_COMPROBADA,paylod) //await antes
+     axios.post(SERVER_URL_COMPROBADA,paylod) 
      .then((response) =>{
 
       if(response.statusText=="OK"){
         console.log("Exito haciendo login ");
-
-        localStorage.setItem('userId',response.data.userId);
-        
-        console.log("response: ");
-        console.log(response);
           
         if(response.data.admin){
+          localStorage.setItem('adminId',response.data.userId);
           this.$router.push('/admin/dashboardAdmin');
         }else{
+          localStorage.setItem('userId',response.data.userId);
           this.$router.push('/user/dashboard');
         }
         

@@ -65,13 +65,11 @@
 
 <script>
       
-import Navigation from '@/components/layouts/menus/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation },
         name: 'VerCultivos',
         data: () => ({
             valid:true,
@@ -106,9 +104,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                     console.log("Error haciendo login ");
                 }
 
-            }); 
-            
-             
+            });       
         // FIN MOUNTED
         },
  

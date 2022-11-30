@@ -19,8 +19,6 @@
                 <v-btn icon="mdi-dots-vertical"></v-btn>
             </template>
             
-
-
             <template v-slot:append>
               <v-btn
                 variant="text"
@@ -33,19 +31,18 @@
           <v-divider></v-divider>
   
           <v-list density="compact" nav>
-            <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
-            <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
-            <v-list-item prepend-icon="mdi-account-group-outline" title="Users" value="users"></v-list-item>
+            <v-list-item prepend-icon="mdi-home-city" title="Dashboard" value="dashboard"></v-list-item>
+            <v-list-item prepend-icon="mdi-account" title="Campos" value="campos"></v-list-item>
+            <v-list-item prepend-icon="mdi-account-group-outline" title="Cultivos" value="cultivos"></v-list-item>
           </v-list>
         </v-navigation-drawer>
-        
-        <v-main style="height: 350px"></v-main>
       </v-layout>
     </v-card>
   </template>
 
 <script>
 export default {
+  name:Navigation,
   data () {
     return {
       drawer: true,
