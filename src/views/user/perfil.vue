@@ -92,9 +92,7 @@ const Swal = require('sweetalert2');
 
         methods: {
 
-            editarPerfil(campoId){
-              this.$router.push(`/user/${campoId}/editarCampo`);
-            },
+            
             comprobarUsuario(){
               this.userId=localStorage.getItem('userId'); 
               if(!this.userId){
