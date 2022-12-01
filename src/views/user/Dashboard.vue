@@ -7,6 +7,7 @@
           <AlertDashboard/>
 
         </v-row>
+        
         <v-row class="justify-center" no-gutters>
           
           <CardUser/>

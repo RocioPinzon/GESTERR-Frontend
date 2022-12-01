@@ -29,7 +29,11 @@
           </v-row>
           <v-row justify="center">
             <v-col
-              cols="6">
+              cols="12"
+              sm="12"
+              md="12"
+              lg="10"
+              xl="10">
 
               <v-sheet class="ma-2 pa-2">
                 <v-table class="elevation-2">

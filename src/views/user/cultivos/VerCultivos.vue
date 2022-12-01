@@ -30,7 +30,11 @@
 
           <v-row justify="center">
             <v-col
-              cols="6">
+              cols="12"
+              sm="10"
+              md="9"
+              lg="7"
+              xl="5">
 
               <v-sheet class="ma-2 pa-2">
                   <v-table>
