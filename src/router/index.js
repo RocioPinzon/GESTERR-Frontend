@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import Signin from '../views/Signin.vue'
 import Signup from '../views/Signup.vue'
 
-import Perfil from '../views/user/Perfil.vue'
+//import Perfil from '../views/user/Perfil.vue'
 
 import Dashboard from '../views/user/Dashboard.vue'
 import DashboardAdmin from '../views/admin/DashboardAdmin.vue'
@@ -50,12 +50,13 @@ const routes = [
     name: 'DashboardAdmin',
     component: DashboardAdmin
   },
-    //  PERFIL  //
+    //  PERFIL  // 
+    /*
   {
     path: '/user/perfil',
     name: 'Perfil',
     component: Perfil
-  },
+  },*/
       //  CAMPOS  //
   {
     path: '/user/campos',
