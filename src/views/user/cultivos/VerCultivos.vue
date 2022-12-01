@@ -104,15 +104,17 @@ const Swal = require('sweetalert2');
         data: () => ({
           userId: null,
           campoId: null,
+          datosUser:{},
           datosCultivo:{},
           cultivos: []
         }),
         mounted(){
           this.comprobarUsuario();   
           this.campoId = this.$route.params.campoId;
+
           this.cargarCultivos(); 
 
-          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) //await antes
+          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`)
             .then((response) =>{
 
               if(response.statusText=="OK"){
@@ -137,15 +139,15 @@ const Swal = require('sweetalert2');
 
         methods: {
           cargarCultivos(){
-              //CONSULTAR CAMPOS USER
+              //CONSULTAR CULTIVOS USER
               
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) //await antes
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) 
                 .then((response) =>{
 
                   if(response.statusText=="OK"){
                     console.log("Exito consultar cultivos ");
                     this.cultivos = response.data;
-                    console.log(response.data);
+
                   }else{
                     console.log("Error get cultivos  ");
                   }
@@ -186,16 +188,17 @@ const Swal = require('sweetalert2');
                     .then(async(responseDelete) =>{
 
                       if(responseDelete.statusText=="OK"){
-                        swalWithBootstrapButtons.fire(
+                        Swal.fire(
                           'Eliminado!',
                           'Tu campo ha sido eliminado.',
                           'success'
                         )
-                        console.log("Exito borrar campos");  
                         this.cargarCultivos();
+
+                        console.log("Exito borrar campos");  
                         
                       }else if(result.dismiss === Swal.DismissReason.cancel){
-                        swalWithBootstrapButtons.fire(
+                        Swal.fire(
                               'Cancelled',
                               'Your imaginary file is safe :)',
                               'error')

@@ -202,17 +202,18 @@ const Swal = require('sweetalert2');
                     .then(async(responseDelete) =>{
 
                       if(responseDelete.statusText=="OK"){
-                        swalWithBootstrapButtons.fire(
-                          'Eliminado!',
+                        Swal.fire(
+                          '¡Eliminado!',
                           'Tu campo ha sido eliminado.',
                           'success'
                         )
-                        console.log("Exito borrar campos");  
                         this.cargarCampos();
+                        console.log("Exito borrar campos");  
+                        
                         
                       }else if(result.dismiss === Swal.DismissReason.cancel){
-                        swalWithBootstrapButtons.fire(
-                              'Cancelled',
+                        Swal.fire(
+                              'Cancelado',
                               'Your imaginary file is safe :)',
                               'error')
                       }else{
