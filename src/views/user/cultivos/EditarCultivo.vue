@@ -18,7 +18,7 @@
                         lazy-validation>
 
                         <v-text-field
-                            v-model="datosCampos.name"
+                            v-model="datosCultivo.name"
                             :counter="10"
                             :rules="nameRules"
                             label="Nombre campo"
@@ -28,17 +28,9 @@
                         </v-text-field>
 
                         <v-text-field
-                            v-model="datosCam.direccion"
-                            :counter="30"
-                            :rules="nameRules"
-                            label="Dirección"
-                            required>
-                        </v-text-field>
-
-                        <v-text-field
-                            v-model="datosCampos.hectareas"
+                            v-model="datosCultivo.cantidad"
                             :counter="2"
-                            :rules="nameRules"
+                            variant="outlined"
                             label="Hectáreas"
                             required>
                         </v-text-field>
@@ -46,15 +38,8 @@
                         <v-btn
                             color="success"
                             class="mr-4"
-                            @click="actualizarCampos"
+                            @click="actualizarCultivos"
                             >Actualizar
-                        </v-btn>
-
-                        <v-btn
-                            color="error"
-                            class="mr-4"
-                            @click="reset">
-                            Borrar datos
                         </v-btn>
 
                     </v-form>
@@ -76,19 +61,15 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
     components: { Navigation, Header },
         name: 'VerCultivos',
         data: () => ({
-            valid:true,
-            nombreCampo:'',
-            direccion:'',
-            hectareas: '',
             userId: null,
             campoId: null,
-            datosCampos:{},
+            cultivoId: null,
+            name:'',
+            cantidad:'',
+            datosCultivo:{},
             valid: true,
             nameRules: [
                 v => (v && v.length <= 20) || 'Name must be less than 10 characters',
-            ],
-            direccionRules: [
-                v => (v && v.length <= 30) || 'Name must be less than 10 characters',
             ]
         }),
 
@@ -96,50 +77,48 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
         
             this.comprobarUsuario();   
             this.campoId = this.$route.params.campoId;
-                console.log();
+            this.cultivoId = this.$route.params.cultivoId;
 
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) // Consultar datos Campos
+            // Consultar datos Cultivo
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}`) 
                 .then((response) =>{
 
                 if(response.statusText=="OK"){
                     console.log("Exito consultar campos ");
-                    this.datosCampos = response.data;
+                    this.datosCultivos = response.data;
                 }else{
-                    console.log("Error haciendo login ");
+                    console.log("Error");
                 }
-
             }); 
-            
              
         // FIN MOUNTED
         },
- 
 
         methods: {
-            volverDashboard(){
-                this.$router.push(`/user/dashboard`);
+            volverCampos(){
+                this.$router.push(`/user/${this.campoId}/cultivos`);
             },
 
             reset(){
                 this.$refs.form.reset()
             },
 
-            actualizarCampos(){
-                let datos = this.datosCampos;
+            actualizarCultivos(){
+                let datos = this.datosCultivo;
                 console.log(datos);
                 
-                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`,datos) //Actualizar Campo
+                //Actualizar Cultivo
+                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}`,datos) 
                 .then((response) =>{
 
-                if(response.statusText=="OK"){
-                    console.log("Exito actualizar datos campo ");
-                    this.datosCampos= response.data;
-                    this.$router.push(`/user/dashboard`);
-                    console.log(response.data);
-                }else{
-                    console.log("Error actualizando datos campo");
-                }
-            });
+                    if(response.statusText=="OK"){
+                        console.log("Exito actualizar datos campo ");
+                        this.datosCultivo= response.data;
+                        this.volverCampos();
+                    }else{
+                        console.log("Error actualizando datos cultivo");
+                    }
+                });
             },
             comprobarUsuario(){
               this.userId=localStorage.getItem('userId'); 

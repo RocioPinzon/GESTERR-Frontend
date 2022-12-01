@@ -1,60 +1,92 @@
 <template>
   <Header/>
-    <div>
-      <div
-        class="d-flex justify-space-between mb-6 bg-surface-variant">
+    <v-layout>
+      <v-main>
+        <v-container class="">
+          <v-row justify="center">
+            <v-col
+              cols="4">
+              <h2 class="text-center py-10">CULTIVOS</h2>
+            </v-col>
+          </v-row>
+          
+          <v-row justify="space-between">
+            <v-sheet class="ma-2 pa-2">
+              <div class="my-3 d-flex justify-space-between">
+                <v-btn 
+                  color="success" 
+                  elevation="6"
+                  @click="agregarCultivo()">Añadir Cultivo</v-btn>
+              </div>
+              <div class="d-flex justify-space-between">
+                <v-btn 
+                  color="primary" 
+                  elevation="6"
+                  @click="volverDashboard()">VOLVER</v-btn>
+              </div>
+              
+            </v-sheet>
+          </v-row>
+          <v-row justify="center">
+            <v-col
+              cols="6">
 
-
-        <v-sheet class="ma-2 pa-2">
-          <v-btn @click="volverDashboard()">VOLVER</v-btn>   
-        </v-sheet>
-        <v-sheet class="ma-2 pa-2">
-          DATOS
-        </v-sheet>
-        <v-sheet class="ma-2 pa-2">
-
-        <div class="d-flex justify-space-between">
-          <v-btn @click="agregarCultivo()">Añadir Cultivo</v-btn>
-        </div>
-        </v-sheet>
-      </div>
-    </div>
-    <v-table>
-            <thead>
-              <tr>
-                <th class="text-left">
-                  Nombre cultivo
-                </th>
-                <th class="text-left">
-                  Cantidad
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="item in cultivos"
-                :key="item._id" >
-                <td>{{ item.nombre }}</td>
-                <td>{{ item.cantidad }}</td>
-                <td>
-                  <button @click="verProductos(item._id)">
-                    <v-icon>mdi-eye</v-icon>
-                  </button>
-                </td>
-                <td>
-                  <button @click="editarCultivo(item._id)">
-                    <v-icon class="red">mdi-pencil</v-icon>
-                  </button>
-                </td>
-                <td>
-                  <button @click="eliminarCultivo(item._id)">
-                    <v-icon class="red">mdi-trash-can</v-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
+              <v-sheet class="ma-2 pa-2">
+                  <v-table>
+                    <thead>
+                      <tr class="bg-green">
+                        <th class="text-left">
+                          Nombre cultivo
+                        </th>
+                        <th class="text-left">
+                          Cantidad
+                        </th>
+                        <th class="text-left">
+                          Ver producto de cultivo
+                        </th>
+                        <th class="text-left">
+                          Editar
+                        </th>
+                        <th class="text-left">
+                          Eliminar
+                        </th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="item in cultivos"
+                        :key="item._id" >
+                        <td>{{ item.nombre }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>
+                          <button @click="verProductos(item._id)">
+                              <v-icon
+                              color="#6EB4D1">mdi-eye</v-icon>
+                          </button>
+                        </td>
+                        <td>
+                          <button @click="editarCultivo(item._id)">
+                            <v-icon  
+                            color="success"
+                            class="red">mdi-pencil</v-icon>
+                          </button>
+                        </td>
+                        <td>
+                          <button @click="eliminarCultivo(item._id)">
+                            <v-icon  
+                            color="error">mdi-trash-can</v-icon>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-sheet>
+              </v-col>
+            </v-row>
+        </v-container>
+      </v-main>
+    </v-layout>
   </template>
   
 
@@ -130,21 +162,18 @@ const Swal = require('sweetalert2');
               this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
             },
             async eliminarCultivo(cultivoId){
-              const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                  confirmButton: '#4CB944',
-                  cancelButton: '#F72C25'
-                },
-                buttonsStyling: false
-              });
-              const result = await swalWithBootstrapButtons.fire({
-                title: 'Estás seguro?',
-                text: "Si elimina, No podrá recuperar el archivo.",
-                icon: 'warning',
-                showCancelButton: true,
+              
+              const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Si elimina, ya no podrá recuperar el campo.",
+                icon: 'question',
+                
+                confirmButtonColor: '#679e1a',
+                cancelButtonColor: '#d33',
                 confirmButtonText: '¡Si, eliminar!',
-                cancelButtonText: 'No, cancelar.',
-                reverseButtons: true
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                reverseButtons: false
               });
               
               // Stop if user did not confirm
@@ -178,8 +207,8 @@ const Swal = require('sweetalert2');
                     });
                 
             },
-            editarCultivo(){
-              this.$router.push(`/user/${this.campoId}/cultivos/${this.cultivoId}/editarCultivo`);
+            editarCultivo(cultivoId){
+              this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/editarCultivo`);
 
             },
             comprobarUsuario(){

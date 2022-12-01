@@ -178,21 +178,18 @@ const Swal = require('sweetalert2');
             },
 
             async eliminarCampo(campoId){
-              const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                  confirmButton: '#4CB944',
-                  cancelButton: '#F72C25'
-                },
-                buttonsStyling: false
-              });
-              const result = await swalWithBootstrapButtons.fire({
-                title: 'Estás seguro?',
-                text: "Si elimina, No podrá recuperar el archivo.",
-                icon: 'warning',
-                showCancelButton: true,
+             
+              const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Si elimina, ya no podrá recuperar el campo.",
+                icon: 'question',
+                
                 confirmButtonText: '¡Si, eliminar!',
-                cancelButtonText: 'No, cancelar.',
-                reverseButtons: true
+                confirmButtonColor: '#679e1a',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                cancelButtonColor: '#d33',
+                reverseButtons: false
               });
               
               // Stop if user did not confirm

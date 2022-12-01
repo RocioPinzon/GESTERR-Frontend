@@ -3,36 +3,14 @@
   <v-layout>
     <v-main>
       <v-container class="">
-        <v-row class="pa-4" no-gutters>
+        <v-row class="justify-center pa-4" no-gutters>
           <AlertDashboard/>
 
         </v-row>
-        <v-row no-gutters>
+        <v-row class="justify-center" no-gutters>
+          
           <CardUser/>
           
-          <v-col>
-            <v-sheet class="pa-2 ma-2">
-              <v-card
-                  class="mx-auto"
-                  max-width="300">
-                  <v-list density="compact">
-                    <v-list-subheader>ACCIONES</v-list-subheader>
-
-                    <v-list-item
-                      v-for="(item, i) in items"
-                      :key="i"
-                      :value="item"
-                      active-color="primary">
-                      <template v-slot:prepend>
-                        <v-icon :icon="item.icon"></v-icon>
-                      </template>
-
-                      <v-list-item-title v-text="item.text"></v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-card>
-            </v-sheet>
-          </v-col>
 
           <v-responsive width="100%"></v-responsive>
 

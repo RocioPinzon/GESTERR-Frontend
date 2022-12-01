@@ -32,6 +32,7 @@
                             type="number"
                             :rules="nameRules"
                             label="Cantidad"
+                            variant="outlined"
                             required>
                         </v-text-field>
 
