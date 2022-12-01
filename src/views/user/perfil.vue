@@ -48,7 +48,7 @@
 <script>
 
 import Header from '@/components/layouts/menus/user/Header.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
+import Navigation from '@/components/layouts/menus/user/Navigation.vue';
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
@@ -58,8 +58,7 @@ const Swal = require('sweetalert2');
         name: 'Dashboard',
         data: () => ({
           userId: null,
-          datosUser:{},
-          campos: []
+          datosUser:{}
         }),
         mounted(){
           this.comprobarUsuario();  
