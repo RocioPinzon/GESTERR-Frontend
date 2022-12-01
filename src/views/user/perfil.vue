@@ -73,10 +73,6 @@ const Swal = require('sweetalert2');
                 console.log("Exito consultar datos usuario ");
                 
                 this.datosUser = response.data;
-                
-                console.log("response: ");
-                console.log(response);
-
               }else{
                 
                 console.log("Error");
@@ -84,14 +80,12 @@ const Swal = require('sweetalert2');
 
             });          
             
-
             // FIN MOUNTED
         },
  
 
         methods: {
 
-            
             comprobarUsuario(){
               this.userId=localStorage.getItem('userId'); 
               if(!this.userId){
