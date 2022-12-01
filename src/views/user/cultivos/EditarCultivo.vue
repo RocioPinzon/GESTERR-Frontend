@@ -18,7 +18,7 @@
                         lazy-validation>
 
                         <v-text-field
-                            v-model="datosCultivo.name"
+                            v-model="datosCultivos.nombre"
                             :counter="10"
                             :rules="nameRules"
                             label="Nombre campo"
@@ -28,17 +28,18 @@
                         </v-text-field>
 
                         <v-text-field
-                            v-model="datosCultivo.cantidad"
+                            v-model="datosCultivos.cantidad"
                             :counter="2"
                             variant="outlined"
                             label="Hectáreas"
+                            clearable
                             required>
                         </v-text-field>
 
                         <v-btn
                             color="success"
                             class="mr-4"
-                            @click="actualizarCultivos"
+                            @click="actualizarCultivos()"
                             >Actualizar
                         </v-btn>
 
@@ -52,7 +53,7 @@
 <script>
 
 import Header from '@/components/layouts/menus/user/Header.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
+import Navigation from '@/components/layouts/menus/user/Navigation.vue';
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //const Swal = require('sweetalert2');
@@ -64,9 +65,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             userId: null,
             campoId: null,
             cultivoId: null,
-            name:'',
-            cantidad:'',
-            datosCultivo:{},
+            datosCultivos:{},
             valid: true,
             nameRules: [
                 v => (v && v.length <= 20) || 'Name must be less than 10 characters',
@@ -82,10 +81,12 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             // Consultar datos Cultivo
             axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}`) 
                 .then((response) =>{
-
+                    
                 if(response.statusText=="OK"){
-                    console.log("Exito consultar campos ");
+                    console.log("Exito consultar cultivo " + this.cultivoId);
                     this.datosCultivos = response.data;
+                    console.log(this.datosCultivos);
+
                 }else{
                     console.log("Error");
                 }
@@ -95,7 +96,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
         },
 
         methods: {
-            volverCampos(){
+            volverCultivos(){
                 this.$router.push(`/user/${this.campoId}/cultivos`);
             },
 
@@ -104,7 +105,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             },
 
             actualizarCultivos(){
-                let datos = this.datosCultivo;
+                let datos = this.datosCultivos;
                 console.log(datos);
                 
                 //Actualizar Cultivo
@@ -113,8 +114,8 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
                     if(response.statusText=="OK"){
                         console.log("Exito actualizar datos campo ");
-                        this.datosCultivo= response.data;
-                        this.volverCampos();
+                        this.datosCultivos= response.data;
+                        this.volverCultivos();
                     }else{
                         console.log("Error actualizando datos cultivo");
                     }

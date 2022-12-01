@@ -78,10 +78,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
         name: 'VerCultivos',
         
         data: () => ({
-            valid:true,
-            nombreCampo:'',
-            direccion:'',
-            hectareas: '',
+           
             userId: null,
             campoId: null,
             datosCampos:{},
