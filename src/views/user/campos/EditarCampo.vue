@@ -95,7 +95,6 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
             this.comprobarUsuario();
             this.campoId = this.$route.params.campoId;
-                console.log();
 
             axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) // Consultar datos Campos
                 .then((response) =>{

@@ -27,6 +27,7 @@
               
             </v-sheet>
           </v-row>
+
           <v-row justify="center">
             <v-col
               cols="6">
@@ -60,7 +61,7 @@
                         <td>{{ item.nombre }}</td>
                         <td>{{ item.cantidad }}</td>
                         <td>
-                          <button @click="verProductos(item._id)">
+                          <button @click="verProductos()">
                               <v-icon
                               color="#6EB4D1">mdi-eye</v-icon>
                           </button>
@@ -68,8 +69,7 @@
                         <td>
                           <button @click="editarCultivo(item._id)">
                             <v-icon  
-                            color="success"
-                            class="red">mdi-pencil</v-icon>
+                            color="success">mdi-pencil</v-icon>
                           </button>
                         </td>
                         <td>
@@ -118,29 +118,20 @@ const Swal = require('sweetalert2');
             .then((response) =>{
 
               if(response.statusText=="OK"){
-                
                 console.log("Exito consultar datos usuario ");
-                
                 this.datosUser = response.data;
                 
-                console.log("response: ");
-                console.log(response);
-                  
-                
               }else{
-                
-                console.log("Error haciendo login ");
+                console.log("Error");
               }
-
             });             
             // FIN MOUNTED
         },
- 
 
         methods: {
           cargarCultivos(){
-              //CONSULTAR CULTIVOS USER
-              
+
+            //CONSULTAR CULTIVOS DE UN CAMPO  
             axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) 
                 .then((response) =>{
 
@@ -160,8 +151,8 @@ const Swal = require('sweetalert2');
             agregarCultivo(){
               this.$router.push(`/user/${this.campoId}/cultivos/crearCultivo`);
             },
-            verProductos(cultivoId){
-              this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
+            verProductos(){
+              this.$router.push(`/user/productos`);
             },
             async eliminarCultivo(cultivoId){
               
