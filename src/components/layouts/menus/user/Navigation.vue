@@ -1,6 +1,5 @@
 <template>
-    <v-card>
-      <v-layout>
+    <v-app>
         <v-navigation-drawer
           v-model="drawer"
           :rail="rail"
@@ -36,8 +35,7 @@
             <v-list-item prepend-icon="mdi-account-group-outline" title="Cultivos" value="cultivos"></v-list-item>
           </v-list>
         </v-navigation-drawer>
-      </v-layout>
-    </v-card>
+      </v-app>
   </template>
 
 <script>

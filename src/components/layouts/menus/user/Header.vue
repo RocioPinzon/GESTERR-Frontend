@@ -1,34 +1,25 @@
 <template>
-
     <v-app-bar color="green">
        
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
         <v-spacer></v-spacer>
-        <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item>
-                <v-list-item-title><router-link :to= urlDashboard()>Dashboard</router-link></v-list-item-title>
-                <v-list-item-title><router-link :to= urlCampos()>Campos</router-link></v-list-item-title>
-                <v-list-item-title><router-link :to= urlProductos()>Productos</router-link></v-list-item-title>
-
-              </v-list-item>
-            </v-list>
+          <v-menu>
+                
+            
           </v-menu>
+            <router-link :to= urlDashboard()><v-btn>Dashboard</v-btn></router-link>
+            <router-link :to= urlCampos()><v-btn>Campos</v-btn></router-link>
+            <router-link :to= urlProductos()><v-btn>Productos</v-btn></router-link>
         <v-btn icon>
           <v-icon @click="logout(item_id)">mdi-export</v-icon>
         </v-btn>
       </v-app-bar>
-      <Navigation/>
+      
 
   </template>
 
 <script>
-import Navigation from './Navigation.vue'
 
 export default {
   components: { Navigation },

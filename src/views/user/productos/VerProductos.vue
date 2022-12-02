@@ -2,57 +2,44 @@
   <Header/>
     <v-layout>
       <v-main>
+        
         <v-container class="">
-          <v-row justify="center">
-            <v-col
-              cols="4">
-              <h2 class="text-center py-10">PRODUCTOS</h2>
-            </v-col>
-          </v-row>
-
-          <v-row justify="space-between">
-            <v-sheet class="ma-2 pa-2">
-              <div class="my-3 d-flex justify-space-between">
-                <v-btn 
-                  color="success" 
-                  elevation="6"
-                  @click="crearProducto()">Añadir Producto</v-btn>
-              </div>
-              <div class="d-flex justify-space-between">
-                <v-btn 
-                  color="primary" 
-                  elevation="6"
-                  @click="volverDashboard()">Volver Dashboard</v-btn>
-              </div>
-              
+          
+          <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="ma-2 pa-2 align-self-end">
+              <v-img
+                src="../../../assets/img/fondo-titulos.png">
+                <h2 class="text-center py-15">{{ titulo }}</h2>
+              </v-img>
             </v-sheet>
           </v-row>
+
           <v-row justify="center">
             <v-col
               cols="12"
               sm="10"
               md="9"
               lg="7"
-              xl="5">
-              <v-sheet class="ma-2 pa-2">
+              xl="5" 
+              class="my-10">
+              <div class="ma-2 py-1 d-flex justify-space-between">
+                <v-btn 
+                  color="success" 
+                  elevation="6"
+                  @click="crearProducto()">Añadir Producto</v-btn>
+              </div>
+              
+              <v-sheet class="ma-2 rounded" elevation="4">
                 <v-table>
                   <thead>
                     <tr class="bg-green">
-                      <th class="text-left">
-                        Nombre producto
-                      </th>
-                      <th class="text-left">
-                        Cantidad (Kg)
-                      </th>
-                      <th class="text-left">
-                        Editar
-                      </th>
-                      <th class="text-left">
-                        Borrar
-                      </th>
-                      
+                      <th class="text-left">{{ nombre }}</th>
+                      <th class="text-left">{{ cantidad }}</th>
+                      <th class="text-left">Editar</th>
+                      <th class="text-left">Borrar</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     <tr
                       v-for="item in productos"
@@ -60,16 +47,14 @@
                       <td>{{ item.name }}</td>
                       <td>{{ item.cantidad }}</td>
                       <td>
-                        <button @click="editarProducto(item._id)">
-                          <v-icon  
-                            color="success">mdi-pencil</v-icon>
-                        </button>
+                        <v-btn variant="flat" @click="editarProducto(item._id)">
+                          <v-icon color="success">mdi-pencil</v-icon>
+                        </v-btn>
                       </td>
                       <td>
-                        <button @click="eliminarProducto(item._id)">
-                          <v-icon   
-                            color="error">mdi-trash-can</v-icon>
-                        </button>
+                        <v-btn variant="flat" @click="eliminarProducto(item._id)">
+                          <v-icon color="error">mdi-trash-can</v-icon>
+                        </v-btn>
                       </td>
                     </tr>
                   </tbody>
@@ -96,7 +81,11 @@ const Swal = require('sweetalert2');
         name: 'VerCultivos',
         data: () => ({
           userId: null,
-          productos: []
+          productos: [],
+          titulo:"PRODUCTOS",
+          nombre:"Nombre producto",
+          textButonActualizar:"Actualizar",
+          cantidad:"Cantidad (Kg)"
         }),
         mounted(){
           this.comprobarUsuario();  
@@ -144,8 +133,13 @@ const Swal = require('sweetalert2');
                 }); 
             },
 
-            volverDashboard(){
-              this.$router.push(`/user/dashboard`);
+            toggleOrder () {
+              this.sortDesc = !this.sortDesc
+            },
+            nextSort () {
+              let index = this.headers.findIndex(h => h.value === this.sortBy)
+              index = (index + 1) % this.headers.length
+              this.sortBy = this.headers[index].value
             },
             
             crearProducto(){

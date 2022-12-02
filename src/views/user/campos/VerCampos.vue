@@ -3,61 +3,38 @@
   <v-layout>
       <v-main>
         <v-container class="">
-          <v-row justify="center">
-            <v-col
-              cols="4">
-              <h2 class="text-center py-10">CAMPOS</h2>
-            </v-col>
-          </v-row>
-         
-          <v-row justify="space-between">
-            <v-sheet class="ma-2 pa-2">
-              <div class="my-3 d-flex justify-space-between">
-                <v-btn 
-                  color="success" 
-                  elevation="6"
-                  @click="agregarCampo()">Añadir campo</v-btn>
-              </div>
-              <div class="d-flex justify-space-between">
-                <v-btn 
-                  color="primary" 
-                  elevation="6"
-                  @click="volverDashboard()">Volver dashboard</v-btn>
-              </div>
-              
+          <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="ma-2 pa-2 align-self-end">
+              <v-img
+                src="../../../assets/img/fondo-titulos.png">
+                <h2 class="text-center py-15">{{ titulo }}</h2>
+              </v-img>
             </v-sheet>
           </v-row>
           <v-row justify="center">
             <v-col
               cols="12"
-              sm="12"
-              md="12"
-              lg="10"
-              xl="10">
-
-              <v-sheet class="ma-2 pa-2">
-                <v-table class="elevation-2">
+                sm="12"
+                md="12"
+                lg="10"
+                xl="10"
+                class="my-10">
+              
+              <div class="my-2 py-1 d-flex justify-space-between">
+                <v-btn 
+                  color="success" 
+                  elevation="6"
+                  @click="agregarCampo()">Añadir campo</v-btn>
+              </div>
+              <v-table class="elevation-2">
                   <thead>
                     <tr class="bg-green">
-                      <th class="text-left">
-                        Nombre
-                      </th>
-                      <th class="text-left">
-                        Direccion
-                      </th>
-                      <th class="text-left">
-                        Hectareas
-                      </th>
-                      <th class="text-left">
-                        Ver cultivos de campo
-                      </th>
-                      <th class="text-left">
-                        Modificar
-                      </th>
-                      <th class="text-left">
-                        Eliminar
-                      </th>
-                      
+                      <th class="text-left">Nombre</th>
+                      <th class="text-left">Direccion</th>
+                      <th class="text-left">Hectareas</th>
+                      <th class="text-left">Cultivos de campo</th>
+                      <th class="text-left">Modificar</th>
+                      <th class="text-left">Eliminar</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -69,32 +46,24 @@
                       <td>{{ item.hectareas }}</td>
                       <td>
                         <button @click="verCultivos(item._id)">
-                          <v-icon
-                            color="primary">
-                            mdi-eye</v-icon>
+                          <v-icon color="#8AA39B">mdi-eye</v-icon>
                         </button>
                       </td>
                       <td>
                         <button @click="editarCampo(item._id)">
-                          <v-icon
-                            color="success">
-                            mdi-pencil</v-icon>
+                          <v-icon color="success">mdi-pencil</v-icon>
                         </button>
                       </td>
                       <td>
                         <button @click="eliminarCampo(item._id)">
-                          <v-icon 
-                            color="error">
-                            mdi-trash-can</v-icon>
+                          <v-icon color="error"> mdi-trash-can</v-icon>
                         </button>
                       </td>
-                    </tr>
-                    
-                    </tbody>
-                  </v-table>
-                </v-sheet>
-              </v-col>
-            </v-row>         
+                    </tr>  
+                  </tbody>
+                </v-table>
+            </v-col>
+          </v-row>        
         </v-container>
       </v-main>
     </v-layout>
@@ -114,7 +83,8 @@ const Swal = require('sweetalert2');
         data: () => ({
           userId: null,
           datosUser:{},
-          campos: []  
+          campos: [],
+          titulo: "CAMPOS"
         }),
         mounted(){
           this.comprobarUsuario(); 

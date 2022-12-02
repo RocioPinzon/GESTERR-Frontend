@@ -5,8 +5,9 @@
           <v-row class="justify-center">
               <v-col
                   cols="6"
-                  sm="12">
-                  <h2 class="text-center">ACTUALIZAR DATOS PRODUCTO</h2>
+                  sm="12"
+                  class="py-15 mb-6">
+                  <h2 class="text-center">{{ titulo }}</h2>
               </v-col>
               <v-col
                   cols="6"
@@ -33,13 +34,14 @@
                           variant="outlined"
                           label="Cantidad"
                           clearable
+                          type="number"
                           required>
                       </v-text-field>
 
                       <v-btn
                           color="success"
                           class="mr-4"
-                          @click="actualizarProducto()">Actualizar
+                          @click="actualizarProducto()">{{ textButton }}
                       </v-btn>
 
                   </v-form>
@@ -61,11 +63,13 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
   components: { Navigation, Header },
       name: 'VerCultivos',
       data: () => ({
-          userId: null,
-          productoId: null,
-          datosProducto:{},
-          valid: true,
-          nameRules: [
+            titulo:"ACTUALIZAR PRODUCTO",
+            textButton:"Actualizar",
+            userId: null,
+            productoId: null,
+            datosProducto:{},
+            valid: true,
+            nameRules: [
               v => (v && v.length <= 20) || 'Name must be less than 10 characters',
           ]
       }),

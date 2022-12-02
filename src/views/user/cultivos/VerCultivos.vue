@@ -3,28 +3,13 @@
     <v-layout>
       <v-main>
         <v-container class="">
-          <v-row justify="center">
-            <v-col
-              cols="4">
-              <h2 class="text-center py-10">CULTIVOS</h2>
-            </v-col>
-          </v-row>
-          
-          <v-row justify="space-between">
-            <v-sheet class="ma-2 pa-2">
-              <div class="my-3 d-flex justify-space-between">
-                <v-btn 
-                  color="success" 
-                  elevation="6"
-                  @click="agregarCultivo()">Añadir Cultivo</v-btn>
-              </div>
-              <div class="d-flex justify-space-between">
-                <v-btn 
-                  color="primary" 
-                  elevation="6"
-                  @click="volverDashboard()">VOLVER</v-btn>
-              </div>
-              
+
+          <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="ma-2 pa-2 align-self-end">
+              <v-img
+                src="../../../assets/img/fondo-titulos.png">
+                <h2 class="text-center py-15">{{ titulo }}</h2>
+              </v-img>
             </v-sheet>
           </v-row>
 
@@ -35,27 +20,21 @@
               md="9"
               lg="7"
               xl="5">
-
-              <v-sheet class="ma-2 pa-2">
+                <div class="ma-2 py-1 d-flex justify-space-between">
+                  <v-btn 
+                  color="success" 
+                  elevation="6"
+                  @click="agregarCultivo()">Añadir Cultivo</v-btn>
+              </div>
+              <v-sheet class="ma-2 rounded" elevation="4">
                   <v-table>
                     <thead>
                       <tr class="bg-green">
-                        <th class="text-left">
-                          Nombre cultivo
-                        </th>
-                        <th class="text-left">
-                          Cantidad
-                        </th>
-                        <th class="text-left">
-                          Ver producto de cultivo
-                        </th>
-                        <th class="text-left">
-                          Editar
-                        </th>
-                        <th class="text-left">
-                          Eliminar
-                        </th>
-                        
+                        <th class="text-left">{{ nombre }}</th>
+                        <th class="text-left">{{ cantidad }}</th>
+                        <th class="text-left">Producto de cultivo</th>
+                        <th class="text-left">Editar</th>
+                        <th class="text-left">Eliminar</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -65,21 +44,18 @@
                         <td>{{ item.nombre }}</td>
                         <td>{{ item.cantidad }}</td>
                         <td>
-                          <button @click="verProductos()">
-                              <v-icon
-                              color="#6EB4D1">mdi-eye</v-icon>
+                          <button variant="flat" @click="verProductos()">
+                              <v-icon color="#8AA39B">mdi-eye</v-icon>
                           </button>
                         </td>
                         <td>
-                          <button @click="editarCultivo(item._id)">
-                            <v-icon  
-                            color="success">mdi-pencil</v-icon>
+                          <button variant="flat" @click="editarCultivo(item._id)">
+                            <v-icon color="success">mdi-pencil</v-icon>
                           </button>
                         </td>
                         <td>
-                          <button @click="eliminarCultivo(item._id)">
-                            <v-icon  
-                            color="error">mdi-trash-can</v-icon>
+                          <button variant="flat" @click="eliminarCultivo(item._id)">
+                            <v-icon color="error">mdi-trash-can</v-icon>
                           </button>
                         </td>
                       </tr>
@@ -110,7 +86,10 @@ const Swal = require('sweetalert2');
           campoId: null,
           datosUser:{},
           datosCultivo:{},
-          cultivos: []
+          cultivos: [],
+          titulo:"CULTIVOS",
+          cantidad:"Cantidad",
+          nombre:"Nombre cultivos"
         }),
         mounted(){
           this.comprobarUsuario();   
