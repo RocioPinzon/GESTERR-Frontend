@@ -6,7 +6,7 @@ import Signup from '../views/Signup.vue'
 
 import Dashboard from '../views/user/Dashboard.vue'
 import DashboardAdmin from '../views/admin/DashboardAdmin.vue'
-import PerfilUser from '../views/user/PerfilUser'
+import Perfil from '../views/user/Perfil'
 
 import VerCampos from '../views/user/campos/VerCampos.vue'
 import CrearCampo from '../views/user/campos/CrearCampo.vue'
@@ -54,8 +54,8 @@ const routes = [
     
   {
     path: '/user/perfil',
-    name: 'PerfilUser',
-    component: PerfilUser
+    name: 'Perfil',
+    component: Perfil
   },
       //  CAMPOS  //
   {
