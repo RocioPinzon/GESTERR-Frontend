@@ -13,10 +13,16 @@
           
           <CardUser/>
           
+          
+          <Tiempo/>
 
           <v-responsive width="100%"></v-responsive>
 
+
+        </v-row>
+        <v-row class="justify-center" no-gutters>
           <CardDashboard/>
+
         </v-row>
       </v-container>
   </v-main>
@@ -26,12 +32,17 @@
 
 <script>
 
+import Tiempo from '@/components/Tiempo';
+
 import Header from '@/components/layouts/menus/user/Header.vue';
 import CardUser from '@/components/layouts/CardUser.vue'
+import CardDatosDash from '@/components/layouts/CardDatosDash.vue'
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import CardDashboard from '@/components/layouts/CardDashboard.vue'
 import AlertDashboard from '@/components/layouts/AlertDashboard.vue'
 import axios from 'axios';
+
+//  Heroku   //
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
@@ -41,7 +52,9 @@ const Swal = require('sweetalert2');
       CardDashboard,
       CardUser,
       AlertDashboard,
-      Header
+      Header,
+      CardDatosDash,
+      Tiempo
       },
         name: 'Dashboard',
         data: () => ({
@@ -55,6 +68,7 @@ const Swal = require('sweetalert2');
         ],
         }),
         mounted(){
+          
           this.comprobarUsuario();  
           this.campoId = this.$route.params.campoId;
           

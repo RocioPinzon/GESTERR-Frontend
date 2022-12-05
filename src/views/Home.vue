@@ -5,7 +5,6 @@
         <Slider/>
 
         <v-container class="text-center" width="800px">
-            <h2>Servicios</h2>
             <Cards/>
         </v-container>
     </v-content>

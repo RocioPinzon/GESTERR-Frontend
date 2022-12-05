@@ -39,7 +39,10 @@ export default {
   },
   methods:{
     logout(){
-      localStorage.removeItem=('userId');
+
+      
+      this.userId= localStorage.removeItem('userId');
+      
       this.$router.push(`/`);
     },
     urlDashboard(){

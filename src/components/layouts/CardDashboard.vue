@@ -1,7 +1,13 @@
 <template>
     <v-container>
-        <v-row>
-            <v-col v-for="(item, i) in items" :key="i.id">
+        <v-row class="d-flex justify-center">
+            <v-col
+              cols="12"
+              sm="12"
+              md="4"
+              lg="4"
+              xl="4"
+              v-for="(item, i) in items" :key="i.id">
                 <v-sheet class="pa-2 ma-2">
                     <v-card
                     class="mx-auto"

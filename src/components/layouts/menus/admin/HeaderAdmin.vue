@@ -27,7 +27,8 @@ export default {
   }),
   methods:{
     logout(){
-      localStorage.removeItem=('adminId');
+
+      this.userId= localStorage.removeItem('adminId');
       this.$router.push(`/`);
     }
   }

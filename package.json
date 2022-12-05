@@ -15,10 +15,14 @@
   "dependencies": {
     "@mdi/font": "5.9.55",
     "axios": "^1.1.3",
+    "chart.js": "^3.9.1",
     "core-js": "^3.8.3",
+    "json-as-xlsx": "^2.4.6",
     "roboto-fontface": "*",
     "sweetalert2": "^11.6.14",
     "vue": "^3.2.13",
+    "vue-chart-3": "^3.1.8",
+    "vue-chartjs": "^4.1.2",
     "vue-router": "^4.0.3",
     "vuetify": "^3.0.0-beta.0",
     "webfontloader": "^1.0.0"

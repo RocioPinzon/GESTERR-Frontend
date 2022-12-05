@@ -21,6 +21,7 @@ import VerProductos from '../views/user/productos/VerProductos.vue'
 import CrearProducto from '../views/user/productos/CrearProducto.vue'
 import EditarProducto from '../views/user/productos/EditarProducto.vue'
 
+import ErrorPage from '../views/ErrorPage.vue'
 
 const routes = [
   {
@@ -104,7 +105,18 @@ const routes = [
     path: '/user/productos/:productoId/editarProducto',
     name: 'EditarProducto',
     component: EditarProducto
-  }
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'ErrorPage',
+    component: ErrorPage
+ }/*
+ ,
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'ErrorPage',
+    component: ErrorPage
+ }**/
 ]
 
 const router = createRouter({

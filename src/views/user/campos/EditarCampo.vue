@@ -42,7 +42,17 @@
                             type="number"
                             required>
                         </v-text-field>
-
+                        <v-select
+                            v-model="datosCampos.provincia"
+                            :items="items"
+                            item-title="nm"
+                            item-value="datosCampos.provincia"
+                            label="Elige una provincia" 
+                            return-object
+                            single-line
+                            disabled
+                            variant="outlined">  
+                        </v-select>
                         <v-btn
                             color="success"
                             class="mr-4"
@@ -50,12 +60,7 @@
                             >Actualizar
                         </v-btn>
 
-                        <v-btn
-                            color="error"
-                            class="mr-4"
-                            @click="reset">
-                            Borrar datos
-                        </v-btn>
+                       
 
                     </v-form>
                 </v-col>
@@ -103,7 +108,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                     console.log("Exito consultar campos ");
                     this.datosCampos = response.data;
                 }else{
-                    console.log("Error haciendo login ");
+                    console.log("Error");
                 }
 
             });       

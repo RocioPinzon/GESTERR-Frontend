@@ -11,6 +11,12 @@
               </v-img>
             </v-sheet>
           </v-row>
+          <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="ma-2 pa-2 align-self-end">
+              <BarChart/>
+            </v-sheet>
+          </v-row>
+          
           <v-row justify="center">
             <v-col
               cols="12"
@@ -21,40 +27,51 @@
                 class="my-10">
               
               <div class="my-2 py-1 d-flex justify-space-between">
+               
                 <v-btn 
                   color="success" 
                   elevation="6"
                   @click="agregarCampo()">Añadir campo</v-btn>
+                
+                <v-btn 
+                  color="success" 
+                  elevation="6"
+                  @click="numeroCampos(campos)">Número de campos total: {{ nCampos }}</v-btn>
               </div>
-              <v-table class="elevation-2">
+              <v-table
+              class="sortable my-10 elevation-5">
+              
                   <thead>
                     <tr class="bg-green">
-                      <th class="text-left">Nombre</th>
-                      <th class="text-left">Direccion</th>
-                      <th class="text-left">Hectareas</th>
-                      <th class="text-left">Cultivos de campo</th>
-                      <th class="text-left">Modificar</th>
-                      <th class="text-left">Eliminar</th>
+                      <th class="text-center">Nombre</th>
+                      <th class="text-center">Direccion</th>
+                      <th class="text-center">Hectareas</th>
+                      <th class="text-center">Provincia</th>
+                      <th class="sorttable_nosort text-center">Cultivos de campo</th>
+                      
+                      <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
+                    <tr class="item"
                       v-for="item in campos"
                       :key="item._id" >
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.direccion }}</td>
-                      <td>{{ item.hectareas }}</td>
-                      <td>
+                     
+                      <td class="text-center">{{ item.name }}</td>
+                      <td class="text-center">{{ item.direccion }}</td>
+                      <td class="text-center">{{ item.hectareas }}</td>
+                      <td class="text-center">{{ item.provincia }}</td>
+
+                      <td class="text-center">
                         <button @click="verCultivos(item._id)">
                           <v-icon color="#8AA39B">mdi-eye</v-icon>
                         </button>
                       </td>
-                      <td>
+                      <td class="text-center">
                         <button @click="editarCampo(item._id)">
                           <v-icon color="success">mdi-pencil</v-icon>
                         </button>
-                      </td>
-                      <td>
+                       
                         <button @click="eliminarCampo(item._id)">
                           <v-icon color="error"> mdi-trash-can</v-icon>
                         </button>
@@ -62,6 +79,16 @@
                     </tr>  
                   </tbody>
                 </v-table>
+                <div class="my-2 py-1 d-flex justify-space-between">
+                  <v-btn 
+                    color="#906b51" 
+                    elevation="6"
+                    class="text-white"
+                    @click="downloadFile">Descargar .xslx
+                  </v-btn>
+                </div>
+
+                
             </v-col>
           </v-row>        
         </v-container>
@@ -70,21 +97,23 @@
 </template>
 
 <script>
-
+import BarChart from '@/components/BarChart'
 import Header from '@/components/layouts/menus/user/Header.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
+//import * as XLSX from 'xlsx';
 const Swal = require('sweetalert2');
-
     export default {
-    components: { Navigation, Header},
+    components: { Navigation, Header,BarChart},
         name: 'Dashboard',
         data: () => ({
           userId: null,
           datosUser:{},
           campos: [],
-          titulo: "CAMPOS"
+          nCampos:"",
+          titulo: "CAMPOS",
+          
         }),
         mounted(){
           this.comprobarUsuario(); 
@@ -93,34 +122,69 @@ const Swal = require('sweetalert2');
           this.cargarCampos();  
           
           //CONSULTAR CAMPOS USER
-          
           axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`)
             .then((response) =>{
 
               if(response.statusText=="OK"){
                 
                 console.log("Exito consultar datos usuario ");
-                
                 this.datosUser = response.data;
-                
-                console.log("response: ");
-                console.log(response);
-                  
-                
               }else{
                 
                 console.log("Error ");
               }
 
-            });          
+            }); 
             
+            //  AÑADIR SCRIPT PARA LLAMAR SORT
+            let ordenar = document.createElement('script');
+            ordenar.setAttribute('src', 'https://www.kryogenix.org/code/browser/sorttable/sorttable.js');
+            document.head.appendChild(ordenar);
 
+            setTimeout(() => {
+              var newTableObject = document.querySelector('.sortable table');
+              sorttable.makeSortable(newTableObject)
+            }, "1500");
+            
             // FIN MOUNTED
         },
  
 
         methods: {
+            
+            numeroCampos(campos){
+              this.nCampos = campos.length;
+              console.log("n campos totales: " + this.nCampos);
+              //return this.nCampos;
+            },
+            downloadFile: function () {
+              const XLSX = require("json-as-xlsx");
 
+              let data = [
+                {
+                  sheet: "Adults",
+                  columns: [
+                    { label: "User", value: "user" },
+                    { label: "Nombre campo", value: (row) => row.name + "." },
+                    { label: "Direccion", value: (row) => row.direccion + "." },
+                    { label: "Hectareas", value: (row) => row.hectareas + "." }, 
+                    { label: "Fecha creacion campo", value: (row) => row.date + "."}
+                  ],
+                  content: this.campos,
+                }
+              ]
+
+              let settings = {
+                fileName: "excelDatos", // Name of the resulting spreadsheet
+                extraLength: 3, // A bigger number means that columns will be wider
+                writeMode: 'writeFile', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+                writeOptions: {}, // Style options from https://github.com/SheetJS/sheetjs#writing-options
+                RTL: false, // Display the columns from right-to-left (the default value is false)
+              }
+
+              XLSX(data, settings) 
+              //XLSX(columns, content, settings);
+            },
             cargarCampos(){
               //CONSULTAR CAMPOS USER
               axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
@@ -166,7 +230,7 @@ const Swal = require('sweetalert2');
                 reverseButtons: false
               });
               
-              // Stop if user did not confirm
+              // se para si el usuario no confirma
                if (!result.value) {
                   return;
                }

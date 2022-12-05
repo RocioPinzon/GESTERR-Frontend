@@ -1,6 +1,6 @@
 <template>
     <v-carousel show-arrows="hover" cycle
-    height="500"
+    height="800"
     hide-delimiter-background>
       <v-carousel-item
         v-for="(item,i) in items"
@@ -10,8 +10,8 @@
         reverse-transition="fade-transition"
         transition="fade-transition">
 
-        <div class="d-flex fill-height justify-center align-center">
-          <div class="text-h2">
+        <div class="d-flex fill-height justify-center align-center ">
+          <div class="text-h2 bg-white pa-10">
             {{ item.title }}
             <br>
             {{ item.description }}
@@ -30,7 +30,7 @@ export default {
         {
           src: require('../../assets/img/slider1.jpg'),
           title: 'GesTerr',
-          description: 'Una app cómoda para gestionar tu campo desde cualquier lado'
+          description: 'Gestionar tu campo desde cualquier lado'
         },
         {
           src: require('../../assets/img/slider2.jpg'),

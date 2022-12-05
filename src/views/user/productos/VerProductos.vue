@@ -30,13 +30,12 @@
               </div>
               
               <v-sheet class="ma-2 rounded" elevation="4">
-                <v-table>
+                <v-table class="sortable my-10 elevation-5">
                   <thead>
                     <tr class="bg-green">
-                      <th class="text-left">{{ nombre }}</th>
-                      <th class="text-left">{{ cantidad }}</th>
-                      <th class="text-left">Editar</th>
-                      <th class="text-left">Borrar</th>
+                      <th class="text-center">{{ nombre }}</th>
+                      <th class="text-center">{{ cantidad }}</th>
+                      <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                     </tr>
                   </thead>
 
@@ -44,14 +43,12 @@
                     <tr
                       v-for="item in productos"
                       :key="item._id" >
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.cantidad }}</td>
-                      <td>
+                      <td class="text-center">{{ item.name }}</td>
+                      <td class="text-center">{{ item.cantidad }}</td>
+                      <td class="text-center">
                         <v-btn variant="flat" @click="editarProducto(item._id)">
                           <v-icon color="success">mdi-pencil</v-icon>
                         </v-btn>
-                      </td>
-                      <td>
                         <v-btn variant="flat" @click="eliminarProducto(item._id)">
                           <v-icon color="error">mdi-trash-can</v-icon>
                         </v-btn>
@@ -60,6 +57,14 @@
                   </tbody>
                 </v-table>
               </v-sheet>
+              <div class="my-2 py-2 d-flex justify-space-between">
+                  <v-btn 
+                    color="#906b51" 
+                    elevation="6"
+                    class="text-white"
+                    @click="downloadFile">Descargar .xslx
+                  </v-btn>
+                </div>
             </v-col>
           </v-row>
       </v-container>
@@ -104,6 +109,15 @@ const Swal = require('sweetalert2');
               }
 
             });  
+            //  AÑADIR SCRIPT PARA LLAMAR SORT
+            let ordenar = document.createElement('script');
+            ordenar.setAttribute('src', 'https://www.kryogenix.org/code/browser/sorttable/sorttable.js');
+            document.head.appendChild(ordenar);
+
+            setTimeout(() => {
+              var newTableObject = document.querySelector('.sortable table');
+              sorttable.makeSortable(newTableObject)
+            }, "1500");
             // FIN MOUNTED
         },
  
@@ -115,7 +129,33 @@ const Swal = require('sweetalert2');
                 this.$router.push(`/signin`);
               } 
             },
+            downloadFile: function () {
+              const XLSX = require("json-as-xlsx");
 
+              let data = [
+                {
+                  sheet: "Adults",
+                  columns: [
+                    { label: "ID Campo", value: "user" },
+                    { label: "Nombre producto", value: (row) => row.name + "." },
+                    { label: "Cantidad", value: (row) => row.cantidad + "." }, // Top level data
+                    //{ label: "Fecha", value: (row) => row.date + "." },
+                  ],
+                  content: this.productos,
+                }
+              ]
+
+              let settings = {
+                fileName: "excelDatos", // Name of the resulting spreadsheet
+                extraLength: 3, // A bigger number means that columns will be wider
+                writeMode: 'writeFile', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+                writeOptions: {}, // Style options from https://github.com/SheetJS/sheetjs#writing-options
+                RTL: false, // Display the columns from right-to-left (the default value is false)
+              }
+
+              XLSX(data, settings) 
+              //XLSX(columns, content, settings);
+            },
             cargarProductos(){
 
             //CONSULTAR PRODUCTOS USER  

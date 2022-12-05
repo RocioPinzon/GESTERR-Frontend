@@ -11,39 +11,37 @@
                     color="green"
                     variant="outlined"
                     closable>
-                    <v-card-title class="d-flex justify-space-end"><v-icon>mdi-account</v-icon><h3>Datos perfil</h3></v-card-title>
+                    <v-card-title class="d-flex justify-space-end"><v-icon>mdi-account</v-icon><h3>DATOS</h3></v-card-title>
                     <v-card-text>
-                        <h3 class="py-3">Bienvenido/a</h3>
-                        <p>Nombre: {{ datosUser.name }}</p>
-                        <p>Apellidos: {{ datosUser.apellidos }}</p>
-                        <p>Username: {{ datosUser.username }}</p>
-                        <p>e-mail: {{ datosUser.email }}</p>
+                        <h3 class="py-3">Tiempo y Fecha Actual</h3>
+                        <p>Hora:  {{ new Date().getHours() }}:  {{ new Date().getUTCMinutes() }} :  {{ new Date().getSeconds() }}</p>
+                        <p>Tiempo provincia:</p>
+                        
                     </v-card-text>
                     
-                    <v-card-actions class="d-flex flex-column">
-                        <v-btn color="success"
-                        variant="flat"
-                        @click="irPerfil()">
-                        {{ button }}
-                        </v-btn>
-                    </v-card-actions>
                 </v-card>
+                
             </v-sheet>
     </v-col>
 </template>
 
 
 <script>
+import Tiempo from '@/components/Tiempo';
+
 import axios from 'axios';
+//  Local   //
+//onst SERVER_URL_COMPROBADA = "http://localhost:3000/user";
 //  Heroku   //
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
-    export default {
+    export default  {
         name: 'Dashboard',
+        components:{Tiempo},
         data: () => ({
           userId: null,
           datosUser:{},
-          button: "Ir a Perfil"
+          campos:[],
         }),
         mounted(){
 
@@ -84,6 +82,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                               if(response.statusText=="OK"){
                                 console.log("Exito consultar campos ");
                                 this.campos = response.data;
+                                this.campos=response.data.provincia;
                               }else{
                                 console.log("Error haciendo login ");
                               }

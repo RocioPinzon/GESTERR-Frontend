@@ -1,9 +1,21 @@
 <template>
   <v-container>
     <v-row>
+      <v-col>
+        <v-sheet class="pa-15">
+          <h2>SERVICIOS</h2>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row class="d-flex justify-center mx-auto" >
       <v-col
+        cols="12"
+        sm="6"
+        md="6"
+        lg="3"
+        xl="3"
         v-for="(item, i) in items" :key="i.id">
-        <v-sheet class="pa-2 ma-2">
+        <v-sheet class=" ma-2">
           <v-card
             class="mx-auto"
             max-width="350">

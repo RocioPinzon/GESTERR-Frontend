@@ -47,11 +47,12 @@
   </template>  
 <script>
 
-import Header from '@/components/layouts/menus/user/Header.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue';
-import axios from 'axios';
-const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
-const Swal = require('sweetalert2');
+    import Header from '@/components/layouts/menus/user/Header.vue';
+    import Navigation from '@/components/layouts/menus/user/Navigation.vue';
+    import axios from 'axios';
+    //  Heroku   //
+    const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
+    const Swal = require('sweetalert2');
 
     export default {
     components: { Navigation,Header },

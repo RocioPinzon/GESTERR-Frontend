@@ -45,12 +45,22 @@
                             variant="outlined"
                             required>
                         </v-text-field>
+                        <v-select
+                            v-model="datosNuevoCampo.valueSelect"
+                            :items="items"
+                            item-title="nm"
+                            item-value="id"
+                            label="Elige una provincia" 
+                            return-object
+                            single-line
+                            variant="outlined">  
+                        </v-select>
+                        
 
                         <v-btn
                             color="success"
                             class="mr-4"
-                            @click="crearCampo()"
-                            >Guardar
+                            @click="crearCampo()">Guardar
                         </v-btn>
 
 
@@ -72,35 +82,58 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
     components: { Navigation, Header },
         name: 'CrearCampo',
         data: () => ({
-          userId: null,
-          datosNuevoCampo:{
+            userId: null,
+            datosNuevoCampo:{
                 name:"",
                 direccion:"",
-                hectareas:""
-            }
+                hectareas:"",
+                valueSelect:"",
+                provincia:""
+            },
+            items:[],//items provincias que recojo para mostrar los options del select
+            //idSelect:"",
+            //valueSelect:"",
+            //provinciaSeleccionada:""
         }),
         mounted(){
             this.comprobarUsuario(); 
+            axios.get(`https://raw.githubusercontent.com/IagoLast/pselect/master/data/provincias.json`)
+                .then((response)=>{
+                    this.items= response.data;
+                    this.valueSelect=response.data.nm;
+
+                    console.log("this.items --> " + this.items)
+                })
             // FIN MOUNTED
         },
  
 
         methods: {
+            obtenerProvincias(){
+                
+            },
             volverCampos(){
                 this.$router.push(`/user/campos`);
             },
 
-            crearCampo(){
-                let datos = this.datosNuevoCampo;
-                console.log(datos);
+            crearCampo(){                
                 
+                this.datosNuevoCampo.provincia=this.datosNuevoCampo.valueSelect.nm;
+                
+                let datos = this.datosNuevoCampo;
+                
+                //console.log("valueSelect ---> "+ this.datosNuevoCampo.valueSelect.nm);//valor bueno
                 axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`,datos) //Actualizar Campo
                 .then((response) =>{
 
                     if(response.statusText=="OK"){
                         console.log("Exito actualizar datos campo ");
                         this.datosNuevoCampo= response.data;
+                        console.log("-------------------\n ");
+                        console.log("Datos cambiados: "+ this.datosNuevoCampo);
                         this.volverCampos();
+                        console.log(this.datosNuevoCampo);
+
                         console.log(response.data);
                     }else{
                         console.log("Error creando campo");
