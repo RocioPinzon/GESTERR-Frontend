@@ -4,10 +4,9 @@ import Home from '../views/Home.vue'
 import Signin from '../views/Signin.vue'
 import Signup from '../views/Signup.vue'
 
-import Perfil from '../views/user/Perfil.vue'
-
 import Dashboard from '../views/user/Dashboard.vue'
 import DashboardAdmin from '../views/admin/DashboardAdmin.vue'
+import Perfil from '../views/user/Perfil.vue'
 
 import VerCampos from '../views/user/campos/VerCampos.vue'
 import CrearCampo from '../views/user/campos/CrearCampo.vue'
