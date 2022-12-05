@@ -84,7 +84,7 @@
     const Swal = require('sweetalert2');
 
     export default {
-      name: 'Perfil',
+      name: 'PerfilUser',
       components: { Navigation,Header },
         data: () => ({
           userId: null,
