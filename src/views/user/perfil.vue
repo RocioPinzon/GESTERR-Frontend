@@ -1,6 +1,6 @@
 <template>
   <Header/>
-    <v-container class="bg-surface-variant">
+    <v-container class="">
       <v-row no-gutters>
         <v-col
             xs="12"
@@ -8,7 +8,7 @@
             md="6"
             lg="5"
             xl="4">
-            <v-sheet class="pa-2 ma-2">
+            <v-sheet class="pa-5 ma-2">
                 <v-card
                         class="mx-auto"
                         color="green"
@@ -17,6 +17,7 @@
                         <v-card-text>
                         <h3 class="py-3">Bienvenido/a</h3>
                         <p>Nombre: {{ datosUser.name }}</p>
+                        <p>Apellidos: {{ datosUser.apellidos }}</p>
                         <p>Username: {{ datosUser.username }}</p>
                         <p>e-mail: {{ datosUser.email }}</p>
                         </v-card-text>
@@ -24,24 +25,53 @@
             </v-sheet>
         </v-col>
         <v-col>
-          <v-sheet class="pa-2 ma-2">
-            .v-col-auto
+          <v-sheet class="pa-5 ma-2">
+            <v-form
+              ref="form"
+              class="elevation-5 pa-6"
+              v-model="valid"
+              lazy-validation>
+              <h2 class="text-center pa-6">EDITAR MIS DATOS PERSONALES</h2>
+
+              <v-text-field
+                v-model="datosUser.name"
+                :counter="10"
+                :rules="nameRules"
+                label="Nombre"
+                variant="outlined"></v-text-field>
+
+              <v-text-field
+                v-model="datosUser.apellidos"
+                :counter="10"
+                :rules="nameRules"
+                label="Apellidos"
+                variant="outlined"></v-text-field>
+              <v-text-field
+                v-model="datosUser.username"
+                :counter="10"
+                :rules="nameRules"
+                label="Username"
+                variant="outlined"></v-text-field>
+                
+              <v-text-field
+                v-model="datosUser.email"
+                :rules="emailRules"
+                label="E-mail"
+                variant="outlined"
+                disabled
+                required></v-text-field>
+              <v-btn
+                color="success"
+                class="mr-4"
+                @click="actualizarDatosUser">
+                Actualizar</v-btn>
+
+            </v-form>
           </v-sheet>
         </v-col>
   
         <v-responsive width="100%"></v-responsive>
   
-        <v-col>
-          <v-sheet class="pa-2 ma-2">
-            .v-col-auto
-          </v-sheet>
-        </v-col>
-  
-        <v-col>
-          <v-sheet class="pa-2 ma-2">
-            .v-col-auto
-          </v-sheet>
-        </v-col>
       </v-row>
     </v-container>
   </template>  
@@ -63,30 +93,63 @@
         }),
         mounted(){
           this.comprobarUsuario();  
-          this.campoId = this.$route.params.campoId;
-                  
+                          
           //CONSULTAR CAMPOS USER
           axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) 
             .then((response) =>{
 
               if(response.statusText=="OK"){
-                
                 console.log("Exito consultar datos usuario ");
-                
                 this.datosUser = response.data;
               }else{
-                
                 console.log("Error");
               }
-
             });          
-            
             // FIN MOUNTED
         },
- 
 
         methods: {
+          cargarDatosUsuarios(){
 
+            //CONSULTAR PRODUCTOS USER  
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) 
+              .then((response) =>{
+
+                if(response.statusText=="OK"){
+                  console.log("Exito consultar productos ");
+                  this.datosUser = response.data;
+
+                }else{
+                  console.log("Error al consultar todos los productos. ");
+                }
+
+              }); 
+            },
+            actualizarDatosUser(){
+                let datos = this.datosUser;
+                console.log(datos);
+                
+                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}`,datos) //Actualizar Campo
+                .then((response) =>{
+
+                if(response.statusText=="OK"){
+                    console.log("Exito actualizar datos campo ");
+                    this.datosUser= response.data;
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Your work has been saved',
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                    this.cargarDatosUsuarios();
+
+                    console.log(response.data);
+                }else{
+                    console.log("Error actualizando datos campo");
+                }
+            });
+            },
             comprobarUsuario(){
               this.userId=localStorage.getItem('userId'); 
               if(!this.userId){
