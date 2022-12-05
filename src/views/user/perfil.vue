@@ -86,7 +86,7 @@
 
     export default {
     components: { Navigation,Header },
-        name: 'Dashboard',
+        name: 'Perfil',
         data: () => ({
           userId: null,
           datosUser:{}
