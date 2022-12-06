@@ -28,6 +28,7 @@
   </v-main>
 
 </v-layout>
+<FooterSinSesion/>
 </template>
 
 <script>
@@ -35,6 +36,7 @@
 import Tiempo from '@/components/Tiempo';
 
 import Header from '@/components/layouts/menus/user/Header.vue';
+import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import CardUser from '@/components/layouts/CardUser.vue'
 import CardDatosDash from '@/components/layouts/CardDatosDash.vue'
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
@@ -54,7 +56,8 @@ const Swal = require('sweetalert2');
       AlertDashboard,
       Header,
       CardDatosDash,
-      Tiempo
+      Tiempo,
+      FooterSinSesion
       },
         name: 'Dashboard',
         data: () => ({

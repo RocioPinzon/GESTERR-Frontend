@@ -8,12 +8,14 @@
             <Cards/>
         </v-container>
     </v-content>
+    <Footer/>
 </template>
 <script>
 
 import Cards from '../components/layouts/Cards.vue'
 import Slider from '../components/layouts/Slider.vue'
 import HeaderSinSesion from '../components/layouts/menus/HeaderSinSesion.vue';
+import Footer from '@/components/layouts/footers/Footer.vue';
 
 export default {
 
@@ -21,7 +23,8 @@ export default {
   components: {
     Cards,
     Slider,
-    HeaderSinSesion
+    HeaderSinSesion,
+    Footer
   },
   data: () => ({
 

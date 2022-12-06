@@ -7,6 +7,7 @@ import Signup from '../views/Signup.vue'
 import Dashboard from '../views/user/Dashboard.vue'
 import DashboardAdmin from '../views/admin/DashboardAdmin.vue'
 import Perfil from '../views/user/Perfil'
+import ListUser from '../views/admin/ListUser.vue'
 
 import VerCampos from '../views/user/campos/VerCampos.vue'
 import CrearCampo from '../views/user/campos/CrearCampo.vue'
@@ -15,6 +16,10 @@ import EditarCampo from '../views/user/campos/EditarCampo.vue'
 import VerCultivos from '../views/user/cultivos/VerCultivos.vue'
 import CrearCultivo from '../views/user/cultivos/CrearCultivo.vue'
 import EditarCultivo from '../views/user/cultivos/EditarCultivo.vue'
+
+import ProductosCultivo from '../views/user/cultivos/ProductosCultivo.vue'
+import CrearProductosCultivo from '../views/user/cultivos/CrearProductosCultivo.vue'
+import EditarProductosCultivo from '../views/user/cultivos/EditarProductosCultivo.vue'
 
 import VerProductos from '../views/user/productos/VerProductos.vue'
 import CrearProducto from '../views/user/productos/CrearProducto.vue'
@@ -57,6 +62,11 @@ const routes = [
     name: 'Perfil',
     component: Perfil
   },
+  {
+    path: '/admin/users',
+    name: 'ListUser',
+    component: ListUser
+  },
       //  CAMPOS  //
   {
     path: '/user/campos',
@@ -89,7 +99,23 @@ const routes = [
     name: 'EditarCultivo',
     component: EditarCultivo
   },
-    //  PRODUCTOS  //
+    //  PRODUCTOS DE CULTIVO //
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos',
+    name: 'ProductosCultivo',
+    component: ProductosCultivo
+  },
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos/crearproducto',
+    name: 'CrearProductosCultivo',
+    component: CrearProductosCultivo
+  },
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos/:productoId/editarproducto',
+    name: 'EditarProductosCultivo',
+    component: EditarProductosCultivo
+  },
+    //  TODOS LOS PRODUCTOS  //
   {
     path: '/user/productos',
     name: 'VerProductos',

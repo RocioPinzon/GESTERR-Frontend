@@ -137,16 +137,19 @@
             </v-sheet>
         </v-col>
     </v-row>
+    <Footer/>
+    
 </template>
 
 <script>
     import axios from 'axios';
+    import Footer from '@/components/layouts/footers/Footer.vue'
 
     const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signup";
     import HeaderSinSesion from '../components/layouts/menus/HeaderSinSesion.vue';
 
     export default {
-    components:{HeaderSinSesion},
+    components:{HeaderSinSesion, Footer},
 
         data: () => ({
            

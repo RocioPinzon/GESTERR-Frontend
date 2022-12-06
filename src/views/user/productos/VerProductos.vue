@@ -2,17 +2,17 @@
   <Header/>
     <v-layout>
       <v-main>
-        
-        <v-container class="">
-          
-          <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <v-img
-                src="../../../assets/img/fondo-titulos.png">
-                <h2 class="text-center py-15">{{ titulo }}</h2>
-              </v-img>
+        <v-img cover height="450" 
+                src="../../../assets/img/parallax.png">
+          <v-row justify="center" class="mt-16 d-flex align-center pa-10">
+            <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+              
+                <h2 class="text-center pa-10">{{ titulo }}</h2>
+              
             </v-sheet>
           </v-row>
+        </v-img>
+        <v-container class="">
 
           <v-row justify="center">
             <v-col
@@ -27,10 +27,17 @@
                   color="success" 
                   elevation="6"
                   @click="crearProducto()">Añadir Producto</v-btn>
+                <v-btn 
+                  v-model="nCampos"
+                  color="success"
+                  variant="tonal"
+                  elevation="6">Número total de campos: {{ nCultivos }}
+                </v-btn>
               </div>
               
               <v-sheet class="ma-2 rounded" elevation="4">
-                <v-table class="sortable my-10 elevation-5">
+                
+                <v-table class="sortable mb-10 elevation-5">
                   <thead>
                     <tr class="bg-green">
                       <th class="text-center">{{ nombre }}</th>
@@ -57,6 +64,13 @@
                   </tbody>
                 </v-table>
               </v-sheet>
+              <div class="text-center">
+                {{visiblePages}}
+                <v-pagination
+                  v-model="page"
+                  :length="Math.ceil(pages/perPage)"
+                  ></v-pagination>
+              </div>
               <div class="my-2 py-2 d-flex justify-space-between">
                   <v-btn 
                     color="#906b51" 
@@ -70,19 +84,21 @@
       </v-container>
     </v-main>
   </v-layout>
+<FooterSinSesion/>
 </template>
   
 
 <script>
 
-import Header from '@/components/layouts/menus/user/Header.vue';  
+import Header from '@/components/layouts/menus/user/Header.vue';
+import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation, Header },
+    components: { Navigation, Header, FooterSinSesion },
         name: 'VerCultivos',
         data: () => ({
           userId: null,
@@ -90,8 +106,22 @@ const Swal = require('sweetalert2');
           titulo:"PRODUCTOS",
           nombre:"Nombre producto",
           textButonActualizar:"Actualizar",
-          cantidad:"Cantidad (Kg)"
+          cantidad:"Cantidad (Kg)",
+          page:1,
+          pages:[],
+          perPage:4
+          
         }),
+        computed: {
+          visiblePages () {
+              const productoPaginados= this.productos.slice((this.page - 1)* this.perPage, this.page* this.perPage);
+              console.log("productoPaginados");
+
+              console.log(productoPaginados);
+              
+             return productoPaginados;
+          }
+        },
         mounted(){
           this.comprobarUsuario();  
  
@@ -109,15 +139,23 @@ const Swal = require('sweetalert2');
               }
 
             });  
-            //  AÑADIR SCRIPT PARA LLAMAR SORT
-            let ordenar = document.createElement('script');
-            ordenar.setAttribute('src', 'https://www.kryogenix.org/code/browser/sorttable/sorttable.js');
-            document.head.appendChild(ordenar);
 
-            setTimeout(() => {
-              var newTableObject = document.querySelector('.sortable table');
-              sorttable.makeSortable(newTableObject)
-            }, "1500");
+            // Consultar datos Productos
+          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/productos`) 
+              .then((response) =>{
+                  
+              if(response.statusText=="OK"){
+                  console.log("Exito consultar producto " + this.productoId);
+                  this.productos = response.data;
+                  console.log(this.productos);
+
+                  this.pages=response.data.length;
+                  console.log(this.pages);
+              }else{
+                  console.log("Error");
+              }
+          }); 
+           
             // FIN MOUNTED
         },
  

@@ -3,18 +3,17 @@
     <v-layout>
         <v-main>
             <v-img cover height="450" 
-                src="../../../assets/img/parallax.png">
+                        src="../../../assets/img/parallax.png">
                 <v-row justify="center" class="mt-16 d-flex align-center pa-10">
                     <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
-                    
+                        
                         <h2 class="text-center pa-10">{{ titulo }}</h2>
-                    
+                        
                     </v-sheet>
                 </v-row>
             </v-img>
-            <v-container class="d-flex flex-column mb-10 pb-10">
+            <v-container class="d-flex flex-column mb-15 pb-5">
                 <v-row class="justify-center">
-                   
                     <v-col
                         cols="6"
                         md="4"
@@ -25,7 +24,7 @@
                             lazy-validation>
 
                             <v-text-field
-                                v-model="datosNuevoCultivo.nombre"
+                                v-model="datosProductoCultivo.name"
                                 :counter="10"
                                 :rules="nameRules"
                                 label="Nombre cultivo"
@@ -34,31 +33,23 @@
                             </v-text-field>
 
                             <v-text-field
-                                v-model="datosNuevoCultivo.cantidad"
+                                v-model="datosProductoCultivo.cantidad"
                                 :counter="2"
                                 type="number"
                                 :rules="nameRules"
-                                label="Cantidad (nº aprox de un cultivo)"
+                                label="Cantidad"
                                 variant="outlined"
                                 required>
                             </v-text-field>
 
                             <v-text-field
-                                v-model="datosNuevoCultivo.hectareas"
-                                :counter="2"
-                                type="number"
-                                :rules="nameRules"
-                                label="Hectareas"
-                                variant="outlined"
-                                required>
+                            v-model="datosProductoCultivo.precio"
+                            type="number"
+                            label="Precio/Kg (Opcional)"
+                            variant="outlined">
                             </v-text-field>
 
-                            <v-btn
-                                color="success"
-                                class="mr-4"
-                                @click="crearCultivo()"
-                                >Guardar
-                            </v-btn>
+                            <v-btn color="success" class="mr-4" @click="actualizarProductoCultivo()">Guardar</v-btn>
 
                         </v-form>
                     </v-col>
@@ -73,7 +64,6 @@
 
 import Header from '@/components/layouts/menus/user/Header.vue';  
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
-
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
@@ -82,42 +72,56 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
         name: 'CrearCultivo',
         data: () => ({
             userId: null,
-            datosNuevoCultivo:{
-                nombre:"",
-                cantidad:"",
-                hectareas:""               
-            },
-            titulo:"CREAR CULTIVO"
+            campoId: null,
+            cultivoId: null,
+            productoId:null,
+            datosProductoCultivo:{},
+            titulo:"EDITAR PRODUCTO DE CULTIVO"
         }),
         mounted(){
             this.comprobarUsuario(); 
             this.campoId = this.$route.params.campoId;
+            this.cultivoId = this.$route.params.cultivoId;
+            this.productoId = this.$route.params.productoId;
 
+            // Consultar datos de un producto de un cultivo
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/productos/${this.productoId}`) 
+                .then((response) =>{
+                    
+                if(response.statusText=="OK"){
+                    console.log("Exito consultar cultivo " + this.productoId);
+                    this.datosProductoCultivo = response.data;
+                    console.log(this.datosProductoCultivo);
+
+                }else{
+                    console.log("Error");
+                }
+            }); 
             // FIN MOUNTED
         },
  
 
         methods: {
-            volverDashboard(){
-                this.$router.push(`/user/${this.campoId}/cultivos`);
+            volverProductosCultivo(){
+                this.$router.push(`/user/${this.campoId}/cultivos/${this.cultivoId}/productos`);
             },
 
-            crearCultivo(){
-                let datos = this.datosNuevoCultivo;
+            actualizarProductoCultivo(){
+                let datos = this.datosProductoCultivo;
                 console.log(datos);
                 
-                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`,datos) //Actualizar Cultivo
+                //Actualizar producto de Cultivo
+                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/productos/${this.productoId}`,datos) 
                 .then((response) =>{
 
                     if(response.statusText=="OK"){
-                        console.log("Exito actualizar datos campo ");
-                        this.datosNuevoCultivo= response.data;
-                        this.volverDashboard();
-                        
+                        console.log("Exito actualizar datos producto cultivo");
+                        this.datosProductoCultivo= response.data;
+                        this.volverProductosCultivo();
                     }else{
-                        console.log("Error creando campo");
+                        console.log("Error actualizando producto de cultivo");
                     }
-                })
+                });
             },
             comprobarUsuario(){
               this.userId=localStorage.getItem('userId'); 

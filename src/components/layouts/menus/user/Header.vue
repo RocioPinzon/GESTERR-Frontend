@@ -4,13 +4,13 @@
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
         <v-spacer></v-spacer>
-          <v-menu>
-                
-            
-          </v-menu>
-            <router-link :to= urlDashboard()><v-btn>Dashboard</v-btn></router-link>
-            <router-link :to= urlCampos()><v-btn>Campos</v-btn></router-link>
-            <router-link :to= urlProductos()><v-btn>Productos</v-btn></router-link>
+          <v-menu></v-menu>
+
+            <v-btn @click="irDashboard()">Dashboard</v-btn>
+            <v-btn @click="irPerfil()">Perfil</v-btn>
+            <v-btn @click="irListadoCampos(item_id)">Campos</v-btn> 
+            <v-btn @click="irListadoProductos(item_id)">Productos</v-btn> 
+
         <v-btn icon>
           <v-icon @click="logout(item_id)">mdi-export</v-icon>
         </v-btn>
@@ -45,14 +45,22 @@ export default {
       
       this.$router.push(`/`);
     },
-    urlDashboard(){
-      return "/user/dashboard";
+    irDashboard(){
+      this.$router.push(`/user/dashboard`);
+
     },
-    urlCampos(){
-      return `/user/campos`;
+
+    irPerfil(){
+      this.$router.push("/user/perfil");
     },
-    urlProductos(){
-      return `/user/productos`;
+
+    irListadoCampos(){
+      this.$router.push(`/user/campos`);
+
+    },
+    irListadoProductos(){
+      this.$router.push(`/user/productos`);
+
     }
   }
 }

@@ -2,17 +2,18 @@
   <Header/>
     <v-layout>
       <v-main>
-        <v-container class="">
-
-          <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <v-img
-                src="../../../assets/img/fondo-titulos.png">
-                <h2 class="text-center py-15">{{ titulo }}</h2>
-              </v-img>
+        <v-img cover height="450" 
+                src="../../../assets/img/parallax.png">
+          <v-row justify="center" class="mt-16 d-flex align-center pa-10">
+            <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+              
+                <h2 class="text-center pa-10">{{ titulo }}</h2>
+              
             </v-sheet>
           </v-row>
-
+        </v-img>
+        <v-container class="mb-10 pb-10">
+          
           <v-row justify="center">
             <v-col
               cols="12"
@@ -20,27 +21,41 @@
               md="9"
               lg="7"
               xl="5">
-                <div class="ma-2 py-1 d-flex justify-space-between">
+                <div class="py-1 d-flex justify-space-between">
                   <v-btn 
                   color="success" 
                   elevation="6"
                   @click="agregarCultivo()">Añadir Cultivo</v-btn>
+                  <v-btn 
+                  v-model="nCampos"
+                  color="success"
+                  variant="tonal"
+                  elevation="6">Número total de campos: {{ nCultivos }}</v-btn>
               </div>
               
-                  <v-table class="sortable my-10 elevation-5">
+                  <v-table class="sortable my-6 elevation-5">
                     <thead>
                       <tr class="bg-green">
                         <th class="text-center">{{ nombre }}</th>
                         <th class="text-center">{{ cantidad }}</th>
+                        <th class="text-center">{{ hectareas }}</th>
+                        <th class="text-center">Producto de cultivo</th>
                         <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-if="tablaVacia===false">
                       <tr
                         v-for="item in cultivos"
                         :key="item._id" >
                         <td class="text-center">{{ item.nombre }}</td>
                         <td class="text-center">{{ item.cantidad }}</td>
+                        <td class="text-center">{{ item.hectareas }}</td>
+
+                        <td class="text-center">
+                          <button @click="verProductos(item._id)">
+                            <v-icon color="#8AA39B">mdi-eye</v-icon>
+                          </button>
+                        </td>
                         <td class="text-center">
                           <button variant="flat" @click="editarCultivo(item._id)">
                             <v-icon color="success">mdi-pencil</v-icon>
@@ -51,6 +66,10 @@
                         </td>
                         
                       </tr>
+                    </tbody>
+                    <tbody v-else>
+                      <td colspan="6" class="pa-10 text-center">AÚN NO HAS CREADO NINGÚN CULTIVO EN ESTE CAMPO. AÑADE UN CULTIVO NUEVO</td>
+
                     </tbody>
                   </v-table>
                   
@@ -68,19 +87,20 @@
         </v-container>
       </v-main>
     </v-layout>
+<FooterSinSesion/>
   </template>
   
-
 <script>
 
 import Header from '@/components/layouts/menus/user/Header.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
+import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
+
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation,Header },
+    components: { Header, FooterSinSesion },
         name: 'VerCultivos',
         data: () => ({
           userId: null,
@@ -89,12 +109,16 @@ const Swal = require('sweetalert2');
           datosCultivo:{},
           cultivos: [],
           titulo:"CULTIVOS",
-          cantidad:"Cantidad",
-          nombre:"Nombre cultivos"
+          cantidad:"Cantidad (nº aprox de cultivos)",
+          hectareas:"Hectareas",
+          nombre:"Nombre cultivos",
+          tablaVacia:false,
+          nCultivos:""
         }),
         mounted(){
           this.comprobarUsuario();   
           this.campoId = this.$route.params.campoId;
+          this.cultivoId = this.$route.params.cultivoId;
 
           this.cargarCultivos(); 
 
@@ -132,7 +156,11 @@ const Swal = require('sweetalert2');
                   if(response.statusText=="OK"){
                     console.log("Exito consultar cultivos ");
                     this.cultivos = response.data;
-
+                    this.nCultivos = this.cultivos.length;
+                        if(this.cultivos.length===0){
+                          
+                          this.tablaVacia=true;
+                        }
                   }else{
                     console.log("Error get cultivos  ");
                   }
@@ -172,8 +200,8 @@ const Swal = require('sweetalert2');
             agregarCultivo(){
               this.$router.push(`/user/${this.campoId}/cultivos/crearCultivo`);
             },
-            verProductos(){
-              this.$router.push(`/user/productos`);
+            verProductos(cultivoId){
+              this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
             },
             async eliminarCultivo(cultivoId){
               
@@ -231,7 +259,21 @@ const Swal = require('sweetalert2');
               if(!this.userId){
                 this.$router.push(`/signin`);
               } 
-            }
+            },
+            cargarCampos(){
+              //CONSULTAR CAMPOS USER
+              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
+                            .then((response) =>{
+
+                              if(response.statusText=="OK"){
+                                console.log("Exito consultar campos ");
+                                this.campos = response.data;
+                              }else{
+                                console.log("Error ");
+                              }
+
+                          });
+            },
 
         }
  

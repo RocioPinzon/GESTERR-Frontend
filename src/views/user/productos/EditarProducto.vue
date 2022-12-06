@@ -38,6 +38,13 @@
                           required>
                       </v-text-field>
 
+                      <v-text-field
+                          v-model="datosProducto.precio"
+                          type="number"
+                          label="Precio/Kg (Opcional)"
+                          variant="outlined">
+                      </v-text-field>
+
                       <v-btn
                           color="success"
                           class="mr-4"
@@ -49,18 +56,20 @@
           </v-row>
       </v-container>
   </v-main>
+<FooterSinSesion/>
 </template>
 
 <script>
 
 import Header from '@/components/layouts/menus/user/Header.vue';
+import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import Navigation from '@/components/layouts/menus/user/Navigation.vue';
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //const Swal = require('sweetalert2');
 
   export default {
-  components: { Navigation, Header },
+  components: { Navigation, Header, FooterSinSesion },
       name: 'VerCultivos',
       data: () => ({
             titulo:"ACTUALIZAR PRODUCTO",

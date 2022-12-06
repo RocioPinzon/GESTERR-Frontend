@@ -3,18 +3,17 @@
     <v-layout>
         <v-main>
             <v-img cover height="450" 
-                src="../../../assets/img/parallax.png">
+                    src="../../../assets/img/parallax.png">
                 <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-                    <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+                <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
                     
-                        <h2 class="text-center pa-10">{{ titulo }}</h2>
+                    <h2 class="text-center pa-10">{{ titulo }}</h2>
                     
-                    </v-sheet>
+                </v-sheet>
                 </v-row>
             </v-img>
-            <v-container class="d-flex flex-column mb-10 pb-10">
+            <v-container class="d-flex flex-column mb-15">
                 <v-row class="justify-center">
-                   
                     <v-col
                         cols="6"
                         md="4"
@@ -25,7 +24,7 @@
                             lazy-validation>
 
                             <v-text-field
-                                v-model="datosNuevoCultivo.nombre"
+                                v-model="datosNuevoProducto.name"
                                 :counter="10"
                                 :rules="nameRules"
                                 label="Nombre cultivo"
@@ -34,31 +33,30 @@
                             </v-text-field>
 
                             <v-text-field
-                                v-model="datosNuevoCultivo.cantidad"
+                                v-model="datosNuevoProducto.cantidad"
                                 :counter="2"
                                 type="number"
                                 :rules="nameRules"
-                                label="Cantidad (nº aprox de un cultivo)"
+                                label="Cantidad"
                                 variant="outlined"
                                 required>
                             </v-text-field>
 
                             <v-text-field
-                                v-model="datosNuevoCultivo.hectareas"
-                                :counter="2"
-                                type="number"
-                                :rules="nameRules"
-                                label="Hectareas"
-                                variant="outlined"
-                                required>
+                            v-model="datosNuevoProducto.precio"
+                            type="number"
+                            label="Precio/Kg (Opcional)"
+                            variant="outlined">
+                            
                             </v-text-field>
 
                             <v-btn
                                 color="success"
                                 class="mr-4"
-                                @click="crearCultivo()"
+                                @click="crearProductoCultivo()"
                                 >Guardar
                             </v-btn>
+
 
                         </v-form>
                     </v-col>
@@ -73,46 +71,46 @@
 
 import Header from '@/components/layouts/menus/user/Header.vue';  
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
-
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
     export default {
     components: { Header, FooterSinSesion},
-        name: 'CrearCultivo',
+        name: 'CrearProductosCultivo',
         data: () => ({
             userId: null,
-            datosNuevoCultivo:{
+            datosNuevoProducto:{
                 nombre:"",
                 cantidad:"",
-                hectareas:""               
+                precio:""              
             },
-            titulo:"CREAR CULTIVO"
+            titulo: "CREAR PRODUCTO DEL CULTIVO"
         }),
         mounted(){
             this.comprobarUsuario(); 
             this.campoId = this.$route.params.campoId;
+            this.cultivoId = this.$route.params.cultivoId;
 
             // FIN MOUNTED
         },
  
 
         methods: {
-            volverDashboard(){
-                this.$router.push(`/user/${this.campoId}/cultivos`);
+            volverProductosCultivo(){
+                this.$router.push(`/user/${this.campoId}/cultivos/${this.cultivoId}/productos`);
             },
 
-            crearCultivo(){
-                let datos = this.datosNuevoCultivo;
+            crearProductoCultivo(){
+                let datos = this.datosNuevoProducto;
                 console.log(datos);
                 
-                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`,datos) //Actualizar Cultivo
+                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/productos`,datos) //Actualizar Cultivo
                 .then((response) =>{
 
                     if(response.statusText=="OK"){
                         console.log("Exito actualizar datos campo ");
-                        this.datosNuevoCultivo= response.data;
-                        this.volverDashboard();
+                        this.datosNuevoProducto= response.data;
+                        this.volverProductosCultivo();
                         
                     }else{
                         console.log("Error creando campo");

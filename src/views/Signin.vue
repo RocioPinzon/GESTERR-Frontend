@@ -73,6 +73,7 @@
         </v-sheet>
   </v-col>
 </v-row>
+<Footer/>
 </template>
 
 <script>
@@ -80,9 +81,10 @@
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signin";
 import HeaderSinSesion from '../components/layouts/menus/HeaderSinSesion.vue';
+import Footer from '@/components/layouts/footers/Footer.vue'
 
 export default {
-  components:{HeaderSinSesion},
+  components:{HeaderSinSesion,Footer},
   name: 'Signin',
   data: () => ({
     user: {
@@ -105,12 +107,12 @@ export default {
   }),
 
   methods: {
-    onSubmit () { //async antes
+    onSubmit () { 
       if (!this.form) return
 
             this.loading = true
 
-            //setTimeout(() => (this.loading = false), 2000)
+            setTimeout(() => (this.loading = false), 2000)
 
             console.log("Formulario enviado");
             //this.created();
@@ -139,7 +141,6 @@ export default {
 
         console.log("Error haciendo login ");
       }
-
      });
     }
   }

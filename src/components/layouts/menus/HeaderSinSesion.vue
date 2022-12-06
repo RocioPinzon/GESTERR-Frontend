@@ -7,18 +7,12 @@
 
         <v-menu>
             <template v-slot:activator>
-              <!--<nav>
-                <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link>
-              </nav>-->
-              <v-btn variant="text"><router-link to="/">Inicio</router-link> </v-btn>
-              <v-btn variant="text"><router-link to="/signin">Entrar</router-link></v-btn>
-              <v-btn variant="text"><router-link to="/signup">Regístrate</router-link></v-btn>
-
+              <v-btn to="/">Dashboard</v-btn>
+              <v-btn to="/signin">Entrar</v-btn>
+              <v-btn to="/signup">Regístrate</v-btn> 
             </template>
           </v-menu>
       </v-app-bar>
-
   </template>
 
 <script>

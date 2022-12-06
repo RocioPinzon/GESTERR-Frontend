@@ -2,21 +2,25 @@
   <Header/>
   <v-layout>
       <v-main>
-        <v-container class="">
-          <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <v-img
-                src="../../../assets/img/fondo-titulos.png">
-                <h2 class="text-center py-15">{{ titulo }}</h2>
-              </v-img>
+        <v-img cover height="450" 
+                src="../../../assets/img/parallax.png">
+          <v-row justify="center" class="mt-16 d-flex align-center pa-10">
+            <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+              
+                <h2 class="text-center pa-10">{{ titulo }}</h2>
+              
             </v-sheet>
           </v-row>
+        </v-img>
+        <v-container class="mb-5 pb-15">
+          
+          <!--
           <v-row justify="center" class="d-flex align-center pa-10">
             <v-sheet class="ma-2 pa-2 align-self-end">
               <BarChart/>
             </v-sheet>
           </v-row>
-          
+          -->
           <v-row justify="center">
             <v-col
               cols="12"
@@ -32,11 +36,12 @@
                   color="success" 
                   elevation="6"
                   @click="agregarCampo()">Añadir campo</v-btn>
-                
-                <v-btn 
-                  color="success" 
-                  elevation="6"
-                  @click="numeroCampos(campos)">Número de campos total: {{ nCampos }}</v-btn>
+        
+                  <v-btn 
+                  v-model="nCampos"
+                  color="success"
+                  variant="tonal"
+                  elevation="6">Número total de campos: {{ nCampos }}</v-btn>
               </div>
               <v-table
               class="sortable my-10 elevation-5">
@@ -52,7 +57,7 @@
                       <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody v-if="tablaVacia===false">
                     <tr class="item"
                       v-for="item in campos"
                       :key="item._id" >
@@ -78,6 +83,10 @@
                       </td>
                     </tr>  
                   </tbody>
+                <tbody v-else>
+                  <td colspan="6" class="pa-10 text-center">AÚN NO HAS CREADO NINGÚN CAMPO. AÑADE UN CAMPO NUEVO</td>
+
+                </tbody>
                 </v-table>
                 <div class="my-2 py-1 d-flex justify-space-between">
                   <v-btn 
@@ -94,18 +103,19 @@
         </v-container>
       </v-main>
     </v-layout>
+<FooterSinSesion/>
 </template>
 
 <script>
 import BarChart from '@/components/BarChart'
 import Header from '@/components/layouts/menus/user/Header.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
+import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //import * as XLSX from 'xlsx';
 const Swal = require('sweetalert2');
     export default {
-    components: { Navigation, Header,BarChart},
+    components: { Header, FooterSinSesion, BarChart},
         name: 'Dashboard',
         data: () => ({
           userId: null,
@@ -113,12 +123,12 @@ const Swal = require('sweetalert2');
           campos: [],
           nCampos:"",
           titulo: "CAMPOS",
+          tablaVacia:false
           
         }),
         mounted(){
           this.comprobarUsuario(); 
           this.campoId = this.$route.params.campoId;
-          
           this.cargarCampos();  
           
           //CONSULTAR CAMPOS USER
@@ -151,12 +161,12 @@ const Swal = require('sweetalert2');
  
 
         methods: {
-            
+            /*
             numeroCampos(campos){
               this.nCampos = campos.length;
               console.log("n campos totales: " + this.nCampos);
               //return this.nCampos;
-            },
+            },*/
             downloadFile: function () {
               const XLSX = require("json-as-xlsx");
 
@@ -193,6 +203,12 @@ const Swal = require('sweetalert2');
                               if(response.statusText=="OK"){
                                 console.log("Exito consultar campos ");
                                 this.campos = response.data;
+                                this.nCampos = this.campos.length;
+                                if(this.campos.length===0){
+                                  
+                                  this.tablaVacia=true;
+                                  
+                                }
                               }else{
                                 console.log("Error haciendo login ");
                               }

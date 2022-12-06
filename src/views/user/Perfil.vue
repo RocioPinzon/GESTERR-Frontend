@@ -74,10 +74,13 @@
   
       </v-row>
     </v-container>
-  </template>  
+  <FooterSinSesion/>
+</template>  
+<FooterSinSesion/>
 <script>
 
     import Header from '@/components/layouts/menus/user/Header.vue';
+    import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
     import axios from 'axios';
     //  Heroku   //
     const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
@@ -85,7 +88,7 @@
 
     export default {
       name: 'Perfil',
-      components: { Navigation,Header },
+      components: { Navigation,Header,FooterSinSesion },
         data: () => ({
           userId: null,
           datosUser:{}
@@ -124,20 +127,21 @@
 
               }); 
             },
+
             actualizarDatosUser(){
                 let datos = this.datosUser;
                 console.log(datos);
                 
-                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}`,datos) //Actualizar Campo
+                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}`,datos) //Actualizar datos usuario
                 .then((response) =>{
 
                 if(response.statusText=="OK"){
                     console.log("Exito actualizar datos campo ");
                     this.datosUser= response.data;
                     Swal.fire({
-                        position: 'top-end',
+                        
                         icon: 'success',
-                        title: 'Your work has been saved',
+                        title: 'Tus datos han sido actualizados',
                         showConfirmButton: false,
                         timer: 1500
                       });
