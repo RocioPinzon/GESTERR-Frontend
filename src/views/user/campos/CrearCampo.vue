@@ -37,7 +37,7 @@
                             <v-text-field
                                 v-model="datosNuevoCampo.direccion"
                                 :counter="30"
-                                :rules="nameRules"
+                                :rules="direccionRules"
                                 label="Dirección"
                                 variant="outlined"
                                 required>
@@ -47,7 +47,6 @@
                                 v-model="datosNuevoCampo.hectareas"
                                 :counter="2"
                                 type="number"
-                                :rules="nameRules"
                                 label="Hectáreas"
                                 variant="outlined"
                                 required>
@@ -61,7 +60,17 @@
                                 return-object
                                 single-line
                                 variant="outlined">  
-                            </v-select>                  
+                            </v-select>
+                            <v-select
+                                v-model="datosNuevoCampo.obtenerEstado"
+                                :items="estados"
+                                :options="estados"
+                                label="Estado" 
+                                return-object
+                                single-line
+                                variant="outlined">  
+                            </v-select>  
+                                       
 
                             <v-btn
                                 color="success"
@@ -96,23 +105,29 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                 name:"",
                 direccion:"",
                 hectareas:"",
-                valueSelect:"",
-                provincia:""
+                estado:"",
+                obtenerEstado:"",
+                provincia:"",
+                valueSelect:""
             },
             items:[],//items provincias que recojo para mostrar los options del select
-            //idSelect:"",
-            //valueSelect:"",
-            //provinciaSeleccionada:""
+            estados:['SINCULTIVAR','CONCULTIVOS','BARBECHO'],//estados que recojo para mostrar los options del select
+           
         }),
         mounted(){
             this.comprobarUsuario(); 
+            this.campoId = this.$route.params.campoId;
+
             axios.get(`https://raw.githubusercontent.com/IagoLast/pselect/master/data/provincias.json`)
                 .then((response)=>{
                     this.items= response.data;
                     this.valueSelect=response.data.nm;
 
-                    console.log("this.items --> " + this.items)
-                })
+                    console.log("this.items1 --> " + this.items)
+                });
+            
+          
+            
             // FIN MOUNTED
         },
  
@@ -128,20 +143,23 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             crearCampo(){                
                 
                 this.datosNuevoCampo.provincia=this.datosNuevoCampo.valueSelect.nm;
-                
+                //this.datosNuevoCampo.estado=this.datosNuevoCampo.obtenerEstados.estado;
+                this.datosNuevoCampo.estado=this.datosNuevoCampo.obtenerEstado;
+                console.log("this.datosNuevoCampo.obtenerEstado --> " + this.datosNuevoCampo.obtenerEstado);
+
+                console.log("this.datosNuevoCampo.estado --> " + this.datosNuevoCampo.estado);
                 let datos = this.datosNuevoCampo;
-                
                 //console.log("valueSelect ---> "+ this.datosNuevoCampo.valueSelect.nm);//valor bueno
                 axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`,datos) //Actualizar Campo
                 .then((response) =>{
 
                     if(response.statusText=="OK"){
-                        console.log("Exito actualizar datos campo ");
+                        console.log("Exito crear datos campo ");
+                        
                         this.datosNuevoCampo= response.data;
                         console.log("-------------------\n ");
                         console.log("Datos cambiados: "+ this.datosNuevoCampo);
                         this.volverCampos();
-                        console.log(this.datosNuevoCampo);
 
                         console.log(response.data);
                     }else{

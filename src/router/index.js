@@ -17,9 +17,9 @@ import VerCultivos from '../views/user/cultivos/VerCultivos.vue'
 import CrearCultivo from '../views/user/cultivos/CrearCultivo.vue'
 import EditarCultivo from '../views/user/cultivos/EditarCultivo.vue'
 
-import ProductosCultivo from '../views/user/cultivos/ProductosCultivo.vue'
-import CrearProductosCultivo from '../views/user/cultivos/CrearProductosCultivo.vue'
-import EditarProductosCultivo from '../views/user/cultivos/EditarProductosCultivo.vue'
+import RegistroProducto from '../views/user/cultivos/RegistroProducto.vue'
+import CrearRegistroProducto from '../views/user/cultivos/CrearRegistroProducto.vue'
+import EditarRegistroProducto from '../views/user/cultivos/EditarRegistroProducto.vue'
 
 import VerProductos from '../views/user/productos/VerProductos.vue'
 import CrearProducto from '../views/user/productos/CrearProducto.vue'
@@ -101,19 +101,19 @@ const routes = [
   },
     //  PRODUCTOS DE CULTIVO //
   {
-    path: '/user/:campoId/cultivos/:cultivoId/productos',
-    name: 'ProductosCultivo',
-    component: ProductosCultivo
+    path: '/user/:campoId/cultivos/:cultivoId/registroproductos',
+    name: 'RegistroProducto',
+    component: RegistroProducto
   },
   {
-    path: '/user/:campoId/cultivos/:cultivoId/productos/crearproducto',
-    name: 'CrearProductosCultivo',
-    component: CrearProductosCultivo
+    path: '/user/:campoId/cultivos/:cultivoId/registroproductos/crearregistro',
+    name: 'CrearRegistroProducto',
+    component: CrearRegistroProducto
   },
   {
-    path: '/user/:campoId/cultivos/:cultivoId/productos/:productoId/editarproducto',
+    path: '/user/:campoId/cultivos/:cultivoId/registroproductos/:productoId/editarregistro',
     name: 'EditarProductosCultivo',
-    component: EditarProductosCultivo
+    component: EditarRegistroProducto
   },
     //  TODOS LOS PRODUCTOS  //
   {

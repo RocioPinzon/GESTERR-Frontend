@@ -22,7 +22,7 @@
               lg="7"
               xl="5" 
               class="my-10">
-              <div class="ma-2 py-1 d-flex justify-space-between">
+              <div class="my-2 py-1 d-flex justify-space-between">
                 <v-btn 
                   color="success" 
                   elevation="6"
@@ -31,27 +31,31 @@
                   v-model="nCampos"
                   color="success"
                   variant="tonal"
-                  elevation="6">Número total de campos: {{ nCultivos }}
+                  elevation="6">Número total de productos: {{ nProductos }}
                 </v-btn>
               </div>
               
-              <v-sheet class="ma-2 rounded" elevation="4">
+              <v-sheet class="my-2 rounded" elevation="4">
                 
-                <v-table class="sortable mb-10 elevation-5">
+                <v-table class="sortable mb-4 elevation-5">
                   <thead>
                     <tr class="bg-green">
                       <th class="text-center">{{ nombre }}</th>
                       <th class="text-center">{{ cantidad }}</th>
+                      <th class="text-center">{{ precio }}</th>
+
                       <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                     </tr>
                   </thead>
 
                   <tbody>
                     <tr
-                      v-for="item in productos"
+                      v-for="item in productosPage"
                       :key="item._id" >
                       <td class="text-center">{{ item.name }}</td>
                       <td class="text-center">{{ item.cantidad }}</td>
+                      <td class="text-center">{{ item.precio }} €</td>
+
                       <td class="text-center">
                         <v-btn variant="flat" @click="editarProducto(item._id)">
                           <v-icon color="success">mdi-pencil</v-icon>
@@ -64,14 +68,8 @@
                   </tbody>
                 </v-table>
               </v-sheet>
-              <div class="text-center">
-                {{visiblePages}}
-                <v-pagination
-                  v-model="page"
-                  :length="Math.ceil(pages/perPage)"
-                  ></v-pagination>
-              </div>
-              <div class="my-2 py-2 d-flex justify-space-between">
+              <v-sheet>
+                <div class="my-1 py-2 d-flex justify-space-between">
                   <v-btn 
                     color="#906b51" 
                     elevation="6"
@@ -79,6 +77,16 @@
                     @click="downloadFile">Descargar .xslx
                   </v-btn>
                 </div>
+                <div class="text-center">
+                  {{visiblePages}}
+                  <v-pagination
+                    v-model="page"
+                    :length="Math.ceil(pages/perPage)"
+                    ></v-pagination>
+                </div>
+              
+              </v-sheet>
+              
             </v-col>
           </v-row>
       </v-container>
@@ -103,23 +111,28 @@ const Swal = require('sweetalert2');
         data: () => ({
           userId: null,
           productos: [],
+          nProductos:"",
           titulo:"PRODUCTOS",
           nombre:"Nombre producto",
+          precio:"Precio (€/kg)",
           textButonActualizar:"Actualizar",
           cantidad:"Cantidad (Kg)",
           page:1,
           pages:[],
-          perPage:4
+          perPage:5,
+          productosPage:[]
           
         }),
         computed: {
           visiblePages () {
               const productoPaginados= this.productos.slice((this.page - 1)* this.perPage, this.page* this.perPage);
               console.log("productoPaginados");
-
               console.log(productoPaginados);
-              
-             return productoPaginados;
+
+              console.log("this");
+              console.log(this);
+              this.productosPage = productoPaginados;              
+              //return productoPaginados; para verlo en pantall como si fuera consola
           }
         },
         mounted(){
@@ -148,6 +161,9 @@ const Swal = require('sweetalert2');
                   console.log("Exito consultar producto " + this.productoId);
                   this.productos = response.data;
                   console.log(this.productos);
+
+                  console.log("response.data");
+                  console.log(response.data);
 
                   this.pages=response.data.length;
                   console.log(this.pages);
@@ -203,21 +219,13 @@ const Swal = require('sweetalert2');
                   if(response.statusText=="OK"){
                     console.log("Exito consultar productos ");
                     this.productos = response.data;
+                    this.nProductos = this.productos.length;
 
                   }else{
                     console.log("Error al consultar todos los productos. ");
                   }
 
                 }); 
-            },
-
-            toggleOrder () {
-              this.sortDesc = !this.sortDesc
-            },
-            nextSort () {
-              let index = this.headers.findIndex(h => h.value === this.sortBy)
-              index = (index + 1) % this.headers.length
-              this.sortBy = this.headers[index].value
             },
             
             crearProducto(){

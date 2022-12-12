@@ -50,6 +50,7 @@
                                 variant="outlined"
                                 required>
                             </v-text-field>
+                            
                             <v-select
                                 v-model="datosCampos.provincia"
                                 :items="items"
@@ -61,12 +62,21 @@
                                 disabled
                                 variant="outlined">  
                             </v-select>
+
+                            <v-select
+                                v-model="datosCampos.estado"
+                                :items="estados"
+                                item-value="datosCampos.estado"
+                                label="Estado" 
+                                return-object
+                                single-line
+                                variant="outlined">  
+                            </v-select>
+                             
                             <v-btn
                                 color="success"
                                 class="mr-4"
-                                @click="actualizarCampos"
-                                >Actualizar
-                            </v-btn>
+                                @click="actualizarCampos">Actualizar</v-btn>
                         </v-form>
                     </v-col>
                 </v-row>
@@ -95,12 +105,15 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             campoId: null,
             datosCampos:{},
             valid: true,
+            estados:['SINCULTIVAR','CONCULTIVOS','BARBECHO'],
+            
+            // REGLAS
             nameRules: [
-                v => (v && v.length <= 20) || 'Name must be less than 10 characters',
+                v => (v && v.length <= 30) || 'Máximo 30 caracteres',
             ],
             direccionRules: [
-                v => (v && v.length <= 30) || 'Name must be less than 10 characters',
-            ]
+                v => (v && v.length <= 40) || 'Máximo 40 caracteres',
+            ],
         }),
 
         mounted(){

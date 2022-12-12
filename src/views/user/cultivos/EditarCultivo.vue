@@ -37,7 +37,7 @@
                                 v-model="datosCultivos.cantidad"
                                 :counter="2"
                                 variant="outlined"
-                                label="Hectáreas"
+                                label="Cantidad (nº aprox)"
                                 clearable
                                 required>
                             </v-text-field>

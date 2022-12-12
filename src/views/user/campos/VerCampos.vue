@@ -14,13 +14,14 @@
         </v-img>
         <v-container class="mb-5 pb-15">
           
-          <!--
+          
           <v-row justify="center" class="d-flex align-center pa-10">
             <v-sheet class="ma-2 pa-2 align-self-end">
               <BarChart/>
             </v-sheet>
+            
           </v-row>
-          -->
+          
           <v-row justify="center">
             <v-col
               cols="12"
@@ -43,6 +44,13 @@
                   variant="tonal"
                   elevation="6">Número total de campos: {{ nCampos }}</v-btn>
               </div>
+                <v-text-field
+                  v-model="search"
+                  label="Search (UPPER CASE ONLY)"
+                  class="mx-4"
+                ></v-text-field>
+              
+
               <v-table
               class="sortable my-10 elevation-5">
               
@@ -52,6 +60,7 @@
                       <th class="text-center">Direccion</th>
                       <th class="text-center">Hectareas</th>
                       <th class="text-center">Provincia</th>
+                      <th class="text-center">Estado</th>
                       <th class="sorttable_nosort text-center">Cultivos de campo</th>
                       
                       <th class="sorttable_nosort text-center">Editar / Eliminar</th>
@@ -59,13 +68,14 @@
                   </thead>
                   <tbody v-if="tablaVacia===false">
                     <tr class="item"
-                      v-for="item in campos"
+                      v-for="item in camposPage"
                       :key="item._id" >
                      
                       <td class="text-center">{{ item.name }}</td>
                       <td class="text-center">{{ item.direccion }}</td>
                       <td class="text-center">{{ item.hectareas }}</td>
                       <td class="text-center">{{ item.provincia }}</td>
+                      <td class="text-center">{{ item.estado }}</td>
 
                       <td class="text-center">
                         <button @click="verCultivos(item._id)">
@@ -88,16 +98,23 @@
 
                 </tbody>
                 </v-table>
-                <div class="my-2 py-1 d-flex justify-space-between">
-                  <v-btn 
-                    color="#906b51" 
-                    elevation="6"
-                    class="text-white"
-                    @click="downloadFile">Descargar .xslx
-                  </v-btn>
-                </div>
-
-                
+                <v-sheet>
+                  <div class="my-2 py-1 d-flex justify-space-between">
+                    <v-btn 
+                      color="#906b51" 
+                      elevation="6"
+                      class="text-white"
+                      @click="downloadFile">Descargar .xslx
+                    </v-btn>
+                  </div>
+                  <div class="text-center">
+                    {{visiblePages}}
+                    <v-pagination
+                      v-model="page"
+                      :length="Math.ceil(pages/perPage)"
+                      ></v-pagination>
+                  </div>
+                </v-sheet>                               
             </v-col>
           </v-row>        
         </v-container>
@@ -107,30 +124,52 @@
 </template>
 
 <script>
-import BarChart from '@/components/BarChart'
+
 import Header from '@/components/layouts/menus/user/Header.vue';
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 //import * as XLSX from 'xlsx';
 const Swal = require('sweetalert2');
+import BarChart from '@/components/BarChart'
+
+
     export default {
-    components: { Header, FooterSinSesion, BarChart},
+    components: { Header, FooterSinSesion, BarChart },
+    
         name: 'Dashboard',
         data: () => ({
           userId: null,
           datosUser:{},
           campos: [],
           nCampos:"",
+          model: null,
+          search: null,
           titulo: "CAMPOS",
-          tablaVacia:false
+          tablaVacia:false,
+          estados:[],
+          estadoCampo:"",
+          page:1,
+          pages:[],
+          perPage:5,
+          camposPage:[],
           
-        }),
-        mounted(){
+         
+      
+    }),
+    computed: {
+      visiblePages () {
+              const camposPaginados= this.campos.slice((this.page - 1)* this.perPage, this.page* this.perPage);
+              this.camposPage = camposPaginados;              
+              //return camposPaginados;// para verlo en pantall como si fuera consola
+          }
+        },
+
+      mounted(){
           this.comprobarUsuario(); 
           this.campoId = this.$route.params.campoId;
           this.cargarCampos();  
-          
+
           //CONSULTAR CAMPOS USER
           axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`)
             .then((response) =>{
@@ -145,7 +184,7 @@ const Swal = require('sweetalert2');
               }
 
             }); 
-            
+
             //  AÑADIR SCRIPT PARA LLAMAR SORT
             let ordenar = document.createElement('script');
             ordenar.setAttribute('src', 'https://www.kryogenix.org/code/browser/sorttable/sorttable.js');
@@ -155,7 +194,24 @@ const Swal = require('sweetalert2');
               var newTableObject = document.querySelector('.sortable table');
               sorttable.makeSortable(newTableObject)
             }, "1500");
+       
             
+            //CONSULTAR CAMPOS USER
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
+                            .then((response) =>{
+
+                              if(response.statusText=="OK"){
+                                console.log("Exito consultar campos ");
+                                this.campos = response.data;
+                                this.pages=response.data.length;
+                                
+                                console.log(this.pages);
+                              }else{
+                                console.log("Error");
+                              }
+
+                          });
+                          
             // FIN MOUNTED
         },
  
@@ -204,13 +260,14 @@ const Swal = require('sweetalert2');
                                 console.log("Exito consultar campos ");
                                 this.campos = response.data;
                                 this.nCampos = this.campos.length;
+                                
                                 if(this.campos.length===0){
                                   
                                   this.tablaVacia=true;
                                   
                                 }
                               }else{
-                                console.log("Error haciendo login ");
+                                console.log("Error");
                               }
 
                           });

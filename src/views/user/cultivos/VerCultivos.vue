@@ -7,13 +7,23 @@
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
             <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
               
-                <h2 class="text-center pa-10">{{ titulo }}</h2>
+                <h2 class="text-center pa-10">{{ titulo }} | {{datosCampo.name}}</h2>
               
             </v-sheet>
           </v-row>
         </v-img>
         <v-container class="mb-10 pb-10">
-          
+          <v-row justify="center">
+            <BarChartCultivos/>
+            <div>
+              <!--<p>Provincia: {{datosCampo.provincia}}</p>
+              <p>Direccion: {{datosCampo.direccion}}</p>-->
+              <div id="place">
+
+              </div>
+              
+            </div>
+          </v-row>
           <v-row justify="center">
             <v-col
               cols="12"
@@ -30,7 +40,7 @@
                   v-model="nCampos"
                   color="success"
                   variant="tonal"
-                  elevation="6">Número total de campos: {{ nCultivos }}</v-btn>
+                  elevation="6">Número total de cultivos: {{ nCultivos }}</v-btn>
               </div>
               
                   <v-table class="sortable my-6 elevation-5">
@@ -39,20 +49,20 @@
                         <th class="text-center">{{ nombre }}</th>
                         <th class="text-center">{{ cantidad }}</th>
                         <th class="text-center">{{ hectareas }}</th>
-                        <th class="text-center">Producto de cultivo</th>
+                        <th class="text-center">Registro de productos</th>
                         <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                       </tr>
                     </thead>
                     <tbody v-if="tablaVacia===false">
                       <tr
-                        v-for="item in cultivos"
+                        v-for="item in cultivosPage"
                         :key="item._id" >
                         <td class="text-center">{{ item.nombre }}</td>
                         <td class="text-center">{{ item.cantidad }}</td>
                         <td class="text-center">{{ item.hectareas }}</td>
 
                         <td class="text-center">
-                          <button @click="verProductos(item._id)">
+                          <button @click="verRegistroProductos(item._id)">
                             <v-icon color="#8AA39B">mdi-eye</v-icon>
                           </button>
                         </td>
@@ -73,15 +83,23 @@
                     </tbody>
                   </v-table>
                   
-                
-                <div class="my-2 py-2 d-flex justify-space-between">
-                  <v-btn 
-                    color="#906b51" 
-                    elevation="6"
-                    class="text-white"
-                    @click="downloadFile">Descargar .xslx
-                  </v-btn>
-                </div>
+                <v-sheet>
+                  <div class="my-2 py-2 d-flex justify-space-between">
+                    <v-btn 
+                      color="#906b51" 
+                      elevation="6"
+                      class="text-white"
+                      @click="downloadFile">Descargar .xslx
+                    </v-btn>
+                  </div>
+                  <div class="text-center">
+                    {{visiblePages}}
+                    <v-pagination
+                      v-model="page"
+                      :length="Math.ceil(pages/perPage)"
+                      ></v-pagination>
+                  </div>
+                </v-sheet>
               </v-col>
             </v-row>
         </v-container>
@@ -96,25 +114,46 @@ import Header from '@/components/layouts/menus/user/Header.vue';
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 
 import axios from 'axios';
+import BarChartCultivos from '@/components/BarChartCultivos.vue'
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Header, FooterSinSesion },
+    components: { Header, FooterSinSesion, BarChartCultivos },
         name: 'VerCultivos',
         data: () => ({
           userId: null,
           campoId: null,
           datosUser:{},
+          datosCampo:{},
           datosCultivo:{},
           cultivos: [],
           titulo:"CULTIVOS",
-          cantidad:"Cantidad (nº aprox de cultivos)",
+          cantidad:"Cantidad (nº aprox)",
           hectareas:"Hectareas",
           nombre:"Nombre cultivos",
           tablaVacia:false,
-          nCultivos:""
+          nCultivos:"",
+          page:1,
+          pages:[],
+          perPage:5,
+          cultivosPage:[],
+          embedCampo:""
         }),
+
+        computed: {
+          visiblePages () {
+              const cultivosPaginados= this.cultivos.slice((this.page - 1)* this.perPage, this.page* this.perPage);
+              console.log("cultivosPaginados");
+              console.log(cultivosPaginados);
+
+              console.log("this");
+              console.log(this);
+              this.cultivosPage = cultivosPaginados;              
+              //return productoPaginados; para verlo en pantall como si fuera consola
+          }
+        },
+
         mounted(){
           this.comprobarUsuario();   
           this.campoId = this.$route.params.campoId;
@@ -126,13 +165,14 @@ const Swal = require('sweetalert2');
             .then((response) =>{
 
               if(response.statusText=="OK"){
-                console.log("Exito consultar datos usuario ");
+                console.log("Exito consultar datos usuario");
                 this.datosUser = response.data;
                 
               }else{
                 console.log("Error");
               }
-            });      
+            });   
+
             //  AÑADIR SCRIPT PARA LLAMAR SORT
             let ordenar = document.createElement('script');
             ordenar.setAttribute('src', 'https://www.kryogenix.org/code/browser/sorttable/sorttable.js');
@@ -142,7 +182,50 @@ const Swal = require('sweetalert2');
               var newTableObject = document.querySelector('.sortable table');
               sorttable.makeSortable(newTableObject)
             }, "1500");
-                   
+
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) 
+                .then((response) =>{
+
+                  if(response.statusText=="OK"){
+                    console.log("Exito consultar cultivos ");
+                    this.cultivos = response.data;
+                    this.pages=response.data.length;
+                    
+                        if(this.cultivos.length===0){
+                          
+                          this.tablaVacia=true;
+                        }
+                  }else{
+                    console.log("Error get cultivos  ");
+                  }
+
+                }); 
+
+              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) 
+                .then((response) =>{
+
+                  if(response.statusText=="OK"){
+                    console.log("Exito consultar cultivos ");
+                    this.datosCampo = response.data;                    
+                    this.embedCampo =response.data.provincia;
+                    var addr = this.datosCampo.direccion + " " + this.datosCampo.provincia;
+                    var embed= "<iframe width='400' height='275' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( addr ) + "&t=&z=10&ie=UTF8&iwloc=&output=embed'></iframe>";
+                    document.getElementById("place").innerHTML= embed;
+
+                  }else{
+                    console.log("Error datos campos ");
+                  }
+
+                }); 
+
+                
+              //var addr = 'Jesús Rincón Jimenez, Badajoz, Spain';
+              
+              //this.embedCampo= embed;
+              //document.querySelector(".place").innerHTML= embed;
+              //setTimeout(() => {
+                    //console.log("Delayed for 1 second.");
+                  //}, "1000")           
             // FIN MOUNTED
         },
 
@@ -157,6 +240,7 @@ const Swal = require('sweetalert2');
                     console.log("Exito consultar cultivos ");
                     this.cultivos = response.data;
                     this.nCultivos = this.cultivos.length;
+                    
                         if(this.cultivos.length===0){
                           
                           this.tablaVacia=true;
@@ -200,8 +284,8 @@ const Swal = require('sweetalert2');
             agregarCultivo(){
               this.$router.push(`/user/${this.campoId}/cultivos/crearCultivo`);
             },
-            verProductos(cultivoId){
-              this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
+            verRegistroProductos(cultivoId){
+              this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/registroproductos`);
             },
             async eliminarCultivo(cultivoId){
               

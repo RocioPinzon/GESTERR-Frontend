@@ -30,7 +30,7 @@
                                 
                             <v-text-field
                                 ref="nombre"
-                                v-model="nombre"
+                                v-model="name"
                                 :rules="nameRules"
                                 :error-messages="errorMessages"
                                 :counter="10"
@@ -153,7 +153,7 @@
 
         data: () => ({
            
-            nombre: "",
+            name: "",
             apellidos: "",
             email: "",
             username:"",
@@ -185,12 +185,12 @@
         ],
         passwordRules:[
             v => !!v || 'Contraseña requerida',
-            v => (v && v.length >= 8 ||  v.length >= 15) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
+            v => (v && v.length >= 8 ||  v.length <= 15) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
 
         ],
         passwordConfirmRules:[
             v => !!v || 'Confirmacion de contraseña requerida',
-            v => (v && v.length <= 8 ||  v.length >= 15 ) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
+            v => (v && v.length >= 8 ||  v.length <= 15 ) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
         ]
     }),
 
@@ -201,48 +201,38 @@
     },
 
     methods: {
-        onSubmit () {
+        onSubmit () { 
             if (!this.form) return
 
-            this.loading = true
-
-            setTimeout(() => (this.loading = false), 2000)
-
-            console.log("Formulario enviado");
-            this.created();
-        },
-
-        created() {   
-                fetch(SERVER_URL_COMPROBADA, {
+                    this.loading = true
+                    setTimeout(() => (this.loading = false), 2000)
+                    console.log("Formulario enviado");
                     
-                    // Adding method type
-                    method: "POST",
-                    
-                    // Adding body or contents to send
-                    body: JSON.stringify({
-                        "name": this.nombre,
-                        "apellidos":this.apellidos,
-                        "email": this.email,
-                        "username":this.username,
-                        "password": this.password,
-                        "confirmPassword": this.passwordConfirm,
-                        }),
-                    
-                    // Añadiendo headers al request
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                        "cache-control":"no-cache"
-                    }
-                })
-                
-                // Convertimos a JSON
-                .then(response => response.json())
-                .then(json => {
-                    document.getElementById("mensajeError").mensajeError= json.error; //Repasar mensajes error
-                    document.getElementById("mensajeSuccess").mensajeSuccess= json.msg;//Repasar mensajes succes
-                    console.log(json);
-                });              
-            }
+            var paylod = {
+                name: this.name,
+                apellidos: this.apellidos,
+                email: this.email,
+                username: this.username,
+                password: this.password,
+                confirmPassword: this.passwordConfirm
+            };
+            
+            axios.post(SERVER_URL_COMPROBADA,paylod) 
+            .then((response) =>{
+                if(response.statusText=="OK"){
+                    console.log("Exito haciendo signup");
+                    this.$router.push('/signin');              
+                }else{
+                    console.log("Error signup");
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+
+            });
+            
+            
+        }
     },
 }
   

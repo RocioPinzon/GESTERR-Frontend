@@ -38,7 +38,7 @@
                                 :counter="2"
                                 type="number"
                                 :rules="nameRules"
-                                label="Cantidad (nº aprox de un cultivo)"
+                                label="Cantidad (nº aprox)"
                                 variant="outlined"
                                 required>
                             </v-text-field>
