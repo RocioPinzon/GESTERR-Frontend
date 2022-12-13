@@ -2,12 +2,12 @@
   <Header/>
     <v-layout>
       <v-main>
-        <v-img cover height="450" 
+        <v-img cover height="425" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
             <v-sheet class="mt-16 pa-2 align-self-end">
               
-                <h2 class="text-center pa-2">{{ titulo }}</h2>
+                <h2 class="text-center mt-15 pa-2">{{ titulo }}</h2>
                 <h2 class="text-center pa-2">en {{datosCampo.name}}</h2>
 
             </v-sheet>
@@ -231,7 +231,7 @@ const Swal = require('sweetalert2');
                     this.embedCampo =response.data.provincia;
                     this.items.text=this.datosCampo.hectareas;
                     var addr = this.datosCampo.direccion + " " + this.datosCampo.provincia;
-                    var embed= "<iframe width='500' height='300' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( addr ) + "&t=&z=10&ie=UTF8&iwloc=&output=embed'></iframe>";
+                    var embed= "<iframe width='725' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( addr ) + "&t=k&z=10&ie=UTF8&iwloc=&output=embed'></iframe>";
                     document.getElementById("place").innerHTML= embed;
 
                   }else{
@@ -312,9 +312,9 @@ const Swal = require('sweetalert2');
                   sheet: "Adults",
                   columns: [
                     { label: "ID Campo", value: "campoId" },
-                    { label: "Nombre cultivo", value: (row) => row.nombre + "." },
-                    { label: "Cantidad", value: (row) => row.cantidad + "." }, // Top level data
-                    { label: "Fecha", value: (row) => row.date + "." },
+                    { label: "Nombre cultivo", value: (row) => row.nombre },
+                    { label: "Cantidad", value: (row) => row.cantidad + " (kg | l)" }, // Top level data
+                    { label: "Fecha", value: (row) => row.date },
                   ],
                   content: this.cultivos,
                 }

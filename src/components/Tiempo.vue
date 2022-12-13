@@ -8,7 +8,8 @@
                 xl="3">
                 
                 <v-sheet class="pa-2 ma-2">
-                    <div id="ww_981182e2b03b4" v='1.3' loc='auto' a='{"t":"horizontal","lang":"es","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"#689F38","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#FFFFFF","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'>Umieść <a href="https://weatherwidget.org/pl/" id="ww_981182e2b03b4_u" target="_blank">Widżet Pogodowy HTML</a> w Witrynie</div>
+                    <div id="ww_644aecd1fd899" v='1.3' loc='auto' a='{"t":"horizontal","lang":"es","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"#689F38","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#FFFFFF","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'><a href="https://weatherwidget.org/pl/" id="ww_644aecd1fd899_u" target="_blank">Widżety prognozy pogody dla stron internetowych</a></div>
+                
                 </v-sheet>
             </v-col>
         
@@ -25,10 +26,9 @@ export default {
 
     mounted() {
       let tiempo = document.createElement('script');
-      tiempo.setAttribute('src', 'https://app1.weatherwidget.org/js/?id=ww_981182e2b03b4');
+      tiempo.setAttribute('src', 'https://app1.weatherwidget.org/js/?id=ww_644aecd1fd899');
       document.head.appendChild(tiempo);
       //async src="https://app1.weatherwidget.org/js/?id=ww_253cddb360a61"
     },
-
 }
 </script>

@@ -2,28 +2,19 @@
   <Header/>
     <v-layout>
       <v-main>
-        <v-img cover height="450" 
+        <v-img cover height="400" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
             <v-sheet class="mt-16 pa-2 align-self-end">
               
                 <h2 class="text-center pa-2">{{ titulo }}</h2>
-
+                <h3 class="text-center pa-2">{{ subtitulo }}</h3>
+                
             </v-sheet>
           </v-row>
         </v-img>
         <v-container class="mb-5 pb-15">
 
-          <v-row class="justify-center d-flex align-center pa-10">
-            
-           
-          </v-row>
-          <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <BarChartTodosCultivos/>
-            </v-sheet>
-                       
-          </v-row>
           <v-row justify="center">
             <v-col
               cols="12"
@@ -34,10 +25,6 @@
               class="my-10">
 
                 <div class="my-2 py-1 d-flex justify-space-between">
-                  <v-btn 
-                  color="success" 
-                  elevation="6"
-                  @click="agregarCultivo()">Añadir Cultivo</v-btn>
                   
                     <v-btn 
                       color="#906b51" 
@@ -90,6 +77,12 @@
                 </v-sheet>
               </v-col>
             </v-row>
+            <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="ma-2 pa-2 align-self-end">
+              <BarChartTodosCultivos/>
+            </v-sheet>
+                       
+          </v-row>
           </v-container>
       </v-main>
     </v-layout>
@@ -117,7 +110,8 @@ const Swal = require('sweetalert2');
           datosCampo:{},
           datosCultivo:{},
           cultivos: [],
-          titulo:"CULTIVOS",
+          titulo:"TODOS LOS CULTIVOS",
+          subtitulo: "Listado de los cultivos presentes en todos los campos",
           cantidad:"Cantidad (nº aprox)",
           hectareas:"Hectareas",
           nombre:"Nombre cultivos",

@@ -157,11 +157,12 @@
             password: "",
             passwordConfirm:"",
             valid: true,
-            checkbox:false,
             form: false,
             loading: false,
             show1: false,
             show2: true,
+
+            // Errores
             errorMsg:[],
             error:false,
             
@@ -185,12 +186,12 @@
         ],
         passwordRules:[
             v => !!v || 'Contraseña requerida',
-            v => (v && v.length >= 5 ||  v.length <= 20) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
+            v => (v && v.length >= 5 ||  v.length <= 20) || 'La contraseña debe tener al menos 5 caracteres y menos de 20'
 
         ],
         passwordConfirmRules:[
             v => !!v || 'Confirmacion de contraseña requerida',
-            v => (v && v.length >= 8 ||  v.length <= 15 ) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
+            v => (v && v.length >= 5 ||  v.length <= 20 ) || 'La contraseña debe tener al menos 5 caracteres y menos de 20'
         ]
     }),
 
@@ -198,9 +199,9 @@
         onSubmit () { 
             if (!this.form) return
 
-                    this.loading = true
-                    setTimeout(() => (this.loading = false), 2000)
-                    console.log("Formulario enviado");
+                this.loading = true
+                setTimeout(() => (this.loading = false), 2000)
+                console.log("Formulario enviado");
                     
             var paylod = {
                 name: this.name,

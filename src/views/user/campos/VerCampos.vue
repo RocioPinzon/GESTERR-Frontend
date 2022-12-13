@@ -187,35 +187,21 @@ import BarChart from '@/components/BarChart'
               var newTableObject = document.querySelector('.sortable table');
               sorttable.makeSortable(newTableObject)
             }, "1500");
-       
-            
-            //CONSULTAR CAMPOS USER
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
-                            .then((response) =>{
-
-                              if(response.statusText=="OK"){
-                                console.log("Exito consultar campos ");
-                                this.campos = response.data;
-                                this.pages=response.data.length;
                                 
-                                console.log(this.pages);
-                              }else{
-                                console.log("Error");
-                              }
-
-                          });
-                          
             // FIN MOUNTED
         },
  
 
         methods: {
-            /*
-            numeroCampos(campos){
-              this.nCampos = campos.length;
-              console.log("n campos totales: " + this.nCampos);
-              //return this.nCampos;
-            },*/
+            
+            comprobarUsuario(){
+              this.userId=localStorage.getItem('userId'); 
+              if(!this.userId){
+                this.$router.push(`/signin`);
+              } 
+            },
+            
+            //Exportar datos json tabla a Excel
             downloadFile: function () {
               const XLSX = require("json-as-xlsx");
 
@@ -223,11 +209,11 @@ import BarChart from '@/components/BarChart'
                 {
                   sheet: "Adults",
                   columns: [
-                    { label: "User", value: "user" },
-                    { label: "Nombre campo", value: (row) => row.name + "." },
-                    { label: "Direccion", value: (row) => row.direccion + "." },
-                    { label: "Hectareas", value: (row) => row.hectareas + "." }, 
-                    { label: "Fecha creacion campo", value: (row) => row.date + "."}
+                    { label: "ID Campo", value: "campoId" },
+                    { label: "Nombre campo", value: (row) => row.name },
+                    { label: "Direccion", value: (row) => row.direccion },
+                    { label: "Hectareas", value: (row) => row.hectareas }, 
+                    { label: "Fecha creacion campo", value: (row) => row.date}
                   ],
                   content: this.campos,
                 }
@@ -242,8 +228,9 @@ import BarChart from '@/components/BarChart'
               }
 
               XLSX(data, settings) 
-              //XLSX(columns, content, settings);
             },
+
+            //Cargar campos
             cargarCampos(){
               //CONSULTAR CAMPOS USER
               axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
@@ -253,34 +240,37 @@ import BarChart from '@/components/BarChart'
                                 console.log("Exito consultar campos ");
                                 this.campos = response.data;
                                 this.nCampos = this.campos.length;
+                                this.pages=response.data.length;
                                 
-                                if(this.campos.length===0){
-                                  
+                                if(this.campos.length===0){  
                                   this.tablaVacia=true;
-                                  
                                 }
+
                               }else{
                                 console.log("Error");
                               }
 
                           });
             },
-            volverDashboard(){
-              this.$router.push(`/user/dashboard`);
-            },
+
+            // Ver cultivos de campo
             verCultivos(campoId){
               this.$router.push(`/user/${campoId}/cultivos`);
 
             },
-            editarCampo(campoId){
-              this.$router.push(`/user/${campoId}/editarCampo`);
-            },
 
+            // Agregar campo
             agregarCampo(){
               this.$router.push(`/user/crearCampo`);
                 
             },
 
+            // Editar campo
+            editarCampo(campoId){
+              this.$router.push(`/user/${campoId}/editarCampo`);
+            },
+
+            // Eliminar campo
             async eliminarCampo(campoId){
              
               const result = await Swal.fire({
@@ -296,7 +286,7 @@ import BarChart from '@/components/BarChart'
                 reverseButtons: false
               });
               
-              // se para si el usuario no confirma
+              // para si el usuario no confirma
                if (!result.value) {
                   return;
                }
@@ -321,20 +311,14 @@ import BarChart from '@/components/BarChart'
                               'Your imaginary file is safe :)',
                               'error')
                       }else{
-                        
                         console.log("Error borrando campo ");
                       }
+                    })
+                    .catch(error => {
 
+                      console.log(error);
                     });
-                
-            },
-            comprobarUsuario(){
-              this.userId=localStorage.getItem('userId'); 
-              if(!this.userId){
-                this.$router.push(`/signin`);
-              } 
             }
         }
- 
     }
   </script>
