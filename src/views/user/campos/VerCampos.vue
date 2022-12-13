@@ -13,8 +13,7 @@
           </v-row>
         </v-img>
         <v-container class="mb-5 pb-15">
-          
-          
+        
           <v-row justify="center" class="d-flex align-center pa-10">
             <v-sheet class="ma-2 pa-2 align-self-end">
               <BarChart/>
@@ -44,15 +43,9 @@
                   variant="tonal"
                   elevation="6">Número total de campos: {{ nCampos }}</v-btn>
               </div>
-                <v-text-field
-                  v-model="search"
-                  label="Search (UPPER CASE ONLY)"
-                  class="mx-4"
-                ></v-text-field>
-              
-
+                             
               <v-table
-              class="sortable my-10 elevation-5">
+              class="sortable my-6 elevation-5">
               
                   <thead>
                     <tr class="bg-green">

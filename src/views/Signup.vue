@@ -32,7 +32,6 @@
                                 ref="nombre"
                                 v-model="name"
                                 :rules="nameRules"
-                                :error-messages="errorMessages"
                                 :counter="10"
                                 :readonly="loading"
                                 label="Nombre"
@@ -47,7 +46,6 @@
                                 v-model="apellidos"
                                 :rules="apeRules"
                                 :counter="10"
-                                :error-messages="errorMessages"
                                 :readonly="loading"
                                 label="Apellidos"
                                 placeholder="Apellidos"
@@ -70,7 +68,6 @@
                                 ref="username"
                                 v-model="username"
                                 :rules="userNameRules"
-                                :error-messages="errorMessages"
                                 :readonly="loading"
                                 label="Username"
                                 placeholder="Username"
@@ -110,14 +107,6 @@
                                 @click:append="show1 = !show1"
                                 required>
                             </v-text-field> 
-                   
-                            <div id="mensajeError">
-                                    
-                            </div>
-                                
-                            <div id="mensajeSuccess">
-                            
-                            </div> 
                         </v-card-text>
 
                         <v-card-actions>
@@ -134,6 +123,14 @@
                         </v-card-actions>
                     </v-form>   
                 </v-card> 
+            </v-sheet>
+            <v-sheet v-if="error">
+                <v-alert
+                    density="comfortable"
+                    type="error"
+                    variant="tonal">
+                    {{ errorMsg }}
+                </v-alert>
             </v-sheet>
         </v-col>
     </v-row>
@@ -160,32 +157,35 @@
             password: "",
             passwordConfirm:"",
             valid: true,
-            errorMessages: '',
             checkbox:false,
             form: false,
             loading: false,
             show1: false,
             show2: true,
+            errorMsg:[],
+            error:false,
             
+        // Validaciones
         nameRules:[
             v => !!v || 'Nombre requerido',
-            v => (v && v.length <= 10) || 'El nombre debe tener como máximo 10 caracteres'
+            v => (v && v.length <= 20) || 'El nombre debe tener como máximo 10 caracteres'
         ],
         apeRules:[
             v => !!v || 'Apellido requerido',
-            v => (v && v.length <= 15) || 'El apellido debe tener como máximo 15 caracteres'
+            v => (v && v.length <= 20) || 'El apellido debe tener como máximo 15 caracteres'
         ],
         userNameRules:[
-            v => !!v || 'Username requerido'
+            v => !!v || 'Username requerido',
+            v => (v && v.length <= 20) || 'El nombre debe tener como máximo 10 caracteres'
         ],
         emailRules: [
             v => !!v || 'E-mail requerido',
             v => /.+@.+/.test(v) || 'E-mail tiene que ser válido',
-            v => (v && v.length <= 20) || 'El email debe tener como máximo 20 caracteres'
+            v => (v && v.length <= 25) || 'El email debe tener como máximo 20 caracteres'
         ],
         passwordRules:[
             v => !!v || 'Contraseña requerida',
-            v => (v && v.length >= 8 ||  v.length <= 15) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
+            v => (v && v.length >= 5 ||  v.length <= 20) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
 
         ],
         passwordConfirmRules:[
@@ -193,12 +193,6 @@
             v => (v && v.length >= 8 ||  v.length <= 15 ) || 'La contraseña debe tener al menos 8 caracteres y menos de 15'
         ]
     }),
-
-    watch: {
-      name () {
-        this.errorMessages = ''
-      },
-    },
 
     methods: {
         onSubmit () { 
@@ -220,13 +214,22 @@
             axios.post(SERVER_URL_COMPROBADA,paylod) 
             .then((response) =>{
                 if(response.statusText=="OK"){
-                    console.log("Exito haciendo signup");
+                    console.log("Exito signup");
                     this.$router.push('/signin');              
                 }else{
-                    console.log("Error signup");
+                    this.error=true;
+                    this.errorMsg="Ops. Algo ha salido mal. Revise los datos del formulario";
                 }
             })
-            .catch(function (error){
+            .catch(error =>{
+
+                this.error=true;
+                this.errorMsg="Ops. Algo ha salido mal. Revise los datos del formulario";
+                /*for (let i = 0; i < error.length; i++) {
+                    this.errorMsg = error.data[i];
+                    
+                }*/
+                //this.errorMsg=error;
                 console.log(error);
 
             });

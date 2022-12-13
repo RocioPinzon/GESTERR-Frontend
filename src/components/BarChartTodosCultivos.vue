@@ -79,9 +79,9 @@
         this.campoId = this.$route.params.campoId;
         this.cultivoId = this.$route.params.cultivoId;
         this.cargarCultivos();
-         //CONSULTAR CAMPOS USER
-         
-         axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`)
+
+        //CONSULTAR TODOS LOS CULTIVOS USER 
+         axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/cultivos`)
               .then((response) =>{
                 if(response.statusText=="OK"){
                   console.log("Exito consultar cultivos");

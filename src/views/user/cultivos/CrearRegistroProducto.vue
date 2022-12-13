@@ -37,7 +37,7 @@
                                 v-model="datosNuevoRegistroProducto.estado"
                                 :items="estados"
                                 :item-title="name"
-                                :item-value="id"
+                                :item-value="_id"
                                 label="Estado" 
                                 return-object
                                 single-line

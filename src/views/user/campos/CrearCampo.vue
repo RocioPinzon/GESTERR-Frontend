@@ -69,9 +69,8 @@
                                 return-object
                                 single-line
                                 variant="outlined">  
-                            </v-select>  
-                                       
-
+                            </v-select>
+                            
                             <v-btn
                                 color="success"
                                 class="mr-4"
@@ -112,7 +111,6 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             },
             items:[],//items provincias que recojo para mostrar los options del select
             estados:['SINCULTIVAR','CONCULTIVOS','BARBECHO'],//estados que recojo para mostrar los options del select
-           
         }),
         mounted(){
             this.comprobarUsuario(); 

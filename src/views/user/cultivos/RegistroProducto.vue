@@ -5,7 +5,7 @@
           <v-img cover height="450" 
                   src="../../../assets/img/parallax.png">
             <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-              <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+              <v-sheet class="mt-16 pa-2 align-self-end">
                 
                   <h2 class="text-center pa-10">{{ titulo }}</h2>
                 
@@ -44,18 +44,27 @@
                         <th class="text-center">{{ nombre }}</th>
                         <th class="text-center">{{ estado }}</th>
                         <th class="text-center">{{ fechaCreacion }}</th>
+                        <th class="text-center">{{ eliminar }}</th>
                       </tr>
                     </thead>
   
-                    <tbody>
+                    <tbody v-if="tablaVacia===false">
                       <tr
                         v-for="item in registroProductos"
                         :key="item._id" >
-                        <td class="text-center">{{ item.name }}</td>
+                        <td class="text-center">{{ item.productoId }}</td>
                         <td class="text-center">{{ item.estado }}</td>
-                        <td class="text-center">{{ item.fechaCreacion }}</td>
-
+                        <td class="text-center">{{ item.fechaInicio }}</td>
+                        <td class="text-center">
+                          <button variant="flat" @click="eliminarRegistro(item._id)">
+                            <v-icon color="error">mdi-trash-can</v-icon>
+                          </button>
+                        </td>
                       </tr>
+                    </tbody>
+                    <tbody v-else>
+                      <td colspan="6" class="pa-10 text-center">AÚN NO HAS AÑADIDO NINGÚN REGISTRO</td>
+
                     </tbody>
                   </v-table>
                 </v-sheet>
@@ -95,10 +104,12 @@
             nombre:"Nombre producto",
             estado:"Estado",
             fechaCreacion:"Fecha",
+            eliminar: "Eliminar",
             page:1,
             pages:[],
             perPage:4,
-            nRegistros:""
+            nRegistros:"",
+            tablaVacia:false,
             
           }),
           computed: {
@@ -116,6 +127,7 @@
    
             this.campoId = this.$route.params.campoId;
             this.cultivoId = this.$route.params.cultivoId;
+            this.registroId = this.$route.params.registroId;
 
             this.cargarRegistroProductos(); 
   
@@ -133,14 +145,18 @@
               });  
   
               // Consultar datos Registro Producto
-              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cutivos/${this.cultivoId}/registroproductos`) 
+              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/registroproductos`) 
                 .then((response) =>{
                     
                 if(response.statusText=="OK"){
                     console.log("Exito consultar producto " + this.cultivoId);
                     this.registroProductos = response.data;
                     console.log(this.registroProductos);
-  
+                    
+                    if(this.registroProductos.length===0){
+                          
+                          this.tablaVacia=true;
+                        }
                     //this.pages=response.data.length;
                     //console.log(this.pages);
                 }else{
@@ -166,9 +182,9 @@
                   {
                     sheet: "Adults",
                     columns: [
-                      { label: "ID Campo", value: "user" },
-                      { label: "Nombre producto", value: (row) => row.name + "." },
-                      { label: "Cantidad", value: (row) => row.cantidad + "." }, // Top level data
+                      { label: "ID Cultivo", value: (row) => row.cultivoId },
+                      { label: "ID Producto", value: (row) => row.productoId + "." },
+                      { label: "Fecha", value: (row) => row.fechaCreacion + "." }, // Top level data
                       //{ label: "Fecha", value: (row) => row.date + "." },
                     ],
                     content: this.registroProductos,
@@ -189,13 +205,17 @@
               cargarRegistroProductos(){
   
               //CONSULTAR PRODUCTOS CULTIVO  
-              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cutivos/${this.cultivoId}/registroproductos`) 
+              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/registroproductos`) 
                   .then((response) =>{
   
                     if(response.statusText=="OK"){
                       console.log("Exito consultar productos ");
                       this.registroProductos = response.data;
-  
+                      this.nRegistros=response.data.length;
+                      if(this.registroProductos.length===0){
+                          
+                          this.tablaVacia=true;
+                        }
                     }else{
                       console.log("Error al consultar todos los productos. ");
                     }
@@ -203,10 +223,10 @@
                   }); 
               },
 
-              cargarRegistroProductos(){
+              /*cargarRegistroProductos(){
   
               //CONSULTAR PRODUCTOS CULTIVO  
-              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cutivos/${this.cultivoId}/productos`) 
+                axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/registroproductos`) 
                   .then((response) =>{
   
                     if(response.statusText=="OK"){
@@ -218,13 +238,60 @@
                     }
   
                   }); 
-              },
+              },*/
                             
               crearRgistroProducto(){
                 this.$router.push(`/user/${this.campoId}/cultivos/${this.cultivoId}/registroproductos/crearregistro`);
 
               },
-  
+
+              async eliminarRegistro(registroId){
+              
+              const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Si elimina, ya no podrá recuperar el registros.",
+                icon: 'question',
+                
+                confirmButtonColor: '#679e1a',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '¡Si, eliminar!',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                reverseButtons: false
+              });
+              
+              // Stop if user did not confirm
+               if (!result.value) {
+                  return;
+               }
+
+                  // DELETE           
+                  axios.delete(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/registroproductos/${registroId}`) 
+                    .then(async(responseDelete) =>{
+
+                      if(responseDelete.statusText=="OK"){
+                        Swal.fire(
+                          'Eliminado!',
+                          'Tu registro ha sido eliminado.',
+                          'success'
+                        )
+                        this.cargarRegistroProductos();
+
+                        console.log("Exito borrar registro");  
+                        
+                      }else if(result.dismiss === Swal.DismissReason.cancel){
+                        Swal.fire(
+                              'Cancelled',
+                              'Your imaginary file is safe :)',
+                              'error')
+                      }else{
+                        
+                        console.log("Error borrando registro");
+                      }
+
+                    });
+                
+            },  
           }
       }
     </script>

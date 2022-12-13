@@ -13,6 +13,7 @@
               v-model="form"
               class="px-6"
               @submit.prevent="onSubmit">
+              
               <div class="ma-4">
                 <v-img
                       class="mx-auto"
@@ -22,44 +23,43 @@
                       container>
                   </v-img>
               </div>
+
               <v-card-title>
-                <p class="text-center py-10 text-h2">Iniciar sesión  </p>
+                <p class="text-center py-10 text-h2">Iniciar sesión </p>
               </v-card-title>
               
               <v-text-field
                   id="email" 
                   name="email"
+                  type="text"
+                  label="Email"
                   v-model="user.email"
                   :rules="emailRules"
                   :readonly="loading"
-                  label="Email"
                   variant="outlined"
                   clearable
-                  type="text">
+                  counter
+                  required>
               </v-text-field>
 
               <v-text-field
                   id="password" 
                   name="password"
-                  :readonly="loading"
-                  v-model="user.password"
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="passwordRules"
-                  label="Contraseña"
                   :type="show1 ? 'text' : 'password'"
-                  clearable
+                  label="Contraseña"
+                  v-model="user.password"
+                  :rules="passwordRules"
+                  :readonly="loading"
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                   variant="outlined"
+                  clearable
                   counter
                   @click:append="show1 = !show1"
                   required>
+
               </v-text-field>
-              <br>
-             
-              <div id="mensajeError"></div>
-                                      
-              <div id="mensajeSuccess"></div> 
+                           
               <v-btn
-                :disabled="!form"
                 :loading="loading"
                 block
                 color="success"
@@ -71,6 +71,16 @@
             </v-form>
           </v-card>
         </v-sheet>
+
+        <v-sheet v-if="error">
+          <v-alert
+            density="comfortable"
+            type="error"
+            variant="tonal">
+            {{ errorMsg }}
+          </v-alert>
+        </v-sheet>
+
   </v-col>
 </v-row>
 <Footer/>
@@ -78,10 +88,11 @@
 
 <script>
 
-import axios from 'axios';
-const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signin";
 import HeaderSinSesion from '../components/layouts/menus/HeaderSinSesion.vue';
 import Footer from '@/components/layouts/footers/Footer.vue'
+
+import axios from 'axios';
+const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user/signin";
 
 export default {
   components:{HeaderSinSesion,Footer},
@@ -91,57 +102,58 @@ export default {
             email: "",
             password: ""
     },
+    show1: false,
+    show2: true,
+
+    // Validaciones
     valid: true,
     emailRules: [
       v => !!v || 'Email requerido',
-      v => (v && v.length <= 20) || 'EL email debe tener al menos 20 caracteres'  
+      v => (v && v.length <= 25) || 'EL email debe tener al menos 20 caracteres'  
     ],
 
     passwordRules:[
-            v => (v && v.length <= 9) || 'La contraseña debe tener al menos 7 caracteres'
-
+            v => (v && v.length >= 5 || v.length <= 20) || 'La contraseña debe tener al menos 5 caracteres'
     ],
-    show1: false,
-    show2: true,
-    checkbox: false,
+
+    //Mensaje error
+    errorMsg:"",
+    error:false   
   }),
 
   methods: {
     onSubmit () { 
-      if (!this.form) return
-
-            this.loading = true
-
-            setTimeout(() => (this.loading = false), 2000)
-
-            console.log("Formulario enviado");
-            //this.created();
-            console.log("this: ");
-            console.log(this);
+      
      var paylod = {
         email: this.user.email,
         password: this.user.password
      };
      
      axios.post(SERVER_URL_COMPROBADA,paylod) 
-     .then((response) =>{
+          .then((response) =>{
 
-      if(response.statusText=="OK"){
-        console.log("Exito haciendo login ");
-          
-        if(response.data.admin){
-          localStorage.setItem('adminId',response.data.userId);
-          this.$router.push('/admin/dashboardAdmin');
-        }else{
-          localStorage.setItem('userId',response.data.userId);
-          this.$router.push('/user/dashboard');
-        }
-        
-      }else{
-
-        console.log("Error haciendo login ");
-      }
-     });
+            if(response.statusText=="OK"){
+              console.log("Exito login");
+                
+              if(response.data.admin){
+                localStorage.setItem('adminId',response.data.userId);
+                this.$router.push('/admin/dashboardAdmin');
+              }else{
+                localStorage.setItem('userId',response.data.userId);
+                this.$router.push('/user/dashboard');
+              }
+              
+            }else{
+                // Error no existe Contraseña o email 
+                this.errorMsg="Contraseña o email incorrectos";
+            }
+          })
+          .catch(error => {
+                // Error general servicio 
+                this.error=true;
+                this.errorMsg="Contraseña o email incorrectos";
+                console.log(error);
+          });
     }
   }
 }

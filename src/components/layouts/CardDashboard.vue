@@ -31,8 +31,7 @@
                       </v-card-text>
 
                       <v-card-actions>
-                          <v-btn color="orange">
-                            <router-link :to=item.ruta> Ir a {{ item.button }}</router-link>
+                          <v-btn :to=item.ruta color="orange">Ir a {{ item.button }}
                           </v-btn>
                       </v-card-actions>
                     </v-card>
@@ -56,20 +55,21 @@ export default {
         src: require('../../assets/img/cat-campo.jpg'),
         button: "campos",
         ruta: "/user/campos"
-      }/*,
+      },
       { 
         id: 2, 
-        title: "Cultivos", 
-        subtitle:"Crea todo tipo de cultivos", 
+        title: "Listado Cultivos", 
+        subtitle:"Visualiza todos tus cultivos", 
         src: require('../../assets/img/cat-cultivos.jpg'),
-        p1:"Seguimiento de los diferentes cultivos.",
-        button: "cultivos"
-      }*/,
+        p1:"Aquí podrás visualizar todos tus cultivos creados.",
+        button: "cultivos",
+        ruta:"/user/cultivos"
+      },
       { 
         id: 3 , 
-        title: "Productos", 
-        subtitle:"Crear productos", 
-        p1:"Analiza tus productos en esta página",
+        title: "Listado Productos", 
+        subtitle:"Visualiza todos tus productos", 
+        p1:"En esta sección podrás ver todos productos.",
         src: require('../../assets/img/cat-productos.jpg'),
         button: "productos",
         ruta:"/user/productos"

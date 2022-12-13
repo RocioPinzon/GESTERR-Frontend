@@ -8,7 +8,6 @@
             <v-sheet class="mt-16 pa-2 align-self-end">
               
                 <h2 class="text-center pa-2">{{ titulo }}</h2>
-                <h2 class="text-center pa-2">en {{datosCampo.name}}</h2>
 
             </v-sheet>
           </v-row>
@@ -21,30 +20,9 @@
           </v-row>
           <v-row justify="center" class="d-flex align-center pa-10">
             <v-sheet class="ma-2 pa-2 align-self-end">
-              <BarChartCultivos/>
+              <BarChartTodosCultivos/>
             </v-sheet>
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <v-card elevation="3" class="mx-auto pa-2" max-width="500">
-                  <v-list>
-                    <v-list-subheader>DATOS CAMPO DE CULTIVO</v-list-subheader>
-              
-                    <v-list-item>
-                      <v-list-item-title>Nombre: {{ datosCampo.name }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-title>Hectareas: {{ datosCampo.hectareas }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-subheader>DATOS CULTIVOS</v-list-subheader>
-                    <v-list-item>
-                      <v-list-item-title>Nº total de cultivos: {{ nCultivos }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-title>Nº total de hectareas: {{ nTotalHectareasCultivos }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-card>           
-            </v-sheet>
-           
+                       
           </v-row>
           <v-row justify="center">
             <v-col
@@ -76,7 +54,6 @@
                         <th class="text-center">{{ nombre }}</th>
                         <th class="text-center">{{ cantidad }}</th>
                         <th class="text-center">{{ hectareas }}</th>
-                        <th class="text-center">Productos de cultivo</th>
                         <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                       </tr>
                     </thead>
@@ -89,14 +66,6 @@
                         <td class="text-center">{{ item.hectareas }}</td>
 
                         <td class="text-center">
-                          <button @click="verProductos(item._id)">
-                            <v-icon color="#8AA39B">mdi-eye</v-icon>
-                          </button>
-                        </td>
-                        <td class="text-center">
-                          <button variant="flat" @click="editarCultivo(item._id)">
-                            <v-icon color="success">mdi-pencil</v-icon>
-                          </button>
                           <button variant="flat" @click="eliminarCultivo(item._id)">
                             <v-icon color="error">mdi-trash-can</v-icon>
                           </button>
@@ -121,16 +90,7 @@
                 </v-sheet>
               </v-col>
             </v-row>
-            <v-row class="justify-center d-flex flex-column align-center pa-10 mt-10">
-              <v-sheet>
-                <h2>LOCALIZACIÓN</h2>
-              </v-sheet>
-              <v-sheet class="pa-10">
-                <div id="place"></div>
-              </v-sheet>
-              
-            </v-row>
-        </v-container>
+          </v-container>
       </v-main>
     </v-layout>
 <FooterSinSesion/>
@@ -141,14 +101,14 @@
 import Header from '@/components/layouts/menus/user/Header.vue';
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import CardDatosCampo from '@/components/layouts/CardDatosCampo.vue';
+import BarChartTodosCultivos from '@/components/BarChartTodosCultivos.vue'
 
 import axios from 'axios';
-import BarChartCultivos from '@/components/BarChartCultivos.vue'
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Header, FooterSinSesion, BarChartCultivos, CardDatosCampo },
+    components: { Header, FooterSinSesion, BarChartTodosCultivos, CardDatosCampo },
         name: 'VerCultivos',
         data: () => ({
           userId: null,
@@ -163,7 +123,7 @@ const Swal = require('sweetalert2');
           nombre:"Nombre cultivos",
           tablaVacia:false,
           nCultivos:"",
-          nTotalHectareasCultivos:0,
+          nTotalHectareasCultivos:"",
           page:1,
           pages:[],
           perPage:5,
@@ -219,25 +179,29 @@ const Swal = require('sweetalert2');
               sorttable.makeSortable(newTableObject)
             }, "1500");
 
-        
-
-              // Cargar datos de un campo al cargar la pagina
-              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}`) 
+            // Cargar datos cultivos de un campo al cargar la pagina
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/cultivos`) 
                 .then((response) =>{
 
                   if(response.statusText=="OK"){
-                    console.log("Exito consultar campoID ");
-                    this.datosCampo = response.data;                    
-                    this.embedCampo =response.data.provincia;
-                    this.items.text=this.datosCampo.hectareas;
-                    var addr = this.datosCampo.direccion + " " + this.datosCampo.provincia;
-                    var embed= "<iframe width='500' height='300' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( addr ) + "&t=&z=10&ie=UTF8&iwloc=&output=embed'></iframe>";
-                    document.getElementById("place").innerHTML= embed;
+                    console.log("Exito consultar cultivos");
+                   
+                    this.cultivos = response.data;
+                    this.pages=response.data.length;
+                    console.log("this.cultivos");
 
+                    console.log(this.cultivos);
+                        if(this.cultivos.length===0){
+                          
+                          this.tablaVacia=true;
+                        }
+                    
                   }else{
-                    console.log("Error datos campos");
+                    console.log("Error get cultivos");
                   }
-                });          
+
+              }); 
+       
             // FIN MOUNTED
         },
 
@@ -250,26 +214,12 @@ const Swal = require('sweetalert2');
                 this.$router.push(`/signin`);
               } 
           },
-          
-          // Cargar información campos
-          cargarCampos(){
-            
-            //CONSULTA AXIOS CAMPOS
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
-                  .then((response) =>{
-                    if(response.statusText=="OK"){
-                      console.log("Exito consultar campos ");
-                      this.campos = response.data;
-                    }else{
-                      console.log("Error");
-                    }
-                });
-          },
-        
+
+                 
           // Cargar información cultivos
           cargarCultivos(){
             //CONSULTAR CULTIVOS DE UN CAMPO  
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`) 
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/cultivos`) 
                 .then((response) =>{
 
                   if(response.statusText=="OK"){
@@ -278,28 +228,15 @@ const Swal = require('sweetalert2');
                     console.log("Exito consultar cultivos ");
                     this.cultivos = response.data;
                     this.nCultivos = this.cultivos.length;
-                    this.pages=response.data.length;
-
-                    for (const hec in this.cultivos) {
-                      
-                        this.nTotalHectareasCultivos += this.cultivos[hec].hectareas;
-                        
-                    }
                     if(this.cultivos.length===0){
                       this.tablaVacia=true;
                     }
                     
                         
                   }else{
-                    // info no existe
-                    // Error no existe cultivo
-                    console.log("Error get cultivos  ");
+                    console.log("Error get cultivos ");
                   }
 
-                }).catch(error =>{
-                  // Error general SERVICIO FALLA 
-                  // no se pueden crear los cultivos
-                  console.log(error)
                 }); 
             },
 
@@ -311,10 +248,11 @@ const Swal = require('sweetalert2');
                 {
                   sheet: "Adults",
                   columns: [
-                    { label: "ID Campo", value: "campoId" },
-                    { label: "Nombre cultivo", value: (row) => row.nombre + "." },
-                    { label: "Cantidad", value: (row) => row.cantidad + "." }, // Top level data
-                    { label: "Fecha", value: (row) => row.date + "." },
+                    { label: "ID Cultivo", value: "cultivoId" },
+                    { label: "Nombre cultivo", value: (row) => row.nombre },
+                    { label: "Cantidad", value: (row) => row.cantidad }, // Top level data
+                    { label: "Hectareas", value: (row) => row.hectareas },
+                    { label: "Fecha", value: (row) => row.date },
                   ],
                   content: this.cultivos,
                 }
@@ -336,27 +274,12 @@ const Swal = require('sweetalert2');
             this.$router.push(`/user/dashboard`);
           },
           
-          // Ver registro productos de un cultivo
-          verRegistroProductos(cultivoId){
-            this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/registroproductos`);
-          },
-          
-          // Ver registro productos de un cultivo
-          verProductos(cultivoId){
-            this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
-          },
-          
           // Agregar cultivo
           agregarCultivo(){
             this.$router.push(`/user/${this.campoId}/cultivos/crearCultivo`);
           },
             
-          // Editar cultivo
-          editarCultivo(cultivoId){
-            this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/editarCultivo`);
-
-          },
-                        
+                                  
           // Eliminar cultivo
           async eliminarCultivo(cultivoId){
             

@@ -13,6 +13,7 @@ import VerCampos from '../views/user/campos/VerCampos.vue'
 import CrearCampo from '../views/user/campos/CrearCampo.vue'
 import EditarCampo from '../views/user/campos/EditarCampo.vue'
 
+import TodosCultivos from '../views/user/cultivos/TodosCultivos.vue'
 import VerCultivos from '../views/user/cultivos/VerCultivos.vue'
 import CrearCultivo from '../views/user/cultivos/CrearCultivo.vue'
 import EditarCultivo from '../views/user/cultivos/EditarCultivo.vue'
@@ -21,9 +22,11 @@ import RegistroProducto from '../views/user/cultivos/RegistroProducto.vue'
 import CrearRegistroProducto from '../views/user/cultivos/CrearRegistroProducto.vue'
 import EditarRegistroProducto from '../views/user/cultivos/EditarRegistroProducto.vue'
 
+import ProductoCultivo from '../views/user/productos/ProductoCultivo.vue'
+import CrearProductoCultivo from '../views/user/productos/CrearProductoCultivo.vue'
+import EditarProductoCultivo from '../views/user/productos/EditarProductoCultivo.vue'
+
 import VerProductos from '../views/user/productos/VerProductos.vue'
-import CrearProducto from '../views/user/productos/CrearProducto.vue'
-import EditarProducto from '../views/user/productos/EditarProducto.vue'
 
 import ErrorPage from '../views/ErrorPage.vue'
 
@@ -83,7 +86,12 @@ const routes = [
     name: 'EditarCampo',
     component: EditarCampo
   },
-    //  CULTIVOS  //
+    //  CULTIVOS  //    
+  {
+    path: '/user/cultivos',
+    name: 'TodosCultivos',
+    component: TodosCultivos
+  },
   {
     path: '/user/:campoId/cultivos',
     name: 'VerCultivos',
@@ -120,7 +128,7 @@ const routes = [
     path: '/user/productos',
     name: 'VerProductos',
     component: VerProductos
-  },
+  }/*,
   {
     path: '/user/productos/crearProducto',
     name: 'CrearProducto',
@@ -130,6 +138,21 @@ const routes = [
     path: '/user/productos/:productoId/editarProducto',
     name: 'EditarProducto',
     component: EditarProducto
+  }*/,
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos',
+    name: 'ProductoCultivo',
+    component: ProductoCultivo
+  },
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos/crearproducto',
+    name: 'CrearProductoCultivo',
+    component: CrearProductoCultivo
+  },
+  {
+    path: '/user/:campoId/cultivos/:cultivoId/productos/:productoId/editarproducto',
+    name: 'EditarProductoCultivo',
+    component: EditarProductoCultivo
   },
   {
     path: '/:catchAll(.*)',

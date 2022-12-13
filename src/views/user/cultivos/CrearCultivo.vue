@@ -5,7 +5,7 @@
             <v-img cover height="450" 
                 src="../../../assets/img/parallax.png">
                 <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-                    <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+                    <v-sheet class="mt-16 pa-2 align-self-end">
                     
                         <h2 class="text-center pa-10">{{ titulo }}</h2>
                     
@@ -16,9 +16,11 @@
                 <v-row class="justify-center">
                    
                     <v-col
-                        cols="6"
-                        md="4"
-                        sm="12"> 
+                        cols="12"
+                        sm="12"
+                        md="6"
+                        lg="4"
+                        xl="4"> 
                         <v-form
                             ref="form"
                             v-model="valid"
@@ -53,6 +55,15 @@
                                 required>
                             </v-text-field>
 
+                            <v-select
+                                v-model="datosNuevoCultivo.estado"
+                                :items="estados"
+                                label="Estado" 
+                                return-object
+                                single-line
+                                variant="outlined">  
+                            </v-select> 
+
                             <v-btn
                                 color="success"
                                 class="mr-4"
@@ -85,9 +96,12 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             datosNuevoCultivo:{
                 nombre:"",
                 cantidad:"",
-                hectareas:""               
+                hectareas:"",
+                estado:""               
             },
-            titulo:"CREAR CULTIVO"
+            titulo:"CREAR CULTIVO",
+            estados:['SEMBRADO','RECOLECTADO']
+
         }),
         mounted(){
             this.comprobarUsuario(); 
@@ -106,7 +120,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
                 let datos = this.datosNuevoCultivo;
                 console.log(datos);
                 
-                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`,datos) //Actualizar Cultivo
+                axios.post(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos`,datos) // Crear Cultivo
                 .then((response) =>{
 
                     if(response.statusText=="OK"){

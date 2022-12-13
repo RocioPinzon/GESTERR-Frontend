@@ -5,7 +5,7 @@
         <v-img cover height="450" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-            <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+            <v-sheet class="mt-16 pa-2 align-self-end">
               
                 <h2 class="text-center pa-10">{{ titulo }}</h2>
               
@@ -13,7 +13,11 @@
           </v-row>
         </v-img>
         <v-container class="">
-
+          <v-row justify="center">
+            <v-sheet class="ma-2 pa-2 align-self-end">
+                <BarChartTodosProductos/>
+              </v-sheet>
+          </v-row>
           <v-row justify="center">
             <v-col
               cols="12"
@@ -43,6 +47,7 @@
                       <th class="text-center">{{ nombre }}</th>
                       <th class="text-center">{{ cantidad }}</th>
                       <th class="text-center">{{ precio }}</th>
+                      <th class="text-center">{{ fecha }}</th>
 
                       <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                     </tr>
@@ -55,6 +60,7 @@
                       <td class="text-center">{{ item.name }}</td>
                       <td class="text-center">{{ item.cantidad }}</td>
                       <td class="text-center">{{ item.precio }} €</td>
+                      <td class="text-center">{{ item.fecha.slice(0, 10) }}</td>
 
                       <td class="text-center">
                         <v-btn variant="flat" @click="editarProducto(item._id)">
@@ -100,14 +106,15 @@
 
 import Header from '@/components/layouts/menus/user/Header.vue';
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
+import BarChartTodosProductos from '@/components/BarChartTodosProductos.vue';
+
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation, Header, FooterSinSesion },
-        name: 'VerCultivos',
+    components: { Navigation, Header, FooterSinSesion, BarChartTodosProductos },
+        name: 'VerProductos',
         data: () => ({
           userId: null,
           productos: [],
@@ -115,6 +122,7 @@ const Swal = require('sweetalert2');
           titulo:"PRODUCTOS",
           nombre:"Nombre producto",
           precio:"Precio (€/kg)",
+          fecha:"Fecha",
           textButonActualizar:"Actualizar",
           cantidad:"Cantidad (Kg)",
           page:1,
@@ -137,7 +145,6 @@ const Swal = require('sweetalert2');
         },
         mounted(){
           this.comprobarUsuario();  
- 
           this.cargarProductos(); 
 
           axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`)
@@ -160,13 +167,7 @@ const Swal = require('sweetalert2');
               if(response.statusText=="OK"){
                   console.log("Exito consultar producto " + this.productoId);
                   this.productos = response.data;
-                  console.log(this.productos);
-
-                  console.log("response.data");
-                  console.log(response.data);
-
                   this.pages=response.data.length;
-                  console.log(this.pages);
               }else{
                   console.log("Error");
               }

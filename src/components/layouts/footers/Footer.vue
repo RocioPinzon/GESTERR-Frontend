@@ -26,16 +26,7 @@ export default {
   name: 'Footer',
 
   data: () => ({
-    links: [
-      'Inicio',
-      'Servicios'
-    ],
-    icons: [
-      'mdi-facebook',
-      'mdi-twitter',
-      'mdi-linkedin',
-      'mdi-instagram'
-    ]
+    
   })
 }
 </script>

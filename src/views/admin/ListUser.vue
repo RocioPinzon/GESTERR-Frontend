@@ -92,17 +92,7 @@
                     console.log("Error");
                   }
                 });
-    
-                axios.get(`${SERVER_URL_COMPROBADA}/user`)
-                .then((response) =>{
-                  if(response.statusText=="OK"){
-                    console.log("Exito consultar datos de los usuarios en mounted ");      
-                    this.usuarios = response.data;
-                  }else{
-                    console.log("Error");
-                  }
-                });
-    
+       
                 //  SCRIPT PARA LLAMAR SORT
                 let ordenar = document.createElement('script');
                 ordenar.setAttribute('src', 'https://www.kryogenix.org/code/browser/sorttable/sorttable.js');
@@ -124,7 +114,7 @@
     
                                   if(response.statusText=="OK"){
                                     console.log("Exito consultar usuarios en methods ");
-                                    this.usuarios = response.data;
+                                    this.usuarios = response.data.filter(usuario => !usuario.admin);
                                   }else{
                                     console.log("Error ");
                                   }
