@@ -5,7 +5,7 @@
 
         <v-spacer></v-spacer>
             <a href="http://localhost:8080/user/dashboard" class="dashboard">Dashboard</a>
-            <v-btn variant="outlined" @click="irListadoCampos(item_id)">Campos</v-btn>
+            <v-btn @click="irListadoCampos(item_id)">Campos</v-btn>
         <v-menu
             open-on-hover>
             <template v-slot:activator="{ props }">
