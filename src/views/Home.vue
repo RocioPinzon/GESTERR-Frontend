@@ -4,7 +4,7 @@
 
         <Slider/>
 
-        <v-container class="text-center bg-white" width="800px">
+        <v-container class="text-center" width="800px">
             <Cards/>
         </v-container>
     </v-content>

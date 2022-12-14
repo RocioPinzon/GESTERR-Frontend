@@ -11,7 +11,7 @@
         transition="fade-transition">
 
         <div class="d-flex fill-height justify-center align-center pa-16">
-          <div class="text-h2 bg-whiteOp pa-16 ">
+          <div class="text-h2 bg-white pa-16 ">
             {{ item.title }}
             <br>
             {{ item.description }}
