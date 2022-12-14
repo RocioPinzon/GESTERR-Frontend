@@ -9,12 +9,12 @@
 
         </v-row>
         
-        <v-row class="justify-center" no-gutters>
+        <v-row justify="center" no-gutters>
+          <v-col><CardUser/></v-col>
+          <v-col><Tiempo/></v-col>
           
-          <CardUser/>
           
           
-          <Tiempo/>
 
           <v-responsive width="100%"></v-responsive>
 

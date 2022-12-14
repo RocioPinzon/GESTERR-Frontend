@@ -1,21 +1,48 @@
 <template>
    
-            <v-col
-                xs="12"
-                sm="12"
-                md="5"
-                lg="5"
-                xl="3">
-                
-                <v-sheet class="pa-2 ma-2">
-                    <div id="ww_644aecd1fd899" v='1.3' loc='auto' a='{"t":"horizontal","lang":"es","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"#689F38","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#FFFFFF","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'><a href="https://weatherwidget.org/pl/" id="ww_644aecd1fd899_u" target="_blank">Widżety prognozy pogody dla stron internetowych</a></div>
-                
-                </v-sheet>
-            </v-col>
+        <div class="tomorrow"
+            data-location-id="036826"
+            data-language="ES"
+            data-unit-system="METRIC"
+            data-skin="light"
+            data-widget-type="aqiPollutant"
+            style="padding-bottom:22px;position:relative;"
+            >
+            <a
+                href="https://www.tomorrow.io/weather-api/"
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
+            >
+                <img
+                alt="Powered by the Tomorrow.io Weather API"
+                src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                width="250"
+                height="18"
+                />
+            </a>
+        </div>
+            
         
 </template>
 
 <script>
+(function(d, s, id) {
+            if (d.getElementById(id)) {
+                if (window.__TOMORROW__) {
+                    window.__TOMORROW__.renderWidget();
+                }
+                return;
+            }
+            const fjs = d.getElementsByTagName(s)[0];
+            const js = d.createElement(s);
+            js.id = id;
+            js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+
+            fjs.parentNode.insertBefore(js, fjs);
+        })(document, 'script', 'tomorrow-sdk');
+
+        
 export default {
     name:'Tiempo',
 
@@ -25,10 +52,17 @@ export default {
     },
 
     mounted() {
-      let tiempo = document.createElement('script');
+      /*let tiempo = document.createElement('script');
       tiempo.setAttribute('src', 'https://app1.weatherwidget.org/js/?id=ww_644aecd1fd899');
-      document.head.appendChild(tiempo);
+      document.head.appendChild(tiempo);*/
       //async src="https://app1.weatherwidget.org/js/?id=ww_253cddb360a61"
+      
     },
 }
+
+
 </script>
+
+
+
+        

@@ -4,7 +4,7 @@
         sm="12"
         md="5"
         lg="5"
-        xl="3">
+        xl="5">
             <v-sheet class="pa-2 ma-2">
                 <v-card
                     class="mx-auto"
