@@ -58,7 +58,7 @@
 <script>
 
 export default {
-  components: { Navigation },
+  components: { },
   name: 'Header',
 
   data: () => ({
