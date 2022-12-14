@@ -4,10 +4,10 @@
         <v-main>
             <v-img cover height="450" 
                     src="../../../assets/img/parallax.png">
-                    <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-                        <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+                    <v-row justify="center" class="mt-16 d-flex align-center pa-15">
+                        <v-sheet class="mt-16 pa-15 text-center">
                         
-                            <h2 class="text-center pa-10">{{ titulo }}</h2>
+                            <h2 class="text-center mt-5 pa-15">{{ titulo }}</h2>
                         
                         </v-sheet>
                     </v-row>

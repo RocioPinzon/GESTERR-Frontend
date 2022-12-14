@@ -2,12 +2,12 @@
   <Header/>
     <v-layout>
       <v-main>
-        <v-img cover height="400" 
+        <v-img cover height="425" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
             <v-sheet class="mt-16 pa-2 align-self-end">
               
-                <h2 class="text-center pa-2">{{ titulo }}</h2>
+                <h2 class="text-center mt-15 pa-2">{{ titulo }}</h2>
                 <h3 class="text-center pa-2">{{ subtitulo }}</h3>
                 
             </v-sheet>
@@ -15,17 +15,22 @@
         </v-img>
         <v-container class="mb-5 pb-15">
 
-          <v-row justify="center">
+          <v-row justify="center mb-5">
             <v-col
               cols="12"
               sm="10"
               md="9"
               lg="7"
               xl="5"
-              class="my-10">
+              class="mb-10">
 
                 <div class="my-2 py-1 d-flex justify-space-between">
-                  
+                  <v-btn 
+                    v-model="nCultivos"
+                    color="success"
+                    variant="tonal"
+                    elevation="6">Número total de cultivos: {{ nCultivos }}
+                  </v-btn>
                     <v-btn 
                       color="#906b51" 
                       elevation="6"
@@ -35,7 +40,7 @@
                   
               </div>
               
-                  <v-table class="sortable my-6 elevation-5">
+                  <v-table class="sortable mb-4 elevation-5">
                     <thead>
                       <tr class="bg-green">
                         <th class="text-center">{{ nombre }}</th>
@@ -78,11 +83,12 @@
               </v-col>
             </v-row>
             <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <BarChartTodosCultivos/>
-            </v-sheet>
+              <v-sheet class="text-center ma-2 pa-2 text-center">
+                <h2 class="text-center pa-5 mb-5">GRÁFICA DE TODOS LOS CULTIVOS</h2>
+                <BarChartTodosCultivos/>
+              </v-sheet>
                        
-          </v-row>
+            </v-row>
           </v-container>
       </v-main>
     </v-layout>
@@ -172,29 +178,6 @@ const Swal = require('sweetalert2');
               var newTableObject = document.querySelector('.sortable table');
               sorttable.makeSortable(newTableObject)
             }, "1500");
-
-            // Cargar datos cultivos de un campo al cargar la pagina
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/cultivos`) 
-                .then((response) =>{
-
-                  if(response.statusText=="OK"){
-                    console.log("Exito consultar cultivos");
-                   
-                    this.cultivos = response.data;
-                    this.pages=response.data.length;
-                    console.log("this.cultivos");
-
-                    console.log(this.cultivos);
-                        if(this.cultivos.length===0){
-                          
-                          this.tablaVacia=true;
-                        }
-                    
-                  }else{
-                    console.log("Error get cultivos");
-                  }
-
-              }); 
        
             // FIN MOUNTED
         },
@@ -221,12 +204,12 @@ const Swal = require('sweetalert2');
                      
                     console.log("Exito consultar cultivos ");
                     this.cultivos = response.data;
+                    this.pages=response.data.length;
                     this.nCultivos = this.cultivos.length;
                     if(this.cultivos.length===0){
                       this.tablaVacia=true;
                     }
-                    
-                        
+                                            
                   }else{
                     console.log("Error get cultivos ");
                   }

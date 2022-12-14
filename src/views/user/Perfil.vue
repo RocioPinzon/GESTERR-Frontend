@@ -1,13 +1,16 @@
 <template>
   <Header/>
     <v-container class="">
-      <v-row no-gutters>
+      <v-row justify="center" no-gutters>
+        <h2 class="text-center pa-15">PERFIL DE USUARIO</h2>
+      </v-row>
+      <v-row justify="center mb-15" no-gutters>
         <v-col
             xs="12"
             sm="12"
             md="6"
             lg="5"
-            xl="4">
+            xl="3">
             <v-sheet class="pa-5 ma-2">
                 <v-card
                         class="mx-auto"
@@ -24,7 +27,12 @@
                     </v-card>
             </v-sheet>
         </v-col>
-        <v-col>
+        <v-col cols="12"
+            xs="12"
+            sm="12"
+            md="6"
+            lg="6"
+            xl="4">
           <v-sheet class="pa-5 ma-2">
             <v-form
               ref="form"

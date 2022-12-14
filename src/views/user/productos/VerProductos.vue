@@ -2,22 +2,18 @@
   <Header/>
     <v-layout>
       <v-main>
-        <v-img cover height="450" 
+        <v-img cover height="425" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
             <v-sheet class="mt-16 pa-2 align-self-end">
               
-                <h2 class="text-center pa-10">{{ titulo }}</h2>
-              
+                <h2 class="text-center mt-15 pa-2">{{ titulo }}</h2>
+                <h3 class="text-center pa-2">{{ subtitulo }}</h3>
+
             </v-sheet>
           </v-row>
         </v-img>
-        <v-container class="">
-          <v-row justify="center">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-                <BarChartTodosProductos/>
-              </v-sheet>
-          </v-row>
+        <v-container class="mb-5 pb-15">
           <v-row justify="center">
             <v-col
               cols="12"
@@ -25,18 +21,21 @@
               md="9"
               lg="7"
               xl="5" 
-              class="my-10">
+              class="mb-10">
               <div class="my-2 py-1 d-flex justify-space-between">
-                <v-btn 
-                  color="success" 
-                  elevation="6"
-                  @click="crearProducto()">Añadir Producto</v-btn>
+                
                 <v-btn 
                   v-model="nCampos"
                   color="success"
                   variant="tonal"
                   elevation="6">Número total de productos: {{ nProductos }}
                 </v-btn>
+                <v-btn 
+                    color="#906b51" 
+                    elevation="6"
+                    class="text-white"
+                    @click="downloadFile">Descargar .xslx
+                  </v-btn>
               </div>
               
               <v-sheet class="my-2 rounded" elevation="4">
@@ -75,14 +74,7 @@
                 </v-table>
               </v-sheet>
               <v-sheet>
-                <div class="my-1 py-2 d-flex justify-space-between">
-                  <v-btn 
-                    color="#906b51" 
-                    elevation="6"
-                    class="text-white"
-                    @click="downloadFile">Descargar .xslx
-                  </v-btn>
-                </div>
+               
                 <div class="text-center">
                   {{visiblePages}}
                   <v-pagination
@@ -94,6 +86,13 @@
               </v-sheet>
               
             </v-col>
+          </v-row>
+          <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="text-center ma-2 pa-2 text-center">
+                <h2 class="text-center pa-5 mb-5">GRÁFICA DE TODOS LOS PRODUCTOS</h2>
+
+                <BarChartTodosProductos/>
+              </v-sheet>
           </v-row>
       </v-container>
     </v-main>
@@ -119,7 +118,8 @@ const Swal = require('sweetalert2');
           userId: null,
           productos: [],
           nProductos:"",
-          titulo:"PRODUCTOS",
+          titulo:"TODOS LOS PRODUCTOS",
+          subtitulo:"Listado de todos los productos de los cultivos",
           nombre:"Nombre producto",
           precio:"Precio (€/kg)",
           fecha:"Fecha",

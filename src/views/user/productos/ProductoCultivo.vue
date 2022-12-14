@@ -2,41 +2,46 @@
     <Header/>
       <v-layout>
         <v-main>
-          <v-img cover height="450" 
+          <v-img cover height="425" 
                   src="../../../assets/img/parallax.png">
             <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-              <v-sheet class="mt-16 pa-2 align-self-end">
+              <v-sheet class="mt-16 pa-2 align-center">
                 
-                  <h2 class="text-center pa-10">{{ titulo }}</h2>
-                
+                  <h2 class="text-center mt-15 pt-2">{{ titulo }}</h2>
+                  <h2 class="text-center pb-2">del cultivo {{datosCultivo.nombre}}</h2>
+                  <div class="text-center">
+                    <v-chip
+                    class="ma-2"
+                    color="success"
+                    variant="outlined">
+                    <v-icon start icon="mdi-plus"></v-icon>
+                    Nº total productos: {{ nProductos }}
+                    </v-chip>
+                  </div>
               </v-sheet>
             </v-row>
           </v-img>
-          <v-container class="">
-            <v-row justify="center">
-              <v-sheet class="ma-2 pa-2 align-self-end">
-                  <BarChartProductos/>
-                </v-sheet>
-            </v-row>
-            <v-row justify="center">
+          <v-container class="mb-5 pb-15">
+            <v-row justify="center mb-5">
               <v-col
                 cols="12"
                 sm="10"
                 md="9"
                 lg="7"
                 xl="5" 
-                class="my-10">
+                class="mb-10">
                 <div class="my-2 py-1 d-flex justify-space-between">
                   <v-btn 
                     color="success" 
                     elevation="6"
                     @click="crearProducto()">Añadir Producto</v-btn>
-                  <v-btn 
-                    v-model="nCampos"
-                    color="success"
-                    variant="tonal"
-                    elevation="6">Número total de productos: {{ nProductos }}
-                  </v-btn>
+
+                    <v-btn 
+                      color="#906b51" 
+                      elevation="6"
+                      class="text-white"
+                      @click="downloadFile">Descargar .xslx
+                    </v-btn>
                 </div>
                 
                 <v-sheet class="my-2 rounded" elevation="4">
@@ -53,7 +58,7 @@
                       </tr>
                     </thead>
   
-                    <tbody>
+                    <tbody v-if="tablaVacia===false">
                       <tr
                         v-for="item in productosPage"
                         :key="item._id" >
@@ -72,17 +77,13 @@
                         </td>
                       </tr>
                     </tbody>
+                    <tbody v-else>
+                      <td colspan="6" class="pa-10 text-center">AÚN NO HAS INSERTADO NINGÚN PRODUCTO. AÑADE UN PRODUCTO NUEVO</td>
+
+                    </tbody>
                   </v-table>
                 </v-sheet>
                 <v-sheet>
-                  <div class="my-1 py-2 d-flex justify-space-between">
-                    <v-btn 
-                      color="#906b51" 
-                      elevation="6"
-                      class="text-white"
-                      @click="downloadFile">Descargar .xslx
-                    </v-btn>
-                  </div>
                   <div class="text-center">
                     {{visiblePages}}
                     <v-pagination
@@ -94,6 +95,13 @@
                 </v-sheet>
                 
               </v-col>
+            </v-row>
+
+            <v-row justify="center" class="d-flex">
+              <v-sheet class="ma-2 pa-2 text-center">
+                  <h2 class="text-center pa-5 mb-5">GRÁFICA DE PRODUCTOS DE UN CULTIVO</h2>
+                  <BarChartProductos/>
+                </v-sheet>
             </v-row>
         </v-container>
       </v-main>
@@ -118,6 +126,7 @@
           data: () => ({
             userId: null,
             productos: [],
+            datosCultivo:{},
             nProductos:"",
             titulo:"PRODUCTOS",
             nombre:"Nombre producto",
@@ -125,6 +134,9 @@
             fecha:"Fecha",
             textButonActualizar:"Actualizar",
             cantidad:"Cantidad (Kg)",
+            tablaVacia:false,
+
+            // Paginacion
             page:1,
             pages:[],
             perPage:5,
@@ -132,6 +144,7 @@
             
           }),
           computed: {
+            //Paginacion tabla
             visiblePages () {
                 const productoPaginados= this.productos.slice((this.page - 1)* this.perPage, this.page* this.perPage);
                 console.log("productoPaginados");
@@ -143,6 +156,7 @@
                 //return productoPaginados; para verlo en pantall como si fuera consola
             }
           },
+
           mounted(){
             this.comprobarUsuario();  
             this.campoId = this.$route.params.campoId;
@@ -161,20 +175,19 @@
                 }
   
               });  
-  
-              // Consultar datos Productos
-            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/productos`) 
+              
+              // Cargar datos de un cultivo al cargar la pagina
+            axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}`) 
                 .then((response) =>{
-                    
-                if(response.statusText=="OK"){
-                    console.log("Exito consultar producto " + this.productoId);
-                    this.productos = response.data;
-                    this.pages=response.data.length;
-                }else{
-                    console.log("Error");
-                }
-            }); 
-             
+
+                  if(response.statusText=="OK"){
+                    console.log("Exito consultar campoID ");
+                    this.datosCultivo = response.data;                    
+                    //this.items.text=this.datosCultivo.hectareas;
+                  }else{
+                    console.log("Error cargar cultivos");
+                  }
+                }); 
               // FIN MOUNTED
           },
    
@@ -193,10 +206,9 @@
                   {
                     sheet: "Adults",
                     columns: [
-                      { label: "ID Campo", value: "user" },
-                      { label: "Nombre producto", value: (row) => row.name + "." },
-                      { label: "Cantidad", value: (row) => row.cantidad + "." }, // Top level data
-                      //{ label: "Fecha", value: (row) => row.date + "." },
+                      { label: "Nombre producto", value: (row) => row.name },
+                      { label: "Cantidad", value: (row) => row.cantidad + " kg/l" },
+                      { label: "Precio", value: (row) => row.precio },
                     ],
                     content: this.productos,
                   }
@@ -211,24 +223,28 @@
                 }
   
                 XLSX(data, settings) 
-                //XLSX(columns, content, settings);
               },
+
               cargarProductos(){
   
-              //CONSULTAR PRODUCTOS de un cutlivo  
-              axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/productos`) 
-                  .then((response) =>{
+                //CONSULTAR PRODUCTOS de un cutlivo  
+                axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos/${this.campoId}/cultivos/${this.cultivoId}/productos`) 
+                    .then((response) =>{
   
-                    if(response.statusText=="OK"){
-                      console.log("Exito consultar productos ");
-                      this.productos = response.data;
-                      this.nProductos = this.productos.length;
-  
-                    }else{
-                      console.log("Error al consultar productos. de un cultivo ");
-                    }
-  
-                  }); 
+                      if(response.statusText=="OK"){
+                        console.log("Exito consultar productos ");
+                        this.productos = response.data;
+                        this.nProductos = this.productos.length;
+                        this.pages=response.data.length;
+
+                        if(this.productos.length===0){
+                            this.tablaVacia=true;
+                          }
+                      }else{
+                        console.log("Error al consultar productos. de un cultivo ");
+                      }
+    
+                    }); 
               },
               
               crearProducto(){
@@ -282,7 +298,10 @@
                           console.log("Error borrando producto ");
                         }
                       });
-              }
+              },
+
+            
+                       
           }
       }
-    </script>
+</script>

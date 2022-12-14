@@ -1,10 +1,5 @@
 <template>
-    <v-col
-        xs="12"
-        sm="12"
-        md="5"
-        lg="5"
-        xl="5">
+   
             <v-sheet class="pa-2 ma-2">
                 <v-card
                     class="mx-auto"
@@ -29,7 +24,6 @@
                     </v-card-actions>
                 </v-card>
             </v-sheet>
-    </v-col>
 </template>
 
 

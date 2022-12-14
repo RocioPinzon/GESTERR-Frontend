@@ -1,6 +1,10 @@
 <template>
     <v-container>
         <v-row class="d-flex justify-center">
+          <h2 class="pa-10 my-10">SERVICIOS</h2>
+        </v-row>
+        <v-row class="d-flex justify-center">
+          
             <v-col
               cols="12"
               sm="12"
@@ -8,6 +12,7 @@
               lg="4"
               xl="4"
               v-for="(item, i) in items" :key="i.id">
+              
                 <v-sheet class="pa-2 ma-2">
                     <v-card
                     class="mx-auto"
@@ -49,7 +54,7 @@ export default {
       items: [
       { 
         id: 1,
-        title: "Campos", 
+        title: "Crear campos", 
         subtitle:"Crea campos ahora", 
         p1:"Lleva un control de los campo que tienes",
         src: require('../../assets/img/cat-campo.jpg'),

@@ -33,7 +33,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 500
+      default: 800
     },
     height: {
       type: Number,
@@ -70,35 +70,24 @@ export default {
   },
   mounted(){
       this.comprobarUsuario(); 
-      this.campoId = this.$route.params.campoId;
-       //CONSULTAR CAMPOS USER
+      this.campoId = this.$route.params.campoId; 
+      this.cargarCampos();
        
-       axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
+  },
+
+  methods:{
+      //CONSULTAR CAMPOS USER
+      cargarCampos(){
+        axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)
                           .then((response) =>{
                             if(response.statusText=="OK"){
-                              console.log("Exito consultar camposW ");
-                              console.log(response.data);
+                              console.log("Exito campos barchar");
 
                               this.chartData.labels=response.data.name;
-                              //this.chartData.datasets= response.data.length;
                               var arrayLength = response.data.length;
                               var contCultivos=0;
                               var contSinCultivos=0;
                               var contBarbecho=0;
-                              console.log("this");
-                              console.log(this);
-                              console.log("-----------------------s");
-
-                              //this.chartData.datasets[0].data[0]=25;
-                              //this.chartData.datasets[0].data[1]=10; //Guuardar los datos dinamicos
-                              //this.chartData.datasets[0].data[2]=30;
-
-                              //var charD = this.chartData.datasets[0].data[3] = 60;
-                              console.log("this.chartData.labels");
-
-                              console.log(this.chartData.labels);
-                              //this.chartData.labels[3];
-                              //this.chartData.labels.push("Newly Added");
 
                               for (var i=0; i<arrayLength; i++) {
                       
@@ -108,48 +97,30 @@ export default {
                                   console.log(response.data[i].hectareas);
                                   console.log("ESTADO");
                                   console.log(response.data[i].estado);
-                                  //this.chartData.labels=response.data[i].name;
-                                  //chartData.datasets.data=response.data[i].estado;
                                     
                                     if(response.data[i].estado==="CONCULTIVOS"){
                                       contCultivos++;
-                                      console.log("contCultivos --> " + contCultivos);
-                                      /*this.numEstadosChar=contCultivos;
-                                      console.log("this.numEstadosChar -->" + this.numEstadosChar);
-                                      this.numEstadosChar =this.numEstadosChar.contCultivos;*/
-
                                     }
 
                                     if(response.data[i].estado==="SINCULTIVAR"){
                                       contSinCultivos++;
-                                      console.log("contSinCultivos --> " + contSinCultivos);
-                                      /*this.numEstadosChar=contSinCultivos;
-                                      console.log("this.numEstadosChar -->" + this.numEstadosChar);
-                                      this.numEstadosChar =this.numEstadosChar.contSinCultivos;*/
                                     }
+
                                     if(response.data[i].estado==="BARBECHO"){
                                       contBarbecho++;
-                                      console.log("contBarbecho -->" + contBarbecho);
                                     }
 
                                     this.chartData.datasets[0].data[0]=contCultivos;
                                     this.chartData.datasets[0].data[1]=contSinCultivos;
-                                    this.chartData.datasets[0].data[2]=contBarbecho;
-
-                                    
-                                  //console.log(this.numEstadosChar = [contCultivos,contSinCultivos,contBarbecho]);
-                                  //this.chartData.datasets[0].data[i]=this.numEstadosChar;
+                                    this.chartData.datasets[0].data[2]=contBarbecho;                                    
                               }                              
                             }else{
                               console.log("Error ");
                             }
                         });
-  },
-
-  methods:{
-      
-          comprobarUsuario(){
-            this.userId=localStorage.getItem('userId'); 
+      },
+      comprobarUsuario(){
+          this.userId=localStorage.getItem('userId'); 
             if(!this.userId){
               this.$router.push(`/signin`);
             } 

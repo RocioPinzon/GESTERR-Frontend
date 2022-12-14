@@ -1,19 +1,55 @@
 <template>
-    <v-app-bar color="green">
+    <v-app-bar shrink-on-scroll color="green">
        
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
         <v-spacer></v-spacer>
-          <v-menu></v-menu>
+            <a href="http://localhost:8080/user/dashboard" class="dashboard">Dashboard</a>
+            <v-btn variant="outlined" @click="irListadoCampos(item_id)">Campos</v-btn>
+        <v-menu
+            open-on-hover>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                color="tonal"
+                v-bind="props">
+                LISTADOS INFORMACIÓN
+              </v-btn>
+            </template>
 
-            <v-btn @click="irDashboard()">Dashboard</v-btn>
-            <v-btn @click="irPerfil()">Perfil</v-btn>
-            <v-btn @click="irListadoCampos(item_id)">Campos</v-btn> 
-            <v-btn @click="irListadoProductos(item_id)">Productos</v-btn> 
+            <v-list>
+              <v-list-item>
+              <v-btn block @click="irListadoCultivos(item_id)">Cultivos</v-btn> 
+              </v-list-item>
 
-        <v-btn icon>
-          <v-icon @click="logout(item_id)">mdi-export</v-icon>
-        </v-btn>
+              <v-list-item>
+                <v-btn block @click="irListadoProductos(item_id)">Productos</v-btn>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-menu open-on-hover>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                color="tonal"
+                v-bind="props">
+                DATOS
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item>
+                <v-btn @click="irPerfil()" block>Perfil</v-btn>
+              </v-list-item>
+
+              <v-list-item>
+                <v-btn @click="logout(item_id)" block>Salir  
+                  <v-icon class="px-2">mdi-export</v-icon>
+                </v-btn>
+              </v-list-item>
+            </v-list>
+          </v-menu> 
+             
+
+        
       </v-app-bar>
       
 
@@ -46,7 +82,8 @@ export default {
       this.$router.push(`/`);
     },
     irDashboard(){
-      this.$router.push(`/user/dashboard`);
+      
+      this.$router.push();
 
     },
 
@@ -58,6 +95,10 @@ export default {
       this.$router.push(`/user/campos`);
 
     },
+    irListadoCultivos(){
+      this.$router.push(`/user/cultivos`);
+
+    },
     irListadoProductos(){
       this.$router.push(`/user/productos`);
 
@@ -65,3 +106,16 @@ export default {
   }
 }
 </script>
+<style>
+
+  .dashboard {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 425;
+    font-size:15px;
+    padding: 0px 20px;
+
+  }
+
+</style>

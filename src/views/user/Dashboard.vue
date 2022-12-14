@@ -3,19 +3,24 @@
   
   <v-layout>
     <v-main>
-      <v-container class="">
-        <v-row class="justify-center pa-4" no-gutters>
-          <AlertDashboard/>
-
-        </v-row>
+      <v-container class="py-16">
         
-        <v-row justify="center" no-gutters>
-          <v-col><CardUser/></v-col>
-          <v-col><Tiempo/></v-col>
+        
+        <v-row justify="center" class="d-flex" no-gutters>
+          <v-col cols="12"
+                  sm="12"
+                  md="4"
+                  lg="5"
+                  xl="3"><CardUser/>
+          </v-col>
+          <v-col cols="12"
+                  sm="12"
+                  md="8"
+                  lg="7"
+                  xl="8" class="pa-4"><Tiempo/>
+          </v-col>
           
-          
-          
-
+        
           <v-responsive width="100%"></v-responsive>
 
 
@@ -70,6 +75,15 @@ const Swal = require('sweetalert2');
           { text: 'Conversions', icon: 'mdi-flag' },
         ],
         }),
+
+        created() {
+            const reloaded = localStorage.getItem('reloaded');
+            if (reloaded !== 'true') {
+                localStorage.setItem('reloaded', 'true');
+                location.reload();
+            }
+          },
+
         mounted(){
           
           this.comprobarUsuario();  
@@ -103,7 +117,7 @@ const Swal = require('sweetalert2');
  
 
         methods: {
-
+            
             cargarCampos(){
               //CONSULTAR CAMPOS USER
               axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/campos`)

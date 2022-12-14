@@ -50,7 +50,14 @@
                                 variant="outlined"
                                 required>
                             </v-text-field>
-
+                            <v-select
+                                v-model="datosCultivos.estado"
+                                :items="estados"
+                                label="Estado" 
+                                return-object
+                                single-line
+                                variant="outlined">  
+                            </v-select> 
                             <v-btn
                                 color="success"
                                 class="mr-4"
@@ -85,6 +92,8 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
             datosCultivos:{},
             valid: true,
             titulo:"EDITAR CULTIVO",
+            estados:['SEMBRADO','RECOLECTADO'],
+            // Reglas 
             nameRules: [
                 v => (v && v.length <= 20) || 'Name must be less than 20 characters',
             ]

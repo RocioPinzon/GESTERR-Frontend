@@ -2,50 +2,84 @@
   <Header/>
   <v-layout>
       <v-main>
-        <v-img cover height="450" 
+        <v-img cover height="425" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-            <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+            <v-col class="mt-16 align-self-end">
               
-                <h2 class="text-center pa-10">{{ titulo }}</h2>
+              <h2 class="text-center mt-15 pa-2">{{ titulo }}</h2>
+              <h3 class="text-center pa-2">{{ subtitulo }}</h3>
+              <div class="text-center">
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Nº de campos: {{ nCampos }}
+                </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Nº total de hectareas: {{ nTotalHectareasCampos }}
+                </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Campos cultivados: {{ nCultivados }}
+                </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Campos barbecho: {{ nBarbecho }}
+                </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Campos sin cultivar: {{ nSinCultivar }}
+                </v-chip>
+              </div>
               
-            </v-sheet>
+            </v-col>
           </v-row>
         </v-img>
         <v-container class="mb-5 pb-15">
-        
-          <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <BarChart/>
-            </v-sheet>
-            
-          </v-row>
           
-          <v-row justify="center">
+          <v-row justify="center mb-5">
             <v-col
               cols="12"
                 sm="12"
                 md="12"
                 lg="10"
-                xl="10"
-                class="my-10">
+                xl="8"
+                class="mb-10">
               
-              <div class="my-2 py-1 d-flex justify-space-between">
+              <div class="my-1 py-1 d-flex justify-space-between">
                
                 <v-btn 
                   color="success" 
                   elevation="6"
                   @click="agregarCampo()">Añadir campo</v-btn>
         
-                  <v-btn 
-                  v-model="nCampos"
-                  color="success"
-                  variant="tonal"
-                  elevation="6">Número total de campos: {{ nCampos }}</v-btn>
+                  <div class="py-1 d-flex justify-space-between">
+                    <v-btn 
+                      color="#906b51" 
+                      elevation="6"
+                      class="text-white"
+                      @click="downloadFile">Descargar .xslx
+                    </v-btn>
+                  </div>
               </div>
                              
               <v-table
-              class="sortable my-6 elevation-5">
+              class="sortable mb-4 elevation-5">
               
                   <thead>
                     <tr class="bg-green">
@@ -92,14 +126,6 @@
                 </tbody>
                 </v-table>
                 <v-sheet>
-                  <div class="my-2 py-1 d-flex justify-space-between">
-                    <v-btn 
-                      color="#906b51" 
-                      elevation="6"
-                      class="text-white"
-                      @click="downloadFile">Descargar .xslx
-                    </v-btn>
-                  </div>
                   <div class="text-center">
                     {{visiblePages}}
                     <v-pagination
@@ -109,7 +135,14 @@
                   </div>
                 </v-sheet>                               
             </v-col>
-          </v-row>        
+          </v-row>
+          <v-row justify="center" class="d-flex align-center pa-10">
+            <v-sheet class="text-center ma-2 pa-2 align-center">
+              <h2 class="text-center pa-5 mb-5">GRÁFICA DE ESTADO DE TODOS LOS CAMPOS</h2>
+              <BarChart/>
+            </v-sheet>
+            
+          </v-row>      
         </v-container>
       </v-main>
     </v-layout>
@@ -139,6 +172,7 @@ import BarChart from '@/components/BarChart'
           model: null,
           search: null,
           titulo: "CAMPOS",
+          subtitulo:"Listado de todos los terrenos. Podrás crear cultivos en cada uno.",
           tablaVacia:false,
           estados:[],
           estadoCampo:"",
@@ -146,6 +180,10 @@ import BarChart from '@/components/BarChart'
           pages:[],
           perPage:5,
           camposPage:[],
+          nCultivados:0,
+          nSinCultivar:0,
+          nBarbecho:0,
+          nTotalHectareasCampos:0
           
          
       
@@ -209,7 +247,6 @@ import BarChart from '@/components/BarChart'
                 {
                   sheet: "Adults",
                   columns: [
-                    { label: "ID Campo", value: "campoId" },
                     { label: "Nombre campo", value: (row) => row.name },
                     { label: "Direccion", value: (row) => row.direccion },
                     { label: "Hectareas", value: (row) => row.hectareas }, 
@@ -241,7 +278,43 @@ import BarChart from '@/components/BarChart'
                                 this.campos = response.data;
                                 this.nCampos = this.campos.length;
                                 this.pages=response.data.length;
-                                
+                                for (const hec in this.campos) {
+                      
+                                    this.nTotalHectareasCampos += this.campos[hec].hectareas;
+                                    
+                                }
+                                var arrayLength = response.data.length;
+                                var contCultivos=0;
+                                var contSinCultivos=0;
+                                var contBarbecho=0;
+
+                                for (var i=0; i<arrayLength; i++) {
+                        
+                                    console.log("NAME");
+                                    console.log(response.data[i].name);
+                                    console.log("CANTIDAD");
+                                    console.log(response.data[i].hectareas);
+                                    console.log("ESTADO");
+                                    console.log(response.data[i].estado);
+                                      
+                                      if(response.data[i].estado==="CONCULTIVOS"){
+                                        contCultivos++;
+                                      }
+
+                                      if(response.data[i].estado==="SINCULTIVAR"){
+                                        contSinCultivos++;
+                                      }
+
+                                      if(response.data[i].estado==="BARBECHO"){
+                                        contBarbecho++;
+                                      }
+
+                                      this.nCultivados=contCultivos;
+                                      this.nSinCultivar=contSinCultivos;
+                                      this.nBarbecho=contBarbecho;
+
+                                }   
+
                                 if(this.campos.length===0){  
                                   this.tablaVacia=true;
                                 }

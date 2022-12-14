@@ -5,55 +5,47 @@
         <v-img cover height="425" 
                 src="../../../assets/img/parallax.png">
           <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-            <v-sheet class="mt-16 pa-2 align-self-end">
+            <v-sheet class="mt-16 pa-2 align-center">
               
-                <h2 class="text-center mt-15 pa-2">{{ titulo }}</h2>
-                <h2 class="text-center pa-2">en {{datosCampo.name}}</h2>
+              <h2 class="text-center mt-15 pt-2">{{ titulo }}</h2>
+              <h2 class="text-center pb-2">en {{datosCampo.name}}</h2>
 
+              <div class="text-center">
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Hectareas del campo: {{ datosCampo.hectareas }}
+                </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Nº de cultivos: {{ nCultivos }}
+                </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="success"
+                  variant="outlined">
+                  <v-icon start icon="mdi-plus"></v-icon>
+                  Nº total de hectareas: {{ nTotalHectareasCultivos }}
+                </v-chip>
+              </div>
             </v-sheet>
           </v-row>
         </v-img>
         <v-container class="mb-5 pb-15">
-
-          <v-row class="justify-center d-flex align-center pa-10">
-            
-           
-          </v-row>
-          <v-row justify="center" class="d-flex align-center pa-10">
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <BarChartCultivos/>
-            </v-sheet>
-            <v-sheet class="ma-2 pa-2 align-self-end">
-              <v-card elevation="3" class="mx-auto pa-2" max-width="500">
-                  <v-list>
-                    <v-list-subheader>DATOS CAMPO DE CULTIVO</v-list-subheader>
-              
-                    <v-list-item>
-                      <v-list-item-title>Nombre: {{ datosCampo.name }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-title>Hectareas: {{ datosCampo.hectareas }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-subheader>DATOS CULTIVOS</v-list-subheader>
-                    <v-list-item>
-                      <v-list-item-title>Nº total de cultivos: {{ nCultivos }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-title>Nº total de hectareas: {{ nTotalHectareasCultivos }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-card>           
-            </v-sheet>
-           
-          </v-row>
-          <v-row justify="center">
+          
+          <v-row justify="center mb-5">
             <v-col
               cols="12"
               sm="10"
               md="9"
               lg="7"
               xl="5"
-              class="my-10">
+              class="mb-10">
 
                 <div class="my-2 py-1 d-flex justify-space-between">
                   <v-btn 
@@ -66,8 +58,7 @@
                       elevation="6"
                       class="text-white"
                       @click="downloadFile">Descargar .xslx
-                    </v-btn>
-                  
+                    </v-btn>                 
               </div>
               
                   <v-table class="sortable my-6 elevation-5">
@@ -76,6 +67,7 @@
                         <th class="text-center">{{ nombre }}</th>
                         <th class="text-center">{{ cantidad }}</th>
                         <th class="text-center">{{ hectareas }}</th>
+                        <th class="text-center">{{ estado }}</th>
                         <th class="text-center">Productos de cultivo</th>
                         <th class="sorttable_nosort text-center">Editar / Eliminar</th>
                       </tr>
@@ -87,6 +79,7 @@
                         <td class="text-center">{{ item.nombre }}</td>
                         <td class="text-center">{{ item.cantidad }}</td>
                         <td class="text-center">{{ item.hectareas }}</td>
+                        <td class="text-center">{{ item.estado }}</td>
 
                         <td class="text-center">
                           <button @click="verProductos(item._id)">
@@ -121,6 +114,12 @@
                 </v-sheet>
               </v-col>
             </v-row>
+            <v-row class="justify-center d-flex ">
+              <v-sheet class="ma-2 pa-2 text-center">
+                <h2 class="text-center pa-5 mb-5">GRÁFICA DE CULTIVOS DE UN CAMPO</h2>
+                <BarChartCultivos/>
+              </v-sheet>
+            </v-row>
             <v-row class="justify-center d-flex flex-column align-center pa-10 mt-10">
               <v-sheet>
                 <h2>LOCALIZACIÓN</h2>
@@ -128,13 +127,12 @@
               <v-sheet class="pa-10">
                 <div id="place"></div>
               </v-sheet>
-              
             </v-row>
         </v-container>
       </v-main>
     </v-layout>
-<FooterSinSesion/>
-  </template>
+  <FooterSinSesion/>
+</template>
   
 <script>
 
@@ -161,6 +159,7 @@ const Swal = require('sweetalert2');
           cantidad:"Cantidad (nº aprox)",
           hectareas:"Hectareas",
           nombre:"Nombre cultivos",
+          estado:"Estado",
           tablaVacia:false,
           nCultivos:"",
           nTotalHectareasCultivos:0,
@@ -178,13 +177,9 @@ const Swal = require('sweetalert2');
         }),
 
         computed: {
+          //Paginacion tablas
           visiblePages () {
               const cultivosPaginados= this.cultivos.slice((this.page - 1)* this.perPage, this.page* this.perPage);
-              console.log("cultivosPaginados");
-              console.log(cultivosPaginados);
-
-              console.log("this");
-              console.log(this);
               this.cultivosPage = cultivosPaginados;              
               //return productoPaginados; para verlo en pantall como si fuera consola
           }
@@ -231,11 +226,11 @@ const Swal = require('sweetalert2');
                     this.embedCampo =response.data.provincia;
                     this.items.text=this.datosCampo.hectareas;
                     var addr = this.datosCampo.direccion + " " + this.datosCampo.provincia;
-                    var embed= "<iframe width='725' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( addr ) + "&t=k&z=10&ie=UTF8&iwloc=&output=embed'></iframe>";
+                    var embed= "<iframe width='700' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( addr ) + "&t=k&z=10&ie=UTF8&iwloc=&output=embed'></iframe>";
                     document.getElementById("place").innerHTML= embed;
 
                   }else{
-                    console.log("Error datos campos");
+                    console.log("Error cargar campos");
                   }
                 });          
             // FIN MOUNTED
@@ -293,7 +288,7 @@ const Swal = require('sweetalert2');
                   }else{
                     // info no existe
                     // Error no existe cultivo
-                    console.log("Error get cultivos  ");
+                    console.log("Error consulta cultivo  ");
                   }
 
                 }).catch(error =>{
@@ -311,10 +306,11 @@ const Swal = require('sweetalert2');
                 {
                   sheet: "Adults",
                   columns: [
-                    { label: "ID Campo", value: "campoId" },
                     { label: "Nombre cultivo", value: (row) => row.nombre },
                     { label: "Cantidad", value: (row) => row.cantidad + " (kg | l)" }, // Top level data
                     { label: "Fecha", value: (row) => row.date },
+                    { label: "Estado", value: (row) => row.estado },
+
                   ],
                   content: this.cultivos,
                 }
@@ -329,19 +325,9 @@ const Swal = require('sweetalert2');
               }
 
               XLSX(data, settings) 
-          },
-            
-          // Volver dashboard
-          volverDashboard(){
-            this.$router.push(`/user/dashboard`);
-          },
-          
-          // Ver registro productos de un cultivo
-          verRegistroProductos(cultivoId){
-            this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/registroproductos`);
-          },
-          
-          // Ver registro productos de un cultivo
+          },            
+                    
+          // Ver  productos de un cultivo
           verProductos(cultivoId){
             this.$router.push(`/user/${this.campoId}/cultivos/${cultivoId}/productos`);
           },
