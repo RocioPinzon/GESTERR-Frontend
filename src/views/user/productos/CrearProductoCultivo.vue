@@ -70,12 +70,11 @@
 
 import Header from '@/components/layouts/menus/user/Header.vue';
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import axios from 'axios';
 const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 
   export default {
-  components: { Navigation, Header, FooterSinSesion},
+  components: { Header, FooterSinSesion},
       name: 'CrearCultivo',
       data: () => ({
           userId: null,

@@ -121,7 +121,7 @@
   const Swal = require('sweetalert2');
   
       export default {
-      components: { Navigation, Header, FooterSinSesion, BarChartProductos },
+      components: { Header, FooterSinSesion, BarChartProductos },
           name: 'VerCultivos',
           data: () => ({
             userId: null,

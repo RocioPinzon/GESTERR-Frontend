@@ -96,7 +96,7 @@
 
     export default {
       name: 'Perfil',
-      components: { Navigation,Header,FooterSinSesion },
+      components: { Header,FooterSinSesion },
         data: () => ({
           userId: null,
           datosUser:{}

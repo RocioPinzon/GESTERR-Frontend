@@ -44,7 +44,6 @@ import Header from '@/components/layouts/menus/user/Header.vue';
 import FooterSinSesion from '@/components/layouts/footers/FooterSinSesion.vue';
 import CardUser from '@/components/layouts/CardUser.vue'
 import CardDatosDash from '@/components/layouts/CardDatosDash.vue'
-import Navigation from '@/components/layouts/menus/user/Navigation.vue'
 import CardDashboard from '@/components/layouts/CardDashboard.vue'
 import AlertDashboard from '@/components/layouts/AlertDashboard.vue'
 import axios from 'axios';
@@ -55,7 +54,6 @@ const Swal = require('sweetalert2');
 
     export default {
     components:   {
-      Navigation,
       CardDashboard,
       CardUser,
       AlertDashboard,

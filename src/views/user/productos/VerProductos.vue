@@ -112,7 +112,7 @@ const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
 const Swal = require('sweetalert2');
 
     export default {
-    components: { Navigation, Header, FooterSinSesion, BarChartTodosProductos },
+    components: { Header, FooterSinSesion, BarChartTodosProductos },
         name: 'VerProductos',
         data: () => ({
           userId: null,
