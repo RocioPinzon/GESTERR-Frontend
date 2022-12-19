@@ -5,7 +5,7 @@
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
         <v-spacer></v-spacer>
-            <a href="http://localhost:8080/user/dashboard" class="menuResp dashboard">Dashboard</a>
+            <a href="https://gesterr.herokuapp.com/user/dashboard" class="menuResp dashboard"><v-icon>mdi-home</v-icon></a>
             <v-btn class="menuResp"  @click="irListadoCampos(item_id)">Campos</v-btn>
             <!--<v-btn class="menuMobile"  @click="irListadoCampos(item_id)">Campos mobile</v-btn>-->
             
@@ -20,7 +20,7 @@
 
               <v-list>
                 <v-list-item>
-                  <a href="http://localhost:8080/user/dashboard" style="color:#4a4a4a" class="dashboard">Dashboard</a>
+                  <a href="https://gesterr.herokuapp.com/user/dashboard" style="color:#4a4a4a" class="dashboard">Dashboard</a>
                 </v-list-item>
                 <v-list-item>
                   <v-btn block @click="irListadoCampos(item_id)">Campos</v-btn>
@@ -45,11 +45,8 @@
               </v-list>
             </v-menu>
         
-
-
-
-
-              <v-menu 
+        
+            <v-menu 
               open-on-hover>
               <template v-slot:activator="{ props }">
                 <v-btn class="menuResp" 
@@ -75,7 +72,7 @@
                 <v-btn class="menuResp" 
                   color="tonal"
                   v-bind="props">
-                  DATOS
+                  <v-icon>mdi-account</v-icon>
                 </v-btn>
               </template>
 
