@@ -25,7 +25,7 @@
               </div>
 
               <v-card-title>
-                <p class="text-center py-10 text-h2">Iniciar sesión </p>
+                <p class="text-center py-10 text-h4">Iniciar sesión </p>
               </v-card-title>
               
               <v-text-field
