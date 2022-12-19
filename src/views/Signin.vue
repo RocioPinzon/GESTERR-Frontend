@@ -113,7 +113,7 @@ export default {
     ],
 
     passwordRules:[
-            v => (v && v.length >= 5 || v.length <= 20) || 'La contraseña debe tener al menos 5 caracteres'
+            v => (v && v.length >= 7 || v.length <= 20) || 'La contraseña debe tener al menos 5 caracteres'
     ],
 
     //Mensaje error

@@ -32,11 +32,12 @@
                                 ref="nombre"
                                 v-model="name"
                                 :rules="nameRules"
-                                :counter="10"
+                                :counter="20"
                                 :readonly="loading"
                                 label="Nombre"
                                 placeholder="Nombre"
                                 clearable
+                                
                                 variant="outlined"
                                 required>
                             </v-text-field>
@@ -45,12 +46,12 @@
                                 ref="ape"
                                 v-model="apellidos"
                                 :rules="apeRules"
-                                :counter="10"
                                 :readonly="loading"
                                 label="Apellidos"
                                 placeholder="Apellidos"
                                 variant="outlined"
                                 clearable
+                                :counter="20"
                                 required>
                             </v-text-field>
                                
@@ -61,6 +62,7 @@
                                 label="E-mail"
                                 variant="outlined"
                                 clearable
+                                :counter="20"
                                 required>
                             </v-text-field>
                             
@@ -73,6 +75,7 @@
                                 placeholder="Username"
                                 variant="outlined"
                                 clearable
+                                :counter="25"
                                 required>
                             </v-text-field>
                                     
@@ -86,7 +89,7 @@
                                 label="Contraseña"
                                 :type="show1 ? 'text' : 'password'"    
                                 variant="outlined"
-                                counter
+                                :counter="20"
                                 clearable
                                 @click:append="show1 = !show1"
                                 required>
@@ -102,7 +105,7 @@
                                 :type="show1 ? 'text' : 'password'"
                                 label="Confirmar contraseña"
                                 variant="outlined"
-                                counter
+                                :counter="20"
                                 clearable
                                 @click:append="show1 = !show1"
                                 required>
@@ -186,12 +189,12 @@
         ],
         passwordRules:[
             v => !!v || 'Contraseña requerida',
-            v => (v && v.length >= 5 ||  v.length <= 20) || 'La contraseña debe tener al menos 5 caracteres y menos de 20'
+            v => (v && v.length >= 7 ||  v.length <= 20) || 'La contraseña debe tener al menos 5 caracteres y menos de 20'
 
         ],
         passwordConfirmRules:[
             v => !!v || 'Confirmacion de contraseña requerida',
-            v => (v && v.length >= 5 ||  v.length <= 20 ) || 'La contraseña debe tener al menos 5 caracteres y menos de 20'
+            v => (v && v.length >= 7 ||  v.length <= 20 ) || 'La contraseña debe tener al menos 5 caracteres y menos de 20'
         ]
     }),
 
@@ -218,8 +221,6 @@
                     console.log("Exito signup");
                     this.$router.push('/signin');              
                 }else{
-
-                    //response.data.errors[0].error
                     this.error=true;
                     this.errorMsg="¡Ops! Algo ha salido mal. Revise los datos del formulario";
                 }
@@ -227,12 +228,10 @@
             .catch(error =>{
 
                 this.error=true;
-                this.errorMsg=error.response.data.errors[0].error;
-                
+                this.errorMsg=error.response.data.errors[0].error;  
                 console.log(error);
 
-            });
-            
+            });           
             
         }
     },
