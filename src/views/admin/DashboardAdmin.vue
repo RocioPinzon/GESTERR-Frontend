@@ -155,50 +155,31 @@
  
               } 
             },
-            async eliminarUsuario(userId){
-              const result = await Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Si elimina, no podrá recuperar a este usuario.",
-                icon: 'question',
+            actualizarDatosUser(){
+                let datos = this.datosUser;
+                console.log(datos);
                 
-                confirmButtonColor: '#679e1a',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '¡Si, eliminar!',
-                showCancelButton: true,
-                cancelButtonText: 'Cancelar',
-                reverseButtons: false
-              });
-              
-              // Stop if user did not confirm
-               if (!result.value) {
-                  return;
-               }
+                axios.put(`${SERVER_URL_COMPROBADA}/${this.userId}`,datos) //Actualizar datos usuario
+                .then((response) =>{
 
-                  // DELETE           
-                  axios.delete(`${SERVER_URL_COMPROBADA}/user/${userId}`) 
-                    .then(async(responseDelete) =>{
-
-                      if(responseDelete.statusText=="OK"){
-                        Swal.fire(
-                          'Eliminado!',
-                          'Usuario ha sido eliminado.',
-                          'success'
-                        )
-                        this.cargarUsuarios();
-
-                        console.log("Exito borrar usuario");  
+                if(response.statusText=="OK"){
+                    console.log("Exito actualizar datos campo ");
+                    this.datosUser= response.data;
+                    Swal.fire({
                         
-                      }else if(result.dismiss === Swal.DismissReason.cancel){
-                        Swal.fire(
-                              'Cancelado',
-                              'Your imaginary file is safe :)',
-                              'error')
-                      }else{
-                        
-                        console.log("Error borrando usuario ");
-                      }
-                    });
-            }
+                        icon: 'success',
+                        title: 'Tus datos han sido actualizados',
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                    this.cargarDatosUsuarios(); 
+
+                    console.log(response.data);
+                }else{
+                    console.log("Error actualizando datos campo");
+                }
+            });
+            },
         }
  
     }
