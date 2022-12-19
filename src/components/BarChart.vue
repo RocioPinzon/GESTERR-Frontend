@@ -33,7 +33,7 @@ export default {
     },
     width: {
       type: Number,
-      default: 800
+      default: 600
     },
     height: {
       type: Number,
@@ -62,7 +62,8 @@ export default {
         
       },
       chartOptions: {
-        responsive: true
+        responsive: true,
+        maintainAspectRatio: false
       },
       campos:[],
       numEstadosChar:[]

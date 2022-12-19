@@ -96,10 +96,10 @@ export default {
       },
       { 
         id: 4 , 
-        title: "Informes", 
-        subtitle:"Genera informes periódicos", 
-        descripcion:"Genera informes de las gráficas de forma periodica.",
-        src: require('../../assets/img/cat-informes.jpg'),
+        title: "Gráficas", 
+        subtitle:"Genera gráficas periódicas", 
+        descripcion:"Genera automáticamente gráficas de forma periodica sobre los datos generados..",
+        src: require('../../assets/img/cat-graficas.jpg'),
         show: false,
       }
     ],

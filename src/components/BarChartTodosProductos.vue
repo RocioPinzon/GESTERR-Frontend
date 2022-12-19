@@ -68,7 +68,8 @@
           
         },
         chartOptions: {
-          responsive: true
+          responsive: true,
+          maintainAspectRatio: false
         },
         campos:[],
         numEstadosChar:[]

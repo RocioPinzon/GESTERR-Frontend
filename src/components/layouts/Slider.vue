@@ -10,12 +10,13 @@
         reverse-transition="fade-transition"
         transition="fade-transition">
 
-        <div class="d-flex fill-height justify-center align-center pa-16">
-          <div class="text-h2 bg-white pa-16 ">
-            {{ item.title }}
-            <br>
-            {{ item.description }}
+        <div class="d-flex fill-height d-flex flex-column justify-center align-center w-100" >
+          <div class="bgSlider text-center pa-15">
+            <h1 class="fontSlider text-center">{{ item.title }}</h1>
+            <h2 class="text-center">{{ item.description }}</h2>
           </div>
+          
+          
         </div>
 
     </v-carousel-item>
@@ -34,12 +35,12 @@ export default {
         },
         {
           src: require('../../assets/img/slider2.jpg'),
-          title: 'Analiza',
+          title: 'Analiza tus cultivos',
           description: 'la productividad de tus cultivos'
         },
         {
           src: require('../../assets/img/slider3.jpg'),
-          title: 'Genera informes',
+          title: 'Genera gráficas',
           description: 'Optimiza tus productos y mejora el rendimiento'
         }
       ]
@@ -47,3 +48,14 @@ export default {
   }
 }
 </script>
+<style>
+
+.bgSlider{
+  background: #e6e6e6d6;
+}
+
+.fontSlider{
+  font-size: 50px;
+}
+
+</style>

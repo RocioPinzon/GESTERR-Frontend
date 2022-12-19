@@ -114,7 +114,7 @@
               axios.get(`${SERVER_URL_COMPROBADA}/user/${this.userId}`)
                 .then((response) =>{
                   if(response.statusText=="OK"){
-                    console.log("Exito consultar datos del usuario ");      
+                    console.log("Exito consultar datos del usuario");      
                     this.datosUser = response.data;
                     
                   }else{

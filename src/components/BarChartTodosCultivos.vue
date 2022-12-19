@@ -33,7 +33,7 @@
       },
       width: {
         type: Number,
-        default: 750
+        default: 600
       },
       height: {
         type: Number,
@@ -68,7 +68,8 @@
           
         },
         chartOptions: {
-          responsive: true
+          responsive: true,
+          maintainAspectRatio: false
         },
         campos:[],
         numEstadosChar:[]
