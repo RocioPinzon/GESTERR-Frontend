@@ -52,7 +52,7 @@
                     </tr>
                   </thead>
 
-                  <tbody>
+                  <tbody v-if="tablaVacia===false">
                     <tr
                       v-for="item in productosPage"
                       :key="item._id" >
@@ -128,7 +128,8 @@ const Swal = require('sweetalert2');
           page:1,
           pages:[],
           perPage:5,
-          productosPage:[]
+          productosPage:[],
+          tablaVacia:false,
           
         }),
         computed: {
@@ -160,18 +161,7 @@ const Swal = require('sweetalert2');
 
             });  
 
-            // Consultar datos Productos
-          axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}/productos`) 
-              .then((response) =>{
-                  
-              if(response.statusText=="OK"){
-                  console.log("Exito consultar producto " + this.productoId);
-                  this.productos = response.data;
-                  this.pages=response.data.length;
-              }else{
-                  console.log("Error");
-              }
-          }); 
+            
            
             // FIN MOUNTED
         },
@@ -192,8 +182,8 @@ const Swal = require('sweetalert2');
                   sheet: "Adults",
                   columns: [
                     { label: "ID Campo", value: "user" },
-                    { label: "Nombre producto", value: (row) => row.name + "." },
-                    { label: "Cantidad", value: (row) => row.cantidad + "." }, // Top level data
+                    { label: "Nombre producto", value: (row) => row.name  },
+                    { label: "Cantidad", value: (row) => row.cantidad }, // Top level data
                     //{ label: "Fecha", value: (row) => row.date + "." },
                   ],
                   content: this.productos,
@@ -221,7 +211,10 @@ const Swal = require('sweetalert2');
                     console.log("Exito consultar productos ");
                     this.productos = response.data;
                     this.nProductos = this.productos.length;
-
+                    this.pages=response.data.length;
+                    if(this.productos.length===0){
+                      this.tablaVacia=true;
+                    }
                   }else{
                     console.log("Error al consultar todos los productos. ");
                   }

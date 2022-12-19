@@ -33,7 +33,7 @@
       },
       width: {
         type: Number,
-        default: 700
+        default: 600
       },
       height: {
         type: Number,

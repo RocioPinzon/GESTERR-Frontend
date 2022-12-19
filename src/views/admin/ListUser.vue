@@ -2,17 +2,17 @@
     <HeaderAdmin/>
         <v-layout>
           <v-main>
-            <v-img cover height="450" 
+            <v-img cover height="425" 
                 src="../../assets/img/parallax.png">
               <v-row justify="center" class="mt-16 d-flex align-center pa-10">
-                <v-sheet elevation="6" class="mt-16 pa-2 align-self-end">
+                <v-sheet class="mt-16 pa-2 align-center">
                   
-                    <h2 class="text-center pa-10">{{ titulo }}</h2>
+                    <h2 class="text-center mt-15 pt-2">{{ titulo }}</h2>
                   
                 </v-sheet>
               </v-row>
             </v-img>
-            <v-container class="my-5">
+            <v-container class="mb-10">
                            
               <v-row justify="center">
                 <v-col
@@ -33,9 +33,9 @@
                         </tr>
                       </thead>
 
-                        <tbody>
+                        <tbody v-if="tablaVacia===false">
                           <tr
-                            v-for="item in usuarios"
+                            v-for="item in usuariosPage"
                             :key="item._id" >
                             <td class="text-center">{{ item.name }}</td>
                             <td class="text-center">{{ item.email }}</td>
@@ -48,8 +48,22 @@
                             </td>
                           </tr>
                         </tbody>
+                        <tbody v-else>
+                          <td colspan="6" class="pa-10 text-center">AÚN NO HAY NINGÚN USUARIO REGISTRADO</td>
+
+                        </tbody>
                       </v-table>
-                    
+                      <v-sheet>
+               
+                        <div class="text-center">
+                          {{visiblePages}}
+                          <v-pagination
+                            v-model="page"
+                            :length="Math.ceil(pages/perPage)"
+                            ></v-pagination>
+                        </div>
+                      
+                      </v-sheet>
                   </v-col>
                 </v-row>         
             </v-container>
@@ -75,9 +89,23 @@
               userId: null,
               usuarios:[],
               datosUser:{},
-              titulo: "LISTADO USUARIOS"
+              titulo: "LISTADO USUARIOS",
+              page:1,
+              pages:[],
+              perPage:5,
+              usuariosPage:[],
+              tablaVacia:false,
               
             }),
+            
+            computed: {
+              visiblePages () {
+                  const usuariosPaginados= this.usuarios.slice((this.page - 1)* this.perPage, this.page* this.perPage);
+                  
+                  this.usuariosPage = usuariosPaginados;              
+                  //return productoPaginados; para verlo en pantall como si fuera consola
+              }
+            },
             mounted(){   
               this.comprobarUsuario();
               
@@ -88,6 +116,7 @@
                   if(response.statusText=="OK"){
                     console.log("Exito consultar datos del usuario ");      
                     this.datosUser = response.data;
+                    
                   }else{
                     console.log("Error");
                   }
@@ -114,7 +143,12 @@
     
                                   if(response.statusText=="OK"){
                                     console.log("Exito consultar usuarios en methods ");
+                                    
                                     this.usuarios = response.data.filter(usuario => !usuario.admin);
+                                    this.pages=response.data.length;
+                                    if(this.usuarios.length===0){
+                                      this.tablaVacia=true;
+                                    }
                                   }else{
                                     console.log("Error ");
                                   }
