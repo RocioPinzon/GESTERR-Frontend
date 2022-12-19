@@ -71,8 +71,8 @@
               <template v-slot:activator="{ props }">
                 <v-btn class="menuResp" 
                   color="tonal"
-                  v-bind="props">
-                  <v-icon>mdi-account</v-icon>
+                  v-bind="props"><v-icon>mdi-account</v-icon>
+                  {{ datosUser.username }}
                 </v-btn>
               </template>
 
@@ -97,6 +97,9 @@
   </template>
 
 <script>
+    import axios from 'axios';
+    const SERVER_URL_COMPROBADA = "https://gesterr-back.herokuapp.com/user";
+
 
 export default {
   components: { },
@@ -107,11 +110,29 @@ export default {
       { title: 'Campos' },
       { title: 'Cultivos' },
       { title: 'Productos' }
-    ]
+    ],
+    datosUser:{}
   }),
   mounted(){
 
     this.userId=localStorage.getItem('userId'); 
+
+    //CONSULTAR CAMPOS USER
+          
+    axios.get(`${SERVER_URL_COMPROBADA}/${this.userId}`) 
+            .then((response) =>{
+
+              if(response.statusText=="OK"){
+                
+                console.log("Exito consultar datos usuario "); 
+                this.datosUser = response.data;
+               
+              }else{
+                
+                console.log("Error haciendo login ");
+              }
+
+            }); 
 
   },
   methods:{
