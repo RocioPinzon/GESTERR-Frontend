@@ -1,53 +1,97 @@
 <template>
+
     <v-app-bar shrink-on-scroll color="green">
        
         <v-app-bar-title>GesTerr</v-app-bar-title>
 
         <v-spacer></v-spacer>
-            <a href="http://localhost:8080/user/dashboard" class="dashboard">Dashboard</a>
-            <v-btn @click="irListadoCampos(item_id)">Campos</v-btn>
-        <v-menu
-            open-on-hover>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                color="tonal"
-                v-bind="props">
-                LISTADOS INFORMACIÓN
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item>
-              <v-btn block @click="irListadoCultivos(item_id)">Cultivos</v-btn> 
-              </v-list-item>
-
-              <v-list-item>
-                <v-btn block @click="irListadoProductos(item_id)">Productos</v-btn>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <v-menu open-on-hover>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                color="tonal"
-                v-bind="props">
-                DATOS
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item>
-                <v-btn @click="irPerfil()" block>Perfil</v-btn>
-              </v-list-item>
-
-              <v-list-item>
-                <v-btn @click="logout(item_id)" block>Salir  
-                  <v-icon class="px-2">mdi-export</v-icon>
+            <a href="http://localhost:8080/user/dashboard" class="menuResp dashboard">Dashboard</a>
+            <v-btn class="menuResp"  @click="irListadoCampos(item_id)">Campos</v-btn>
+            <!--<v-btn class="menuMobile"  @click="irListadoCampos(item_id)">Campos mobile</v-btn>-->
+            
+            <v-menu >
+              <template v-slot:activator="{ props }">
+                <v-btn class="menuMobile"
+                  color="tonal"
+                  v-bind="props">
+                  MENU
                 </v-btn>
-              </v-list-item>
-            </v-list>
-          </v-menu> 
-             
+              </template>
+
+              <v-list>
+                <v-list-item>
+                  <a href="http://localhost:8080/user/dashboard" style="color:#4a4a4a" class="dashboard">Dashboard</a>
+                </v-list-item>
+                <v-list-item>
+                  <v-btn block @click="irListadoCampos(item_id)">Campos</v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                <v-btn block @click="irListadoCultivos(item_id)">Cultivos</v-btn> 
+                </v-list-item>
+
+                <v-list-item>
+                  <v-btn block @click="irListadoProductos(item_id)">Productos</v-btn>
+                </v-list-item>
+                <v-list-item>
+                  <v-btn @click="irPerfil()" block>Perfil</v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                  <v-btn @click="logout(item_id)" block>Salir  
+                    <v-icon class="px-2">mdi-export</v-icon>
+                  </v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+        
+
+
+
+
+              <v-menu 
+              open-on-hover>
+              <template v-slot:activator="{ props }">
+                <v-btn class="menuResp" 
+                  color="tonal"
+                  v-bind="props">
+                  LISTADOS INFORMACIÓN
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item>
+                <v-btn block @click="irListadoCultivos(item_id)">Cultivos</v-btn> 
+                </v-list-item>
+
+                <v-list-item>
+                  <v-btn block @click="irListadoProductos(item_id)">Productos</v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+
+            <v-menu open-on-hover>
+              <template v-slot:activator="{ props }">
+                <v-btn class="menuResp" 
+                  color="tonal"
+                  v-bind="props">
+                  DATOS
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item>
+                  <v-btn @click="irPerfil()" block>Perfil</v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                  <v-btn @click="logout(item_id)" block>Salir  
+                    <v-icon class="px-2">mdi-export</v-icon>
+                  </v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu> 
+          
 
         
       </v-app-bar>
@@ -118,4 +162,15 @@ export default {
 
   }
 
+  @media only screen and (max-width: 768px) { 
+    .menuResp { 
+      display: none !important;
+      } 
+    }
+    
+    @media only screen and (min-width: 768px) { 
+    .menuMobile { 
+      display: none !important;
+      } 
+    }
 </style>

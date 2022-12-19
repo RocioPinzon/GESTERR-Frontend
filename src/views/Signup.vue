@@ -218,19 +218,17 @@
                     console.log("Exito signup");
                     this.$router.push('/signin');              
                 }else{
+
+                    //response.data.errors[0].error
                     this.error=true;
-                    this.errorMsg="Ops. Algo ha salido mal. Revise los datos del formulario";
+                    this.errorMsg="¡Ops! Algo ha salido mal. Revise los datos del formulario";
                 }
             })
             .catch(error =>{
 
                 this.error=true;
-                this.errorMsg="Ops. Algo ha salido mal. Revise los datos del formulario";
-                /*for (let i = 0; i < error.length; i++) {
-                    this.errorMsg = error.data[i];
-                    
-                }*/
-                //this.errorMsg=error;
+                this.errorMsg=error.response.data.errors[0].error;
+                
                 console.log(error);
 
             });
