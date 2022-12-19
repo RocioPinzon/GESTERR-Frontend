@@ -7,7 +7,7 @@
 
         <v-menu>
             <template v-slot:activator>
-              <v-btn to="/">Dashboard</v-btn>
+              <v-btn to="/"><v-icon>mdi-home</v-icon></v-btn>
               <v-btn to="/signin">Entrar</v-btn>
               <v-btn to="/signup">Regístrate</v-btn> 
             </template>
