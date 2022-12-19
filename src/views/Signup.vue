@@ -25,7 +25,7 @@
                                 </v-img>
                             </div>
                             <v-card-title>
-                                <p class="text-center py-10 text-h3">Regístrate</p>
+                                <p class="text-center py-10 text-h4 text-md-h3">Regístrate</p>
                             </v-card-title>
                                 
                             <v-text-field
