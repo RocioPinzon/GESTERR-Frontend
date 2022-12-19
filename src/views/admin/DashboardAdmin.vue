@@ -68,7 +68,7 @@
                   <v-btn
                     color="success"
                     class="mr-4"
-                    @click="actualizarDatosUser">
+                    @click="actualizarDatosUser()">
                     Actualizar</v-btn>
 
                 </v-form>
