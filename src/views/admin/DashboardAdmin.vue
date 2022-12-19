@@ -108,15 +108,7 @@
           
           this.cargarUsuarios();  
 
-          axios.get(`${SERVER_URL_COMPROBADA}/user/${this.userId}`)
-            .then((response) =>{
-              if(response.statusText=="OK"){
-                console.log("Exito consultar datos del usuario ");      
-                this.datosUser = response.data;
-              }else{
-                console.log("Error");
-              }
-            });
+          this.cargarDatosUser();
 
             axios.get(`${SERVER_URL_COMPROBADA}/user`)
             .then((response) =>{
@@ -155,6 +147,17 @@
  
               } 
             },
+            cargarDatosUser(){
+              axios.get(`${SERVER_URL_COMPROBADA}/user/${this.userId}`)
+            .then((response) =>{
+              if(response.statusText=="OK"){
+                console.log("Exito consultar datos del usuario ");      
+                this.datosUser = response.data;
+              }else{
+                console.log("Error");
+              }
+            });
+            },
             actualizarDatosUser(){
                 let datos = this.datosUser;
                 console.log(datos);
@@ -163,7 +166,6 @@
                 .then((response) =>{
 
                 if(response.statusText=="OK"){
-                    console.log("Exito actualizar datos campo ");
                     this.datosUser= response.data;
                     Swal.fire({
                         
@@ -172,11 +174,11 @@
                         showConfirmButton: false,
                         timer: 1500
                       });
-                    this.cargarDatosUsuarios(); 
+                    this.cargarDatosUser(); 
 
                     console.log(response.data);
                 }else{
-                    console.log("Error actualizando datos campo");
+                    console.log("Error actualizando datos usuario");
                 }
             });
             },
