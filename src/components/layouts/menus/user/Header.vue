@@ -14,7 +14,7 @@
                 <v-btn class="menuMobile"
                   color="tonal"
                   v-bind="props">
-                  MENU
+                  <v-icon >mdi-menu</v-icon>
                 </v-btn>
               </template>
 
